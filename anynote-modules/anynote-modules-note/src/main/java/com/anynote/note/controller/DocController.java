@@ -7,6 +7,7 @@ import com.anynote.core.web.model.bo.CreateResEntity;
 
 
 import com.anynote.core.web.model.bo.ResData;
+import com.anynote.file.api.model.dto.DocUploadTempLinkDTO;
 import com.anynote.note.model.bo.PDFCreateParam;
 import com.anynote.note.service.DocService;
 import org.springframework.validation.annotation.Validated;
@@ -32,6 +33,11 @@ public class DocController {
 
     @Resource
     private DocService docService;
+
+    @PostMapping("upload")
+    public ResData<CreateResEntity> docUploadTempLink(DocUploadTempLinkDTO docUploadTempLinkDTO) {
+        return null;
+    }
 
     @Upload(value = FileType.PDF, max = 500)
     @PostMapping("pdfs")

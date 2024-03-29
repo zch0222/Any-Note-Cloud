@@ -1,13 +1,11 @@
 package com.anynote.note.model.bo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @author 称霸幼儿园
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 public class NoteTaskQueryParam extends KnowledgeBaseQueryParam {

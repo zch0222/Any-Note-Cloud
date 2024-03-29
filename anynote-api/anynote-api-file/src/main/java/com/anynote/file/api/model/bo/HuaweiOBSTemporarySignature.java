@@ -15,4 +15,6 @@ public class HuaweiOBSTemporarySignature {
     private String signedUrl;
 
     private Map<String, String> actualSignedRequestHeaders;
+
+    private String uploadId;
 }

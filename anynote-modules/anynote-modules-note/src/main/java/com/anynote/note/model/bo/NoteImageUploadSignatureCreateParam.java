@@ -22,16 +22,10 @@ public class NoteImageUploadSignatureCreateParam extends NoteQueryParam {
      */
     private String contentType;
 
-    /**
-     * 上传ID
-     */
-    private String uploadId;
-
     @Builder(builderMethodName = "NoteImageUploadSignatureCreateParamBuilder")
-    public NoteImageUploadSignatureCreateParam(String fileName, String contentType, Long noteId, String uploadId) {
+    public NoteImageUploadSignatureCreateParam(String fileName, String contentType, Long noteId) {
         this.fileName = fileName;
         this.contentType = contentType;
-        this.uploadId = uploadId;
         this.setId(noteId);
     }
 

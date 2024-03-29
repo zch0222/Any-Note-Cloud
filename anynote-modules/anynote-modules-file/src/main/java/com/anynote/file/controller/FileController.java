@@ -50,7 +50,7 @@ public class FileController {
             @RequestBody @Validated CreateHuaweiOBSTemporarySignatureDTO createHuaweiOBSTemporarySignatureDTO) {
         return ResUtil.success(fileService.createHuaweiOBSTemporarySignature(createHuaweiOBSTemporarySignatureDTO.getPath(),
                 createHuaweiOBSTemporarySignatureDTO.getFileName(), createHuaweiOBSTemporarySignatureDTO.getExpireSeconds(),
-                createHuaweiOBSTemporarySignatureDTO.getContentType(), createHuaweiOBSTemporarySignatureDTO.getUploadId(),
+                createHuaweiOBSTemporarySignatureDTO.getContentType(),
                 createHuaweiOBSTemporarySignatureDTO.getSource()));
     }
 

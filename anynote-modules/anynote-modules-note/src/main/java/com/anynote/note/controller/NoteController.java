@@ -144,7 +144,6 @@ public class NoteController {
                 .NoteImageUploadSignatureCreateParamBuilder()
                         .fileName(noteImageUploadTempLinkDTO.getFileName())
                         .contentType(noteImageUploadTempLinkDTO.getContentType())
-                        .uploadId(noteImageUploadTempLinkDTO.getUploadId())
                         .noteId(noteImageUploadTempLinkDTO.getNoteId()).build()));
     }
 

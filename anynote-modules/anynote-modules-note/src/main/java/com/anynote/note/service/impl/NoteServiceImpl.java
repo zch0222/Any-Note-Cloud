@@ -470,7 +470,6 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note>
                 .fileName(createParam.getFileName())
                 .path(StringUtils.format(FileConstants.NOTE_IMAGE_PATH_TEMPLATE, createParam.getNoteId(),
                         createParam.getNoteId()))
-                .uploadId(createParam.getUploadId())
                 .source(FileSources.NOTE_IMAGE.getValue()).build()), "上传图片失败");
     }
 

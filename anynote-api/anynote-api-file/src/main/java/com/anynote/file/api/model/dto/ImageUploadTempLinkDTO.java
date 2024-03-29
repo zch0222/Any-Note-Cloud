@@ -21,10 +21,4 @@ public class ImageUploadTempLinkDTO {
     @NotBlank(message = "图片类型不能为空")
     @Pattern(regexp = "(image/jpeg|image/png|image/gif)", message = "非法类型")
     private String contentType;
-
-    /**
-     * 上传ID
-     */
-    @NotBlank(message = "上传ID不能为空")
-    private String uploadId;
 }

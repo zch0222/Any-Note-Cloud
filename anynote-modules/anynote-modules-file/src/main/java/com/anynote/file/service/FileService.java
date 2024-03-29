@@ -24,7 +24,7 @@ public interface FileService extends IService<FilePO> {
 
     public HuaweiOBSTemporarySignature createHuaweiOBSTemporarySignature(String path, String fileName,
                                                                          Long expireSeconds, String contentType,
-                                                                         String uploadId, Integer source);
+                                                                         Integer source);
 
     /**
      * 完成上传回调

@@ -31,12 +31,6 @@ public class CreateHuaweiOBSTemporarySignatureDTO {
     private String ContentType;
 
     /**
-     * 上传ID
-     */
-    @NotBlank(message = "上传ID不能为空")
-    private String uploadId;
-
-    /**
      * 文件来源
      */
     @NotNull(message = "文件来源不能为空")

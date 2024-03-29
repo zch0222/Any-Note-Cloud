@@ -545,7 +545,6 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseMapper, N
                         .expireSeconds(HuaweiOBSConstants.KNOWLEDGE_BASE_COVER_TEMPORARY_SIGNATURE_EXPIRE_SECONDS)
                         .fileName(uploadTempLinkDTO.getFileName())
                         .path(FileConstants.KNOWLEDGE_BASE_COVER)
-                        .uploadId(uploadTempLinkDTO.getUploadId())
                         .source(FileSources.KNOWLEDGE_BASE_COVER.getValue()).build()), "图片上传失败");
     }
 

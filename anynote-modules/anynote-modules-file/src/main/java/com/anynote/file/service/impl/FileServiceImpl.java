@@ -96,7 +96,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FilePO>
 
     @Override
     public HuaweiOBSTemporarySignature createHuaweiOBSTemporarySignature(String path, String fileName, Long expireSeconds,
-                                                                         String contentType, String uploadId, Integer source) {
+                                                                         String contentType, Integer source) {
         Date date = new Date();
         FilePO filePO = FilePO.builder()
                 .originalFileName(fileName)
@@ -107,11 +107,14 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FilePO>
                 .type(contentType)
                 .source(source)
                 .build();
+        String uploadId = UUID.randomUUID().toString().replace("-", "");
         HuaweiOBSTemporarySignature huaweiOBSTemporarySignature = filePluginFactory
                 .huaweiFilePlugin().createTemporarySignature(path,
                         filePO.getFileName(),
                         expireSeconds, contentType);
+        huaweiOBSTemporarySignature.setUploadId(uploadId);
         filePO.setUrl(UrlUtil.removeAllParams(huaweiOBSTemporarySignature.getSignedUrl()));
+
         redisService.setCacheObject(CacheConstants.FILE_UPLOAD_ID +
                         ServletUtils.getHeader(SecurityConstants.DETAILS_USER_ID) + ":" + uploadId, filePO,
                 expireSeconds + 20L, TimeUnit.SECONDS);
