@@ -48,6 +48,11 @@ public class RemoteFileFallbackFactory implements FallbackFactory<RemoteFileServ
             public ResData<FilePO> completeHuaweiOBSUpload(CompleteUploadDTO completeUploadDTO) {
                 throw new BusinessException(ResCode.INNER_FILE_SERVICE_ERROR);
             }
+
+            @Override
+            public ResData<FilePO> getFileById(Long id, String fromSource) {
+                throw new BusinessException("获取文件失败");
+            }
         };
     }
 }

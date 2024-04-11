@@ -27,7 +27,6 @@ import com.anynote.note.model.dto.CompleteKnowledgeBaseUploadDTO;
 import com.anynote.note.model.dto.CreateKnowledgeBaeDTO;
 import com.anynote.note.model.dto.KnowledgeBaseCoverUploadTempLinkDTO;
 import com.anynote.note.model.vo.CreateKnowledgeBaseVO;
-import com.anynote.note.model.vo.UploadKnowledgeBaeCoverVO;
 import com.anynote.note.service.NoteTaskService;
 import com.anynote.note.validate.annotation.PageValid;
 import com.anynote.system.api.RemoteUserService;
@@ -50,15 +49,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import io.swagger.models.auth.In;
 import org.apache.poi.ss.usermodel.*;
-import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.w3c.dom.ls.LSException;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayOutputStream;
@@ -541,7 +537,7 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseMapper, N
     @Override
     public HuaweiOBSTemporarySignature createCoverUploadTempSignature(KnowledgeBaseCoverUploadTempLinkDTO uploadTempLinkDTO) {
         return RemoteResDataUtil.getResData(remoteFileService.createHuaweiOBSTemporarySignature(CreateHuaweiOBSTemporarySignatureDTO.builder()
-                        .ContentType(uploadTempLinkDTO.getContentType())
+                        .contentType(uploadTempLinkDTO.getContentType())
                         .expireSeconds(HuaweiOBSConstants.KNOWLEDGE_BASE_COVER_TEMPORARY_SIGNATURE_EXPIRE_SECONDS)
                         .fileName(uploadTempLinkDTO.getFileName())
                         .path(FileConstants.KNOWLEDGE_BASE_COVER)

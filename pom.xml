@@ -241,6 +241,18 @@
                 <version>${anynote.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.anynote</groupId>
+                <artifactId>anynote-modules-ai</artifactId>
+                <version>${anynote.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.anynote</groupId>
+                <artifactId>anynote-api-ai</artifactId>
+                <version>${anynote.version}</version>
+            </dependency>
+
             <!-- SpringCloud 微服务 -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>

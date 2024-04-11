@@ -15,4 +15,6 @@ public class ServiceNameConstants {
     public static final String FILE_SERVICE = "anynote-file";
 
     public static final String NOTE_SERVICE = "anynote-note";
+
+    public static final String AI_SERVICE = "anynote-ai";
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anynote.note.mapper.DocMapper">
+    <resultMap id="DocListVOResultMap" type="com.anynote.note.model.vo.DocListVO">
+        <id column="id" property="id" />
+        <result column="doc_name" property="docName" />
+        <result column="create_by" property="createBy" />
+        <result column="creator_nickname" property="creatorNickname" />
+        <result column="creator_username" property="creatorUsername" />
+        <result column="knowledge_base_id" property="knowledgeBaseId" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="DocVOResultMap" type="com.anynote.note.model.vo.DocVO">
+        <id column="id" property="id" />
+        <result column="doc_name" property="docName" />
+        <result column="create_by" property="createBy" />
+        <result column="creator_nickname" property="creatorNickname" />
+        <result column="creator_username" property="creatorUsername" />
+        <result column="knowledge_base_id" property="knowledgeBaseId" />
+        <result column="url" property="url"/>
+        <result column="hash" property="hash"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="selectDocList" resultMap="DocListVOResultMap">
+        SELECT
+            n_doc.id, n_doc.name as doc_name, n_doc.create_by, n_doc.knowledge_base_id, n_doc.create_time,
+            n_doc.update_time, sys_user.nickname as creator_nick_name, sys_user.username as creator_username
+        FROM
+            n_doc
+        LEFT JOIN
+            sys_user ON sys_user.id = n_doc.create_by
+        WHERE
+            n_doc.knowledge_base_id = #{id}
+        ${params.knowledgeBaseScope}
+    </select>
+
+    <select id="selectDocById" resultMap="DocVOResultMap">
+        SELECT
+            n_doc.id, n_doc.name as doc_name, n_doc.create_by, n_doc.knowledge_base_id, n_doc.create_time,
+            n_doc.update_time, sys_user.nickname as creator_nick_name, sys_user.username as creator_username, f_file.hash,
+            f_file.url
+        FROM
+            n_doc
+        LEFT JOIN
+            sys_user ON sys_user.id = n_doc.create_by
+        LEFT JOIN
+            f_file ON f_file.id = n_doc.file_id
+        WHERE
+            n_doc.id = #{docId};
+    </select>
+
+
+</mapper>

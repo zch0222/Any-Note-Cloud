@@ -4,7 +4,6 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.query_dsl.*;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import com.alibaba.fastjson2.JSON;
-import com.anynote.common.datascope.aspect.BasePermissionsAspect;
 import com.anynote.common.elasticsearch.constant.ElasticsearchIndexConstants;
 import com.anynote.common.elasticsearch.model.EsNoteIndex;
 import com.anynote.common.elasticsearch.model.bo.SearchPageBean;
@@ -41,7 +40,6 @@ import com.anynote.note.enums.NotePermissions;
 import com.anynote.note.mapper.NoteMapper;
 import com.anynote.note.mapper.NoteTextMapper;
 import com.anynote.note.model.bo.*;
-import com.anynote.note.model.dto.CompleteNoteImageUploadDTO;
 import com.anynote.note.model.dto.NoteSearchDTO;
 import com.anynote.note.service.KnowledgeBaseService;
 import com.anynote.note.service.NoteImageService;
@@ -465,7 +463,7 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note>
     @RequiresNotePermissions(NotePermissions.EDIT)
     public HuaweiOBSTemporarySignature getImageUploadTempSignature(NoteImageUploadSignatureCreateParam createParam) {
         return RemoteResDataUtil.getResData(remoteFileService.createHuaweiOBSTemporarySignature(CreateHuaweiOBSTemporarySignatureDTO.builder()
-                .ContentType(createParam.getContentType())
+                .contentType(createParam.getContentType())
                 .expireSeconds(HuaweiOBSConstants.NOTE_IMAGE_TEMPORARY_SIGNATURE_EXPIRE_SECONDS)
                 .fileName(createParam.getFileName())
                 .path(StringUtils.format(FileConstants.NOTE_IMAGE_PATH_TEMPLATE, createParam.getNoteId(),

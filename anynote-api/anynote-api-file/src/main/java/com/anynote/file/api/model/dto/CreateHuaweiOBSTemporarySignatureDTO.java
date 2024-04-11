@@ -28,7 +28,7 @@ public class CreateHuaweiOBSTemporarySignatureDTO {
     private Long expireSeconds;
 
     @NotBlank(message = "ContentType不能为空")
-    private String ContentType;
+    private String contentType;
 
     /**
      * 文件来源

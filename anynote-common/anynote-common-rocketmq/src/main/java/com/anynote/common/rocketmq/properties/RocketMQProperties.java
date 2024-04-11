@@ -21,4 +21,8 @@ public class RocketMQProperties {
     private String noteTopic;
 
     private String noteGroup;
+
+    private String docTopic;
+
+    private String docGroup;
 }

@@ -15,6 +15,11 @@
             <artifactId>anynote-common-core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.anynote</groupId>
+            <artifactId>anynote-api-system</artifactId>
+        </dependency>
+
 
         <!-- SpringBoot Boot Redis -->
         <dependency>

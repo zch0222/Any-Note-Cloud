@@ -43,4 +43,7 @@ public interface RemoteFileService {
     @PostMapping("completeHuaweiOBSUpload")
     public ResData<FilePO> completeHuaweiOBSUpload(@RequestBody @Validated CompleteUploadDTO completeUploadDTO);
 
+
+    @GetMapping(value = "{id}")
+    public ResData<FilePO> getFileById(@PathVariable("id") Long id, @RequestHeader("from-source") String fromSource);
 }

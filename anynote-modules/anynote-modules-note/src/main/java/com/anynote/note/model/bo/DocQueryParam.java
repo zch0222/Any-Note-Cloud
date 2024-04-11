@@ -39,10 +39,12 @@ public class DocQueryParam extends KnowledgeBaseQueryParam {
     }
 
     @Builder(builderMethodName = "DocQueryParamBuilder")
-    public DocQueryParam(Long docId, Long knowledgeBaseId, String docName, Integer docType) {
+    public DocQueryParam(Long docId, Long knowledgeBaseId, String docName, Integer docType, Integer page, Integer pageSize) {
         this.setKnowledgeBaseId(knowledgeBaseId);
         this.docId = docId;
         this.docName = docName;
         this.docType = docType;
+        this.setPage(page);
+        this.setPageSize(pageSize);
     }
 }

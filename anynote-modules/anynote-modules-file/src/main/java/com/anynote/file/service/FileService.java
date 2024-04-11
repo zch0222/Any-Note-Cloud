@@ -33,4 +33,6 @@ public interface FileService extends IService<FilePO> {
      */
     public FilePO completeUpload(CompleteUploadDTO completeUploadDTO);
 
+    public FilePO getFileById(Long id);
+
 }

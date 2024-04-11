@@ -13,5 +13,10 @@ public enum ConfigEnum {
     /**
      * 华为对象存储配置
      */
-    HUAWEI_OBS_CONFIG;
+    HUAWEI_OBS_CONFIG,
+
+    /**
+     * AI 服务器地址
+     */
+    AI_SERVER_ADDRESS;
 }

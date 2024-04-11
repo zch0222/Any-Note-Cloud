@@ -33,7 +33,7 @@ public class FileTypeUtils {
     }
 
 
-    public static final List<String> getAllowExtensions(FileType fileType) {
+    public static List<String> getAllowExtensions(FileType fileType) {
         if (FileType.IMAGE.equals(fileType)) {
             return Arrays.asList(MimeTypeUtils.IMAGE_EXTENSION);
         }

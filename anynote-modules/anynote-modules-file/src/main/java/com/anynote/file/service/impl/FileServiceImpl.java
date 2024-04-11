@@ -8,6 +8,7 @@ import com.anynote.core.exception.BusinessException;
 import com.anynote.core.utils.ServletUtils;
 import com.anynote.core.utils.StringUtils;
 import com.anynote.core.utils.UrlUtil;
+import com.anynote.core.utils.file.FileUtils;
 import com.anynote.file.api.model.bo.FileDTO;
 import com.anynote.file.api.model.bo.HuaweiOBSTemporarySignature;
 import com.anynote.file.api.model.bo.UploadProgress;
@@ -100,7 +101,8 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FilePO>
         Date date = new Date();
         FilePO filePO = FilePO.builder()
                 .originalFileName(fileName)
-                .fileName(UUID.randomUUID().toString().replace("-", "") + "_" + fileName)
+                .fileName(UUID.randomUUID().toString().replace("-", "") + "." +
+                        FileUtils.getFileExtension(fileName))
                 .createBy(Long.valueOf(ServletUtils.getHeader(SecurityConstants.DETAILS_USER_ID)))
                 .deleted(0)
                 .createTime(date)
@@ -138,5 +140,10 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FilePO>
                 ServletUtils.getRequestAttributes(SecurityConstants.DETAILS_USER_ID) + ":" +
                 completeUploadDTO.getUploadId());
         return filePO;
+    }
+
+    @Override
+    public FilePO getFileById(Long id) {
+        return this.baseMapper.selectById(id);
     }
 }

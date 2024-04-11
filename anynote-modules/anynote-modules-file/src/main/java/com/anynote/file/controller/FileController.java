@@ -2,7 +2,6 @@ package com.anynote.file.controller;
 
 import com.anynote.common.security.annotation.InnerAuth;
 import com.anynote.core.utils.ResUtil;
-import com.anynote.core.web.model.bo.CreateResEntity;
 import com.anynote.core.web.model.bo.ResData;
 import com.anynote.file.api.model.bo.*;
 import com.anynote.file.api.model.dto.CompleteUploadDTO;
@@ -59,5 +58,11 @@ public class FileController {
     public ResData<FilePO> completeHuaweiOBSUpload(
             @RequestBody @Validated CompleteUploadDTO completeUploadDTO) {
         return ResUtil.success(fileService.completeUpload(completeUploadDTO));
+    }
+
+    @GetMapping("/{id}")
+//    @InnerAuth
+    public ResData<FilePO> getFileById(@PathVariable("id") Long id) {
+        return ResUtil.success(fileService.getFileById(id));
     }
 }
