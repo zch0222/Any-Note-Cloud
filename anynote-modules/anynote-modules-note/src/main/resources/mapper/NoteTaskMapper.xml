@@ -39,16 +39,24 @@
     </resultMap>
 
     <resultMap id="NoteTaskChartsPOResultMap" type="com.anynote.note.model.po.NoteTaskChartsPO">
-        <result column="note_task_id" property="noteTaskId" />
+<!--        <id column="operation_id" property="operationId"/>-->
+<!--        <result column="note_task_id" property="noteTaskId" />-->
         <result column="user_id" property="userId" />
         <result column="note_id" property="noteId" />
-        <result column="note_history_id" property="noteHistoryId" />
-        <result column="note_edit_count" property="noteEditCount" />
-        <result column="submit_time" property="submitTime" />
-        <result column="status" property="status" />
-        <result column="update_time" property="updateTime" />
+<!--        <result column="note_history_id" property="noteHistoryId" />-->
+<!--        <result column="note_edit_count" property="noteEditCount" />-->
+<!--        <result column="submit_time" property="submitTime" />-->
+<!--        <result column="status" property="status" />-->
+<!--        <result column="note_last_update_time" property="updateTime" />-->
         <result column="username" property="username" />
         <result column="nickname" property="nickname" />
+        <result column="edit_count" property="editCount" />
+<!--        <result column="operation_time" property="operationTime"/>-->
+    </resultMap>
+
+    <resultMap id="NoteTaskSubmissionTimePOResultMap" type="com.anynote.note.model.po.NoteTaskSubmissionTimePO">
+        <result property="earliestTime" column="earliest_time" />
+        <result property="latestTime" column="latest_time" />
     </resultMap>
 
 
@@ -155,20 +163,33 @@
 
     <select id="selectNoteTaskCharts" resultMap="NoteTaskChartsPOResultMap">
         SELECT
-            n_note_task_submission_record.note_task_id, n_note_task_submission_record.user_id,
-            n_note_task_submission_record.note_id, n_note_task_submission_record.note_history_id, n_note_task_submission_record.note_edit_count,
-            n_note_task_submission_record.submit_time, n_note_task_submission_record.status, n_note.update_time, sys_user.username,
-            sys_user.nickname
+        sys_user.username, sys_user.nickname, sys_user.id as user_id, COUNT(*) as edit_count, n_note_task_submission_record.note_id
+        FROM
+        n_note_task_submission_record
+        LEFT JOIN
+        n_note_operation_log ON n_note_operation_log.note_id = n_note_task_submission_record.note_id
+        LEFT JOIN
+        sys_user ON sys_user.id = n_note_task_submission_record.user_id
+        WHERE
+        n_note_task_submission_record.note_task_id = #{noteTaskId}
+        AND
+        n_note_task_submission_record.status = 0
+        AND
+        n_note_operation_log.operation_time &gt;= #{startTime}
+        AND
+        n_note_operation_log.operation_time &lt;= #{endTime}
+        GROUP BY sys_user.id, sys_user.username, sys_user.nickname, n_note_task_submission_record.note_id;
+    </select>
+
+    <select id="selectNoteTaskSubmissionTime" resultMap="NoteTaskSubmissionTimePOResultMap">
+        SELECT
+            MIN(n_note_operation_log.operation_time) as earliest_time, MAX(n_note_operation_log.operation_time) as latest_time
         FROM
             n_note_task_submission_record
-                LEFT JOIN
-            n_note ON n_note.id = n_note_task_submission_record.note_id
-                LEFT JOIN
-            sys_user ON sys_user.id = n_note_task_submission_record.user_id
+        LEFT JOIN
+            n_note_operation_log ON n_note_operation_log.note_id = n_note_task_submission_record.note_id
         WHERE
-            n_note_task_submission_record.note_task_id = #{noteTaskId}
-          AND
-            n_note_task_submission_record.status = 0;
+            n_note_task_submission_record.note_task_id = #{noteTaskId};
     </select>
 
 

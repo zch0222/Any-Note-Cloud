@@ -8,6 +8,7 @@ import com.anynote.common.security.token.TokenUtil;
 import com.anynote.core.constant.Constants;
 import com.anynote.core.exception.BusinessException;
 import com.anynote.core.exception.user.UserParamException;
+import com.anynote.core.utils.DateUtils;
 import com.anynote.core.utils.StringUtils;
 import com.anynote.core.web.enums.ResCode;
 import com.anynote.core.web.model.bo.PageBean;
@@ -25,6 +26,8 @@ import com.anynote.note.model.dto.AdminNoteTaskDTO;
 import com.anynote.note.model.dto.MemberNoteTaskDTO;
 import com.anynote.note.model.po.NoteTaskAnalyzePO;
 import com.anynote.note.model.po.NoteTaskChartsPO;
+import com.anynote.note.model.po.NoteTaskSubmissionTimePO;
+import com.anynote.note.model.vo.NoteTaskChartsVO;
 import com.anynote.note.model.vo.NoteTaskHistoryVO;
 import com.anynote.note.model.vo.NoteTaskUserAnalyzeVO;
 import com.anynote.note.service.*;
@@ -44,9 +47,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -99,6 +100,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
 
     /**
      * 更新笔记任务
+     *
      * @param updateParam
      * @return
      */
@@ -141,6 +143,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
 
     /**
      * 获取用户对笔记任务的权限
+     *
      * @param userId 用户ID
      * @param taskId 笔记ID
      * @return
@@ -157,11 +160,9 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
         }
         if (1 == userNoteTask.getPermissions()) {
             return NoteTaskPermissions.MANAGE;
-        }
-        else if (2 == userNoteTask.getPermissions()) {
+        } else if (2 == userNoteTask.getPermissions()) {
             return NoteTaskPermissions.SUBMIT;
-        }
-        else if (3 == userNoteTask.getPermissions()) {
+        } else if (3 == userNoteTask.getPermissions()) {
             return NoteTaskPermissions.NO;
         }
         return NoteTaskPermissions.NO;
@@ -169,6 +170,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
 
     /**
      * 为知识库创建笔记任务
+     *
      * @param taskCreateParam
      * @return
      */
@@ -274,6 +276,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
 
     /**
      * 需要提交的人数
+     *
      * @param queryParam
      * @return
      */
@@ -288,6 +291,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
 
     /**
      * 提交任务
+     *
      * @param submitParam
      * @return
      */
@@ -336,8 +340,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
 
             }
             throw new UserParamException("提交失败，任务已经结束", ResCode.USER_REQUEST_PARAM_ERROR);
-        }
-        else if (date.getTime() < noteTaskInfo.getStartTime().getTime()) {
+        } else if (date.getTime() < noteTaskInfo.getStartTime().getTime()) {
             throw new UserParamException("提交失败，任务尚未开始", ResCode.USER_REQUEST_PARAM_ERROR);
         }
 
@@ -384,23 +387,24 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
         // 添加任务操作记录
         String destination = rocketMQProperties.getNoteTaskTopic() + ":" + NoteTaskTagsEnum.INSERT_HISTORY.name();
         rocketMQTemplate.asyncSend(destination, NoteTaskOperationHistory.builder()
-                        .noteTaskId(submitParam.getTaskId())
-                        .type(NoteTaskOperationType.SUBMIT.getValue())
-                        .operatorId(loginUser.getSysUser().getId())
-                        .operationTime(date)
-                        .noteTaskUserId(loginUser.getSysUser().getId())
-                        .noteTaskSubmissionRecordId(noteTaskSubmissionRecord.getId())
-                        .deleted(0)
-                        .updateTime(date)
-                        .updateBy(loginUser.getSysUser().getId())
-                        .createTime(date)
-                        .createBy(loginUser.getSysUser().getId())
+                .noteTaskId(submitParam.getTaskId())
+                .type(NoteTaskOperationType.SUBMIT.getValue())
+                .operatorId(loginUser.getSysUser().getId())
+                .operationTime(date)
+                .noteTaskUserId(loginUser.getSysUser().getId())
+                .noteTaskSubmissionRecordId(noteTaskSubmissionRecord.getId())
+                .deleted(0)
+                .updateTime(date)
+                .updateBy(loginUser.getSysUser().getId())
+                .createTime(date)
+                .createBy(loginUser.getSysUser().getId())
                 .build(), RocketmqSendCallbackBuilder.commonCallback());
         return Constants.SUCCESS_RES;
     }
 
     /**
      * 非管理员获取笔记任务信息
+     *
      * @param queryParam
      * @return
      */
@@ -437,7 +441,6 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
     }
 
 
-
 //    @RequiresKnowledgeBasePermissions(value = KnowledgeBasePermissions.MANAGE, message = "权限不足")
 //    @Override
 //    public AdminNoteTaskDTO getAdminNoteTaskById(NoteTaskQueryParam queryParam) {
@@ -449,6 +452,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
 
     /**
      * 获取笔记所属的知识库id
+     *
      * @param noteTaskId
      * @return
      */
@@ -464,6 +468,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
 
     /**
      * 管理员根据id获取笔记任务信息
+     *
      * @param queryParam
      * @return
      */
@@ -492,8 +497,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
         adminNoteTaskDTO.setNeedSubmitCount(needSubmitCount);
         if (0L == needSubmitCount) {
             adminNoteTaskDTO.setSubmissionProgress(100.0);
-        }
-        else {
+        } else {
             adminNoteTaskDTO.setSubmissionProgress(new BigDecimal(1.0 * adminNoteTaskDTO.getSubmittedCount() / needSubmitCount)
                     .setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
         }
@@ -502,6 +506,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
 
     /**
      * 管理员获取任务列表
+     *
      * @param queryParam
      * @return
      */
@@ -537,8 +542,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
                     adminNoteTaskDTO.setNeedSubmitCount(needSubmitCount);
                     if (0L == needSubmitCount) {
                         adminNoteTaskDTO.setSubmissionProgress(100.0);
-                    }
-                    else {
+                    } else {
                         adminNoteTaskDTO.setSubmissionProgress(new BigDecimal(1.0 * adminNoteTaskDTO.getSubmittedCount() / needSubmitCount)
                                 .setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                     }
@@ -561,6 +565,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
 
     /**
      * 获取任务提交的笔记操作次数列表
+     *
      * @param queryParam
      * @return
      */
@@ -574,6 +579,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
 
     /**
      * 退回消息
+     *
      * @param submissionReturnParam
      * @return
      */
@@ -615,17 +621,17 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
         // 插入历史日志
         String destination = rocketMQProperties.getNoteTaskTopic() + ":" + NoteTaskTagsEnum.INSERT_HISTORY.name();
         rocketMQTemplate.send(destination, MessageBuilder.withPayload(NoteTaskOperationHistory.builder()
-                        .noteTaskId(submissionReturnParam.getNoteTaskId())
-                        .type(NoteTaskOperationType.RETURN_SUBMISSION.getValue())
-                        .operatorId(loginUser.getSysUser().getId())
-                        .operationTime(date)
-                        .noteTaskUserId(noteTaskSubmissionRecord.getUserId())
-                        .noteTaskSubmissionRecordId(noteTaskSubmissionRecord.getId())
-                        .deleted(0)
-                        .createBy(loginUser.getSysUser().getId())
-                        .createTime(date)
-                        .updateBy(loginUser.getSysUser().getId())
-                        .updateTime(date)
+                .noteTaskId(submissionReturnParam.getNoteTaskId())
+                .type(NoteTaskOperationType.RETURN_SUBMISSION.getValue())
+                .operatorId(loginUser.getSysUser().getId())
+                .operationTime(date)
+                .noteTaskUserId(noteTaskSubmissionRecord.getUserId())
+                .noteTaskSubmissionRecordId(noteTaskSubmissionRecord.getId())
+                .deleted(0)
+                .createBy(loginUser.getSysUser().getId())
+                .createTime(date)
+                .updateBy(loginUser.getSysUser().getId())
+                .updateTime(date)
                 .build()).build());
         return Constants.SUCCESS_RES;
     }
@@ -676,7 +682,27 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
 
     @RequiresNoteTaskPermissions(NoteTaskPermissions.MANAGE)
     @Override
-    public List<NoteTaskChartsPO> getNoteTaskChartsData(NoteTaskChartsQueryParam queryParam) {
-        return this.baseMapper.selectNoteTaskCharts(queryParam.getNoteTaskId());
+    public List<NoteTaskChartsVO> getNoteTaskChartsData(NoteTaskChartsQueryParam queryParam) {
+        NoteTaskSubmissionTimePO noteTaskSubmissionTimePO =
+                this.baseMapper.selectNoteTaskSubmissionTime(queryParam.getNoteTaskId());
+        Date roundedEarliestTime = DateUtils.roundDownToHour(noteTaskSubmissionTimePO.getEarliestTime());
+        Date roundedLatestTime = DateUtils.roundUpToHour(noteTaskSubmissionTimePO.getLatestTime());
+        Calendar calendar = DateUtils.buildCalendar(roundedEarliestTime);
+        List<NoteTaskChartsVO> noteTaskChartsVOList = new ArrayList<>();
+        while (calendar.getTime().before(roundedLatestTime)) {
+            Calendar endTimeCalendar = DateUtils.buildCalendar(calendar.getTime());
+            endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
+            noteTaskChartsVOList.add(NoteTaskChartsVO
+                    .builder()
+                    .startTime(calendar.getTime())
+                    .endTime(endTimeCalendar.getTime())
+                    .chartsPOList(this.baseMapper.selectNoteTaskCharts(NoteTaskChartsSelectParam
+                            .builder()
+                            .startTime(calendar.getTime()).endTime(endTimeCalendar.getTime())
+                            .noteTaskId(queryParam.getNoteTaskId()).build()))
+                    .build());
+            calendar.add(Calendar.HOUR_OF_DAY, 1);
+        }
+        return noteTaskChartsVOList;
     }
 }

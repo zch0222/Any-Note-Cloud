@@ -14,6 +14,7 @@ import com.anynote.note.model.dto.NoteTaskSubmissionRecordCreateDTO;
 import com.anynote.note.model.dto.NoteTaskCreateDTO;
 import com.anynote.note.model.dto.UserNoteTaskAnalyzeDTO;
 import com.anynote.note.model.po.NoteTaskChartsPO;
+import com.anynote.note.model.vo.NoteTaskChartsVO;
 import com.anynote.note.model.vo.NoteTaskHistoryVO;
 import com.anynote.note.model.vo.NoteTaskUserAnalyzeVO;
 import com.anynote.note.service.NoteTaskService;
@@ -81,15 +82,9 @@ public class NoteTaskController {
      * @return 任务图表数据
      */
     @GetMapping("{id}/charts")
-    public ResData<List<NoteTaskChartsPO>> getNoteTaskChartsData(@NotNull(message = "任务ID不能为空") @PathVariable("id") Long id) {
+    public ResData<List<NoteTaskChartsVO>> getNoteTaskChartsData(@NotNull(message = "任务ID不能为空") @PathVariable("id") Long id) {
         NoteTaskChartsQueryParam noteTaskChartsQueryParam = new NoteTaskChartsQueryParam();
         noteTaskChartsQueryParam.setNoteTaskId(id);
         return ResUtil.success(noteTaskService.getNoteTaskChartsData(noteTaskChartsQueryParam));
-
     }
-
-
-
-
-
 }
