@@ -3,10 +3,12 @@ package com.anynote.note.mapper;
 import com.anynote.note.api.model.bo.NoteOperationCount;
 import com.anynote.note.api.model.po.NoteTask;
 import com.anynote.note.model.bo.NoteTaskAnalyzeQueryParam;
+import com.anynote.note.model.bo.NoteTaskChartsSelectParam;
 import com.anynote.note.model.bo.NoteTaskQueryParam;
 import com.anynote.note.model.dto.MemberNoteTaskDTO;
 import com.anynote.note.model.po.NoteTaskAnalyzePO;
 import com.anynote.note.model.po.NoteTaskChartsPO;
+import com.anynote.note.model.po.NoteTaskSubmissionTimePO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -26,7 +28,9 @@ public interface NoteTaskMapper extends BaseMapper<NoteTask> {
 
     public List<NoteTaskAnalyzePO> selectNoteTaskAnalyze(NoteTaskAnalyzeQueryParam queryParam);
 
-    public List<NoteTaskChartsPO> selectNoteTaskCharts(@Param("noteTaskId") Long noteTaskId);
+    public List<NoteTaskChartsPO> selectNoteTaskCharts(NoteTaskChartsSelectParam param);
+
+    public NoteTaskSubmissionTimePO selectNoteTaskSubmissionTime(@Param("noteTaskId") Long noteTaskId);
 
 
 }

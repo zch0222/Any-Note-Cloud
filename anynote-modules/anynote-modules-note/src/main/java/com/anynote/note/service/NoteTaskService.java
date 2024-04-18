@@ -8,7 +8,7 @@ import com.anynote.note.enums.NoteTaskPermissions;
 import com.anynote.note.model.bo.*;
 import com.anynote.note.model.dto.AdminNoteTaskDTO;
 import com.anynote.note.model.dto.MemberNoteTaskDTO;
-import com.anynote.note.model.po.NoteTaskChartsPO;
+import com.anynote.note.model.vo.NoteTaskChartsVO;
 import com.anynote.note.model.vo.NoteTaskHistoryVO;
 import com.anynote.note.model.vo.NoteTaskUserAnalyzeVO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -76,6 +76,6 @@ public interface NoteTaskService extends IService<NoteTask> {
      */
     public List<NoteTask> getNoteTasksByKnowledgeBaseId(Long knowledgeBaseId);
 
-    public List<NoteTaskChartsPO> getNoteTaskChartsData(NoteTaskChartsQueryParam queryParam);
+    public List<NoteTaskChartsVO> getNoteTaskChartsData(NoteTaskChartsQueryParam queryParam);
 
 }
