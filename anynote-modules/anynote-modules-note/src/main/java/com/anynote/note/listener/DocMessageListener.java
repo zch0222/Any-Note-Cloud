@@ -21,7 +21,7 @@ import java.nio.ByteBuffer;
 @Component
 @Slf4j
 @RocketMQMessageListener(topic = "${anynote.data.rocketmq.doc-topic}",
-        consumerGroup = "${anynote.data.rocketmq.doc-group}")
+        consumerGroup = "${anynote.data.rocketmq.doc-group}", maxReconsumeTimes = 2)
 public class DocMessageListener implements RocketMQListener<MessageExt> {
 
     @Resource
@@ -48,6 +48,7 @@ public class DocMessageListener implements RocketMQListener<MessageExt> {
         Doc doc = docService.getBaseMapper().selectById(docId);
         FilePO filePO = RemoteResDataUtil.getResData(remoteFileService.getFileById(doc.getFileId(), "inner"),
                 "获取文件信息失败");
-        remoteRagService.indexFile(RagFileIndexReq.builder().file_path(filePO.getUrl()).build());
+        RemoteResDataUtil.getResData(remoteRagService.indexFile(RagFileIndexReq.builder()
+                .file_path(filePO.getUrl()).build(), "inner"), "索引建立失败");
     }
 }

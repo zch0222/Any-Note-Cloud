@@ -61,7 +61,7 @@ public class FileController {
     }
 
     @GetMapping("/{id}")
-//    @InnerAuth
+    @InnerAuth
     public ResData<FilePO> getFileById(@PathVariable("id") Long id) {
         return ResUtil.success(fileService.getFileById(id));
     }

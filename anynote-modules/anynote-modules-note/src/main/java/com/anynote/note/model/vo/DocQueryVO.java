@@ -1,15 +1,19 @@
-package com.anynote.ai.api.model.bo;
+package com.anynote.note.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ *
+ * @author 称霸幼儿园
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RagFileIndexRes {
+public class DocQueryVO {
 
-    private String hash;
+    private String message;
 }

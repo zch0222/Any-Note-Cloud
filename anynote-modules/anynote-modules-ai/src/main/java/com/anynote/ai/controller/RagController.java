@@ -2,6 +2,8 @@ package com.anynote.ai.controller;
 
 import com.anynote.ai.api.model.bo.RagFileIndexReq;
 import com.anynote.ai.api.model.bo.RagFileIndexRes;
+import com.anynote.ai.api.model.bo.RagFileQueryReq;
+import com.anynote.ai.api.model.bo.RagFileQueryRes;
 import com.anynote.ai.service.RagService;
 import com.anynote.common.security.annotation.InnerAuth;
 import com.anynote.core.utils.ResUtil;
@@ -25,6 +27,12 @@ public class RagController {
     @PostMapping("index")
     public ResData<RagFileIndexRes> indexFile(@Validated @RequestBody RagFileIndexReq ragFileIndexReq) {
         return ResUtil.success(ragService.indexFile(ragFileIndexReq));
+    }
+
+    @InnerAuth
+    @PostMapping("query")
+    public ResData<RagFileQueryRes> queryFile(@Validated @RequestBody RagFileQueryReq ragFileQueryReq) {
+        return ResUtil.success(ragService.queryFile(ragFileQueryReq));
     }
 
 }

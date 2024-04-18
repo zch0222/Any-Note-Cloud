@@ -17,6 +17,7 @@ import com.anynote.note.model.bo.PDFCreateParam;
 import com.anynote.note.model.dto.CompleteDocUploadDTO;
 import com.anynote.note.model.dto.DocListDTO;
 import com.anynote.note.model.vo.DocListVO;
+import com.anynote.note.model.vo.DocQueryVO;
 import com.anynote.note.model.vo.DocVO;
 import com.anynote.note.service.DocService;
 import org.springframework.validation.annotation.Validated;
@@ -83,6 +84,11 @@ public class DocController {
     @GetMapping("{id}")
     public ResData<DocVO> getDoc(@Validated @PathVariable @NotNull(message = "文档ID不能为空") Long id) {
         return ResUtil.success(docService.getDocById(DocQueryParam.DocQueryParamBuilder().docId(id).build()));
+    }
+
+    @PostMapping("{id}/query")
+    public ResData<DocQueryVO> ragQueryDoc(@Validated @PathVariable @NotNull(message = "文档ID不能为空") Long id) {
+        return null;
     }
 
 }

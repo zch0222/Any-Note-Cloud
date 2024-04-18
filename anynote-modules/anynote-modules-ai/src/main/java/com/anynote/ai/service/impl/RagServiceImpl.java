@@ -2,6 +2,8 @@ package com.anynote.ai.service.impl;
 
 import com.anynote.ai.api.model.bo.RagFileIndexReq;
 import com.anynote.ai.api.model.bo.RagFileIndexRes;
+import com.anynote.ai.api.model.bo.RagFileQueryReq;
+import com.anynote.ai.api.model.bo.RagFileQueryRes;
 import com.anynote.ai.service.RagService;
 import com.anynote.common.redis.service.ConfigService;
 import com.anynote.common.redis.service.RedisService;
@@ -46,6 +48,22 @@ public class RagServiceImpl implements RagService {
         if (!HttpStatus.OK.equals(response.getStatusCode())) {
             throw new BusinessException("调用文件索引服务器失败");
         }
+
         return RemoteResDataUtil.getResData(response.getBody(), "建立索引失败");
+    }
+
+
+    @Override
+    public RagFileQueryRes queryFile(RagFileQueryReq ragFileQueryReq) {
+        String aiServerAddress = configService.getAIServerAddress();
+        HttpEntity<RagFileQueryReq> httpEntity = new HttpEntity<>(ragFileQueryReq);
+        ParameterizedTypeReference<ResData<RagFileQueryRes>> responseType =
+                new ParameterizedTypeReference<ResData<RagFileQueryRes>>() {};
+        ResponseEntity<ResData<RagFileQueryRes>> response = restTemplate.exchange(aiServerAddress + "/api/rag/query",
+                HttpMethod.POST, httpEntity, responseType);
+        if (!HttpStatus.OK.equals(response.getStatusCode())) {
+            throw new BusinessException("调用AI服务器失败");
+        }
+        return RemoteResDataUtil.getResData(response.getBody(), "查询失败");
     }
 }

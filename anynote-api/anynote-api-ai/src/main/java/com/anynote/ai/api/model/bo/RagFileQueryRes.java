@@ -5,14 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-
+/**
+ * @author 称霸幼儿园
+ */
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class RagFileIndexReq {
+@NoArgsConstructor
+public class RagFileQueryRes {
 
-    @NotNull(message = "文件地址不能为空")
-    private String file_path;
+    private String message;
+
 }
