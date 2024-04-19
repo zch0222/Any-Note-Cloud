@@ -1,5 +1,7 @@
 package com.anynote.common.redis.service;
 
+import com.anynote.core.enums.ConfigEnum;
+import com.anynote.system.api.model.po.SysConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.util.CloseableIterator;
@@ -42,6 +44,10 @@ public class RedisService {
     public <T> void setCacheObject(final String key, final T value, final Long timeout, final TimeUnit timeUnit)
     {
         redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
+    }
+
+    public SysConfig getConfig(ConfigEnum configEnum) {
+        return (SysConfig) this.getCacheObject(configEnum.name());
     }
 
     /**

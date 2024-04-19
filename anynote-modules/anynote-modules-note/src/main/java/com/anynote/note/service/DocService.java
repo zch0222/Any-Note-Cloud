@@ -5,11 +5,9 @@ import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.file.api.model.bo.HuaweiOBSTemporarySignature;
 import com.anynote.note.api.model.po.Doc;
 import com.anynote.note.enums.DocPermissions;
-import com.anynote.note.model.bo.DocCreateParam;
-import com.anynote.note.model.bo.DocQueryParam;
-import com.anynote.note.model.bo.DocUploadSignatureCreateParam;
-import com.anynote.note.model.bo.PDFCreateParam;
+import com.anynote.note.model.bo.*;
 import com.anynote.note.model.vo.DocListVO;
+import com.anynote.note.model.vo.DocQueryVO;
 import com.anynote.note.model.vo.DocVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -31,6 +29,8 @@ public interface DocService extends IService<Doc> {
     public DocPermissions getDocPermissions(Long docId);
 
     public DocVO getDocById(DocQueryParam queryParam);
+
+    public DocQueryVO queryDoc(DocRagQueryParam docRagQueryParam);
 
 
 }

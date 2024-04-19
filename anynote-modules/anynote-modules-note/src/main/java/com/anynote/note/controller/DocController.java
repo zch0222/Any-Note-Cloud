@@ -10,19 +10,16 @@ import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.core.web.model.bo.ResData;
 import com.anynote.file.api.model.bo.HuaweiOBSTemporarySignature;
 import com.anynote.file.api.model.dto.DocUploadTempLinkDTO;
-import com.anynote.note.model.bo.DocCreateParam;
-import com.anynote.note.model.bo.DocQueryParam;
-import com.anynote.note.model.bo.DocUploadSignatureCreateParam;
-import com.anynote.note.model.bo.PDFCreateParam;
+import com.anynote.note.model.bo.*;
 import com.anynote.note.model.dto.CompleteDocUploadDTO;
 import com.anynote.note.model.dto.DocListDTO;
+import com.anynote.note.model.dto.DocRagQueryDTO;
 import com.anynote.note.model.vo.DocListVO;
 import com.anynote.note.model.vo.DocQueryVO;
 import com.anynote.note.model.vo.DocVO;
 import com.anynote.note.service.DocService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.annotation.Resource;
@@ -87,8 +84,12 @@ public class DocController {
     }
 
     @PostMapping("{id}/query")
-    public ResData<DocQueryVO> ragQueryDoc(@Validated @PathVariable @NotNull(message = "文档ID不能为空") Long id) {
-        return null;
+    public ResData<DocQueryVO> ragQueryDoc(@Validated @PathVariable @NotNull(message = "文档ID不能为空") Long id,
+                                           @RequestBody DocRagQueryDTO docRagQueryDTO) {
+        return ResUtil.success(docService.queryDoc(DocRagQueryParam.DocRagQueryParamBuilder()
+                .docId(id)
+                .prompt(docRagQueryDTO.getPrompt())
+                .build()));
     }
 
 }

@@ -4,6 +4,7 @@ import com.anynote.ai.api.factory.RemoteRagFallbackFactory;
 import com.anynote.ai.api.model.bo.RagFileIndexReq;
 import com.anynote.ai.api.model.bo.RagFileIndexRes;
 import com.anynote.ai.api.model.bo.RagFileQueryReq;
+import com.anynote.ai.api.model.bo.RagFileQueryRes;
 import com.anynote.core.constant.ServiceNameConstants;
 import com.anynote.core.web.model.bo.ResData;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -26,6 +27,6 @@ public interface RemoteRagService {
                                               @RequestHeader("from-source") String fromSource);
 
     @PostMapping("/rag/query")
-    public ResData<RagFileQueryReq> queryFile(@RequestBody RagFileQueryReq ragFileQueryReq);
+    public ResData<RagFileQueryRes> queryFile(@RequestBody RagFileQueryReq ragFileQueryReq);
 
 }

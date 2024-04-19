@@ -21,6 +21,8 @@ public class DocVO {
      */
     private String docName;
 
+    private String englishDocName;
+
     /**
      * 创建者ID
      */

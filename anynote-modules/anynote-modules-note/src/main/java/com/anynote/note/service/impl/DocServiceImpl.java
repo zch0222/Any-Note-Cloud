@@ -1,5 +1,10 @@
 package com.anynote.note.service.impl;
 
+import com.anynote.ai.api.RemoteRagService;
+import com.anynote.ai.api.RemoteTranslateService;
+import com.anynote.ai.api.model.bo.RagFileQueryReq;
+import com.anynote.ai.api.model.bo.RagFileQueryRes;
+import com.anynote.ai.api.model.dto.TranslateTextDTO;
 import com.anynote.common.redis.service.ConfigService;
 import com.anynote.common.rocketmq.callback.RocketmqSendCallbackBuilder;
 import com.anynote.common.rocketmq.properties.RocketMQProperties;
@@ -30,6 +35,7 @@ import com.anynote.note.enums.KnowledgeBasePermissions;
 import com.anynote.note.mapper.DocMapper;
 import com.anynote.note.model.bo.*;
 import com.anynote.note.model.vo.DocListVO;
+import com.anynote.note.model.vo.DocQueryVO;
 import com.anynote.note.model.vo.DocVO;
 import com.anynote.note.service.DocService;
 import com.anynote.note.service.KnowledgeBaseService;
@@ -45,6 +51,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -71,6 +79,12 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
     @Resource
     private TokenUtil tokenUtil;
 
+    @Resource
+    private RemoteRagService remoteRagService;
+
+    @Resource
+    private RemoteTranslateService remoteTranslateService;
+
 
     @Override
     @RequiresKnowledgeBasePermissions(value = KnowledgeBasePermissions.MANAGE, message = "您没有权限上传PDF文档")
@@ -81,7 +95,6 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
                 FileConstants.DOC_PDF, loginUser.getSysUser().getId(), pdfCreateParam.getUploadId(), FileSources.KNOWLEDGE_BASE_DOC.getValue());
 
         FilePO filePO = RemoteResDataUtil.getResData(resData, "上传文档失败");
-
         Doc doc = Doc.builder()
                 .fileId(filePO.getId())
                 .name(filePO.getOriginalFileName())
@@ -144,6 +157,10 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
         // 异步建立索引
         String destination = rocketMQProperties.getDocTopic() + ":" + DocTagsEnum.RAG_INDEX.name();
         rocketMQTemplate.asyncSend(destination, doc.getId(), RocketmqSendCallbackBuilder.commonCallback());
+
+        String translateDocNameDestination = rocketMQProperties.getDocTopic() + ":" +
+                DocTagsEnum.TRANSLATE_DOC_NAME_TO_ENGLISH.name();
+        rocketMQTemplate.asyncSend(translateDocNameDestination, doc.getId(), RocketmqSendCallbackBuilder.commonCallback());
 
         return CreateResEntity.builder()
                 .id(doc.getId())
@@ -213,4 +230,21 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
         return docVO;
     }
 
+
+    @Override
+    @RequiresDocPermissions(DocPermissions.READ)
+    public DocQueryVO queryDoc(DocRagQueryParam docRagQueryParam) {
+        DocVO docVO = this.getDocById(docRagQueryParam);
+        RagFileQueryRes ragFileQueryRes = RemoteResDataUtil.getResData(remoteRagService.queryFile(RagFileQueryReq.builder()
+                .file_hash(docVO.getHash())
+                .prompt(docRagQueryParam.getPrompt())
+                .file_name(docVO.getEnglishDocName().replace(" ", "_"))
+                .author(docVO.getCreatorNickname())
+                .category("UNKNOWN")
+                .description("None")
+                .build()), "RAG查询失败");
+        return DocQueryVO
+                .builder()
+                .message(ragFileQueryRes.getMessage()).build();
+    }
 }

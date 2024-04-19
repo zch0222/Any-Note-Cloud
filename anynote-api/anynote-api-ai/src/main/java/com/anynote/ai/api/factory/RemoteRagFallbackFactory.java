@@ -4,6 +4,7 @@ import com.anynote.ai.api.RemoteRagService;
 import com.anynote.ai.api.model.bo.RagFileIndexReq;
 import com.anynote.ai.api.model.bo.RagFileIndexRes;
 import com.anynote.ai.api.model.bo.RagFileQueryReq;
+import com.anynote.ai.api.model.bo.RagFileQueryRes;
 import com.anynote.core.exception.BusinessException;
 import com.anynote.core.web.model.bo.ResData;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class RemoteRagFallbackFactory implements FallbackFactory<RemoteRagServic
             }
 
             @Override
-            public ResData<RagFileQueryReq> queryFile(RagFileQueryReq ragFileQueryReq) {
+            public ResData<RagFileQueryRes> queryFile(RagFileQueryReq ragFileQueryReq) {
                 throw new BusinessException("AI模块调用失败：查询文档失败");
             }
         };

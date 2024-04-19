@@ -16,6 +16,13 @@ public enum ConfigEnum {
     HUAWEI_OBS_CONFIG,
 
     /**
+     * 翻译类型
+     */
+    TRANSLATE_TYPE,
+
+    DEEPL_CONFIG,
+
+    /**
      * AI 服务器地址
      */
     AI_SERVER_ADDRESS;

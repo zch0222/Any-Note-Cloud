@@ -38,6 +38,11 @@ public class Doc extends BaseEntity {
     private String name;
 
     /**
+     * 英文名
+     */
+    private String englishName;
+
+    /**
      * 知识库id
      */
     private Long knowledgeBaseId;
@@ -66,7 +71,7 @@ public class Doc extends BaseEntity {
 
     @Builder
     public Doc(Long id, Long fileId, String name, Long knowledgeBaseId, Integer type, Integer dataScope, String permissions, Integer deleted,
-               Long createBy, Date createTime, Long updateBy,
+               Long createBy, Date createTime, Long updateBy, String englishName,
                Date updateTime, String remark, Map<String, Object> params) {
         super(createBy, createTime, updateBy, updateTime, remark, params);
         this.id = id;
@@ -77,6 +82,7 @@ public class Doc extends BaseEntity {
         this.dataScope = dataScope;
         this.permissions = permissions;
         this.deleted = deleted;
+        this.englishName = englishName;
     }
 
 
