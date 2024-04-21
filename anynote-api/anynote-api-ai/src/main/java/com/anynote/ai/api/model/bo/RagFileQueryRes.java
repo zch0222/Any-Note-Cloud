@@ -16,4 +16,10 @@ public class RagFileQueryRes {
 
     private String message;
 
+    private String id;
+
+    private String status;
+
+    private String result;
+
 }

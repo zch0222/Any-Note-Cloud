@@ -1,1 +1,2 @@
 com.anynote.common.rocketmq.properties.RocketMQProperties
+com.anynote.common.rocketmq.config.RocketMQConfig

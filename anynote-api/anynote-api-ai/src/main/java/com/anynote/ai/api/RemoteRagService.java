@@ -27,6 +27,6 @@ public interface RemoteRagService {
                                               @RequestHeader("from-source") String fromSource);
 
     @PostMapping("/rag/query")
-    public ResData<RagFileQueryRes> queryFile(@RequestBody RagFileQueryReq ragFileQueryReq);
+    public void queryFile(@RequestBody RagFileQueryReq ragFileQueryReq);
 
 }

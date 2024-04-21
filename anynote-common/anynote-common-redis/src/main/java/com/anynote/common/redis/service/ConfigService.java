@@ -17,4 +17,9 @@ public class ConfigService {
         return sysConfig.getValue();
     }
 
+    public Integer getRagMaxDayCount() {
+        SysConfig sysConfig = redisService.getConfig(ConfigEnum.RAG_MAX_DAY_COUNT);
+        return Integer.valueOf(sysConfig.getValue());
+    }
+
 }

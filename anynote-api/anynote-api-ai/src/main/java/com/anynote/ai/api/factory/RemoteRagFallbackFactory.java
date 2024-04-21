@@ -33,7 +33,7 @@ public class RemoteRagFallbackFactory implements FallbackFactory<RemoteRagServic
             }
 
             @Override
-            public ResData<RagFileQueryRes> queryFile(RagFileQueryReq ragFileQueryReq) {
+            public void queryFile(RagFileQueryReq ragFileQueryReq) {
                 throw new BusinessException("AI模块调用失败：查询文档失败");
             }
         };

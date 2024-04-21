@@ -24,6 +24,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 
 /**
  * 文档 Controller
@@ -84,12 +85,12 @@ public class DocController {
     }
 
     @PostMapping("{id}/query")
-    public ResData<DocQueryVO> ragQueryDoc(@Validated @PathVariable @NotNull(message = "文档ID不能为空") Long id,
-                                           @RequestBody DocRagQueryDTO docRagQueryDTO) {
-        return ResUtil.success(docService.queryDoc(DocRagQueryParam.DocRagQueryParamBuilder()
+    public void ragQueryDoc(@Validated @PathVariable @NotNull(message = "文档ID不能为空") Long id,
+                                           @RequestBody DocRagQueryDTO docRagQueryDTO) throws IOException {
+        docService.queryDoc(DocRagQueryParam.DocRagQueryParamBuilder()
                 .docId(id)
                 .prompt(docRagQueryDTO.getPrompt())
-                .build()));
+                .build());
     }
 
 }

@@ -3,8 +3,7 @@ package com.anynote.ai.controller;
 import com.anynote.ai.api.model.bo.RagFileIndexReq;
 import com.anynote.ai.api.model.bo.RagFileIndexRes;
 import com.anynote.ai.api.model.bo.RagFileQueryReq;
-import com.anynote.ai.api.model.bo.RagFileQueryRes;
-import com.anynote.ai.service.RagService;
+import com.anynote.ai.service.FileRagService;
 import com.anynote.common.security.annotation.InnerAuth;
 import com.anynote.core.utils.ResUtil;
 import com.anynote.core.web.model.bo.ResData;
@@ -15,24 +14,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("rag")
 public class RagController {
 
     @Resource
-    private RagService ragService;
+    private FileRagService fileRagService;
 
     @InnerAuth
     @PostMapping("index")
     public ResData<RagFileIndexRes> indexFile(@Validated @RequestBody RagFileIndexReq ragFileIndexReq) {
-        return ResUtil.success(ragService.indexFile(ragFileIndexReq));
+        return ResUtil.success(fileRagService.indexFile(ragFileIndexReq));
     }
 
     @InnerAuth
     @PostMapping("query")
-    public ResData<RagFileQueryRes> queryFile(@Validated @RequestBody RagFileQueryReq ragFileQueryReq) {
-        return ResUtil.success(ragService.queryFile(ragFileQueryReq));
+    public void queryFile(@Validated @RequestBody RagFileQueryReq ragFileQueryReq) throws IOException {
+        fileRagService.queryFile(ragFileQueryReq);
     }
 
 }

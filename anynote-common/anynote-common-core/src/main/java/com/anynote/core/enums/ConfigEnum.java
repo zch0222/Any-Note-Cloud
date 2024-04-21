@@ -23,6 +23,11 @@ public enum ConfigEnum {
     DEEPL_CONFIG,
 
     /**
+     * RAG服务每日最多调用次数
+     */
+    RAG_MAX_DAY_COUNT,
+
+    /**
      * AI 服务器地址
      */
     AI_SERVER_ADDRESS;

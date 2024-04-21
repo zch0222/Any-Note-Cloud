@@ -134,13 +134,40 @@ public class RedisService {
     public void deleteObjects(Object prefix) {
         ScanOptions options = ScanOptions.scanOptions()
                 .match(prefix + "*")
-                .count(20)
                 .build();
 
         CloseableIterator<Object> keyIterator = redisTemplate.opsForValue().getOperations().scan(options);
         while (keyIterator.hasNext()) {
             redisTemplate.delete(keyIterator.next());
         }
+    }
+
+    public Map<String, Object> getObjects(String prefix) {
+        // 创建扫描选项，匹配所有以prefix为前缀的键
+        ScanOptions options = ScanOptions.scanOptions().match(prefix + "*").build();
+
+        // 使用CloseableIterator进行迭代键
+        CloseableIterator<String> keyIterator = redisTemplate.opsForValue().getOperations().scan(options);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            while (keyIterator.hasNext()) {
+                String key = keyIterator.next();
+                // 从Redis获取与键对应的值
+                Object value = redisTemplate.opsForValue().get(key);
+                if (value != null) {
+                    resultMap.put(key, value);
+                }
+            }
+        } finally {
+            try {
+                keyIterator.close(); // 确保关闭keyIterator
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return resultMap;
     }
 
     /**
@@ -279,5 +306,4 @@ public class RedisService {
     {
         return redisTemplate.keys(pattern);
     }
-
 }

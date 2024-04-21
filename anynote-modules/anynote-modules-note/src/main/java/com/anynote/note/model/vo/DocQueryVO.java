@@ -15,5 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DocQueryVO {
 
+    private String status;
+
     private String message;
 }

@@ -1,1 +1,3 @@
 com.anynote.ai.api.factory.RemoteRagFallbackFactory
+com.anynote.ai.api.factory.RemoteTranslateFallbackFactory
+com.anynote.ai.api.RagService

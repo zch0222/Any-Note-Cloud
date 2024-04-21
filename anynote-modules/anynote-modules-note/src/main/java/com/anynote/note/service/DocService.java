@@ -11,6 +11,8 @@ import com.anynote.note.model.vo.DocQueryVO;
 import com.anynote.note.model.vo.DocVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.io.IOException;
+
 /**
  * 文档服务
  * @author 称霸幼儿园
@@ -30,7 +32,7 @@ public interface DocService extends IService<Doc> {
 
     public DocVO getDocById(DocQueryParam queryParam);
 
-    public DocQueryVO queryDoc(DocRagQueryParam docRagQueryParam);
+    public void queryDoc(DocRagQueryParam docRagQueryParam) throws IOException;
 
 
 }

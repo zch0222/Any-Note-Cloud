@@ -40,6 +40,10 @@ public class ResUtil {
         return new ResData<>(resCode.getCode(), resCode.getMsg(), new String[0]);
     }
 
+    public static <K> ResData<K> error(K data) {
+        return new ResData<>(ResCode.BUSINESS_ERROR.getCode(), ResCode.BUSINESS_ERROR.getMsg(), data);
+    }
+
     public static ResData error(ResCode resCode, String msg) {
         return new ResData<>(resCode.getCode(), msg, new HashMap<>());
     }

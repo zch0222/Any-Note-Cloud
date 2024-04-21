@@ -1,5 +1,11 @@
 package com.anynote.core.utils;
 
+import sun.util.resources.LocaleData;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -38,6 +44,32 @@ public class DateUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar;
+    }
+
+    public static String getCurrentDateString() {
+        // 获取当前日期
+        LocalDate today = LocalDate.now();
+        // 创建格式化器
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        // 格式化日期
+        return today.format(formatter);
+    }
+
+    public static Date getYesterdayUsingCalendar() {
+        Calendar calendar = Calendar.getInstance();  // 获取当前日期和时间的Calendar实例
+        calendar.add(Calendar.DATE, -1);             // 将日期减一天来获取昨天的日期
+        return calendar.getTime();                  // 将Calendar转换为Date
+    }
+
+    public static String getDateString(Date date) {
+        // 将Date转换为LocalDateTime
+        LocalDateTime localDateTime = date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        // 创建格式化器
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        // 格式化日期
+        return formatter.format(localDateTime);
     }
 
 }
