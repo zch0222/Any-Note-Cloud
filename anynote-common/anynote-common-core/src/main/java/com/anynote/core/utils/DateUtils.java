@@ -1,7 +1,5 @@
 package com.anynote.core.utils;
 
-import sun.util.resources.LocaleData;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
