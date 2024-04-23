@@ -259,8 +259,8 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
     @Override
     @RequiresDocPermissions(DocPermissions.READ)
     public void queryDoc(DocRagQueryParam docRagQueryParam) throws IOException {
+
         DocVO docVO = this.getDocById(docRagQueryParam);
-        String aiServerAddress = configService.getAIServerAddress();
         HttpServletResponse response = ServletUtils.getResponse();
         response.setHeader("Content-Type", "text/event-stream;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache");
