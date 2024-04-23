@@ -130,7 +130,6 @@ public class RagService {
                     latch.countDown();
                 },
                 () -> {
-                    latch.countDown();
                     if (ragFileQueryRes[0].getStatus().equals("finished")) {
                         ragLog.setResult(0);
                     }
@@ -144,6 +143,7 @@ public class RagService {
                     String destination = rocketMQProperties.getRagTopic() + ":" + RagTagsEnum.SAVE_RAG_LOG.name();
                     rocketMQTemplate.asyncSend(destination, gson.toJson(ragLog),
                             RocketmqSendCallbackBuilder.commonCallback());
+                    latch.countDown();
                 }
         );
 
