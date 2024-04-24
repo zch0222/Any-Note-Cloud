@@ -34,5 +34,9 @@ public interface DocService extends IService<Doc> {
 
     public void queryDoc(DocRagQueryParam docRagQueryParam) throws IOException;
 
+    public String indexDoc(DocIndexParam docIndexParam);
+
+    public String deleteDoc(DocDeleteParam param);
+
 
 }

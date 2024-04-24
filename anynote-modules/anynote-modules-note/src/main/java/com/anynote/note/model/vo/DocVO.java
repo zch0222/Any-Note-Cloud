@@ -21,6 +21,8 @@ public class DocVO {
      */
     private String docName;
 
+    private Integer indexStatus;
+
     private String englishDocName;
 
     /**

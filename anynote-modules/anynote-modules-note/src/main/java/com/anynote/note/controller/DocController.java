@@ -93,4 +93,17 @@ public class DocController {
                 .build());
     }
 
+    @PostMapping("{id}/index")
+    public ResData<String> indexDoc(@Validated @PathVariable @NotNull(message = "文档ID不能为空") Long id) {
+        DocIndexParam docIndexParam = new DocIndexParam();
+        docIndexParam.setDocId(id);
+        return ResUtil.success(docService.indexDoc(docIndexParam));
+    }
+
+    @DeleteMapping("{id}")
+    public ResData<String> deleteDoc(@Validated @PathVariable @NotNull(message = "文档ID不能为空") Long id) {
+        DocDeleteParam docDeleteParam = new DocDeleteParam();
+        docDeleteParam.setDocId(id);
+        return ResUtil.success(docService.deleteDoc(docDeleteParam));
+    }
 }

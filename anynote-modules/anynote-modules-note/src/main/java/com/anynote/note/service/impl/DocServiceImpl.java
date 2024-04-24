@@ -17,6 +17,7 @@ import com.anynote.common.security.token.TokenUtil;
 import com.anynote.core.constant.FileConstants;
 import com.anynote.core.constant.HuaweiOBSConstants;
 import com.anynote.core.exception.BusinessException;
+import com.anynote.core.exception.user.UserParamException;
 import com.anynote.core.utils.RemoteResDataUtil;
 import com.anynote.core.utils.ResUtil;
 import com.anynote.core.utils.ServletUtils;
@@ -35,6 +36,7 @@ import com.anynote.note.datascope.annotation.KnowledgeBaseDataScope;
 import com.anynote.note.datascope.annotation.RequiresDocPermissions;
 import com.anynote.note.datascope.annotation.RequiresKnowledgeBasePermissions;
 import com.anynote.note.datascope.aspect.RequiresDocPermissionsAspect;
+import com.anynote.note.enums.DocIndexStatus;
 import com.anynote.note.enums.DocPermissions;
 import com.anynote.note.enums.DocType;
 import com.anynote.note.enums.KnowledgeBasePermissions;
@@ -169,6 +171,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
                 .name(filePO.getOriginalFileName())
                 .knowledgeBaseId(docCreateParam.getKnowledgeBaseId())
                 .type(DocType.PDF.getValue())
+                .indexStatus(DocIndexStatus.NOT_INDEXED.getValue())
                 .dataScope(3)
                 .permissions("77400")
                 .deleted(0)
@@ -217,6 +220,10 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
                 .eq(Doc::getId, docId)
                 .select(Doc::getPermissions, Doc::getCreateBy, Doc::getKnowledgeBaseId, Doc::getId);
         Doc doc = this.baseMapper.selectOne(docLambdaQueryWrapper);
+
+        if (StringUtils.isNull(doc)) {
+            throw new UserParamException("文档不存在");
+        }
 
         int permission = 0;
         if (loginUser.getUserId().equals(doc.getCreateBy())) {
@@ -268,6 +275,15 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
         Gson gson = new Gson();
 
         LoginUser loginUser = tokenUtil.getLoginUser();
+        if (0 != docVO.getIndexStatus()) {
+            writer.write(String.format("id: %s\nevent: message\ndata: %s\n\n", System.currentTimeMillis(),
+                    gson.toJson(ResUtil.error(DocQueryVO.builder()
+                            .status("failed")
+                            .message("文档索引未生成，请先点击上方更多生成索引")
+                            .build()))));
+            writer.flush();
+            return;
+        }
 
         try {
             ragService.query(loginUser.getSysUser().getId(), RagFileQueryReq.builder()
@@ -359,5 +375,24 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
 //        } catch (InterruptedException e) {
 //            Thread.currentThread().interrupt();
 //        }
+    }
+
+    @RequiresDocPermissions(DocPermissions.MANAGE)
+    @Override
+    public String indexDoc(DocIndexParam docIndexParam) {
+        // 异步建立索引
+        String destination = rocketMQProperties.getDocTopic() + ":" + DocTagsEnum.RAG_INDEX.name();
+        rocketMQTemplate.asyncSend(destination, docIndexParam.getDocId(), RocketmqSendCallbackBuilder.commonCallback());
+        return "SUCCESS";
+    }
+
+    @RequiresDocPermissions(DocPermissions.MANAGE)
+    @Override
+    public String deleteDoc(DocDeleteParam param) {
+        int count = this.baseMapper.deleteById(param.getDocId());
+        if (1 != count) {
+            throw new BusinessException("删除失败");
+        }
+        return "SUCCESS";
     }
 }

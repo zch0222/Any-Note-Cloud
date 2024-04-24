@@ -6,6 +6,7 @@
     <resultMap id="DocListVOResultMap" type="com.anynote.note.model.vo.DocListVO">
         <id column="id" property="id" />
         <result column="doc_name" property="docName" />
+        <result column="index_status" property="indexStatus"/>
         <result column="create_by" property="createBy" />
         <result column="creator_nickname" property="creatorNickname" />
         <result column="creator_username" property="creatorUsername" />
@@ -18,6 +19,7 @@
         <id column="id" property="id" />
         <result column="doc_name" property="docName" />
         <result column="english_doc_name" property="englishDocName" />
+        <result column="index_status" property="indexStatus"/>
         <result column="create_by" property="createBy" />
         <result column="creator_nickname" property="creatorNickname" />
         <result column="creator_username" property="creatorUsername" />
@@ -30,7 +32,7 @@
 
     <select id="selectDocList" resultMap="DocListVOResultMap">
         SELECT
-            n_doc.id, n_doc.name as doc_name, n_doc.create_by, n_doc.knowledge_base_id, n_doc.create_time,
+            n_doc.id, n_doc.name as doc_name, n_doc.create_by, n_doc.knowledge_base_id, n_doc.create_time, n_doc.index_status,
             n_doc.update_time, sys_user.nickname as creator_nickname, sys_user.username as creator_username
         FROM
             n_doc
@@ -38,13 +40,15 @@
             sys_user ON sys_user.id = n_doc.create_by
         WHERE
             n_doc.knowledge_base_id = #{id}
+          AND
+            n_doc.is_delete = 0
         ${params.knowledgeBaseScope}
     </select>
 
     <select id="selectDocById" resultMap="DocVOResultMap">
         SELECT
             n_doc.id, n_doc.name as doc_name, n_doc.english_name as english_doc_name, n_doc.create_by, n_doc.knowledge_base_id, n_doc.create_time,
-            n_doc.update_time, sys_user.nickname as creator_nickname, sys_user.username as creator_username, f_file.hash,
+            n_doc.update_time, n_doc.index_status, sys_user.nickname as creator_nickname, sys_user.username as creator_username, f_file.hash,
             f_file.url
         FROM
             n_doc

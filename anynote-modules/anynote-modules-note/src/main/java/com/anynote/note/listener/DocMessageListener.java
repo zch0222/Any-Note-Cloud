@@ -6,10 +6,13 @@ import com.anynote.ai.api.model.bo.RagFileIndexReq;
 import com.anynote.ai.api.model.dto.TranslateTextDTO;
 import com.anynote.common.rocketmq.tags.DocTagsEnum;
 import com.anynote.common.rocketmq.tags.NoteTagsEnum;
+import com.anynote.core.exception.BusinessException;
 import com.anynote.core.utils.RemoteResDataUtil;
 import com.anynote.file.api.RemoteFileService;
 import com.anynote.file.api.model.po.FilePO;
 import com.anynote.note.api.model.po.Doc;
+import com.anynote.note.enums.DocIndexStatus;
+import com.anynote.note.enums.DocType;
 import com.anynote.note.service.DocService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageExt;
@@ -58,10 +61,19 @@ public class DocMessageListener implements RocketMQListener<MessageExt> {
 
     private void indexDoc(Long docId) {
         Doc doc = docService.getBaseMapper().selectById(docId);
+        doc.setIndexStatus(DocIndexStatus.INDEXING.getValue());
+        docService.getBaseMapper().updateById(doc);
         FilePO filePO = RemoteResDataUtil.getResData(remoteFileService.getFileById(doc.getFileId(), "inner"),
                 "获取文件信息失败");
-        RemoteResDataUtil.getResData(remoteRagService.indexFile(RagFileIndexReq.builder()
-                .file_path(filePO.getUrl()).build(), "inner"), "索引建立失败");
+        try {
+            RemoteResDataUtil.getResData(remoteRagService.indexFile(RagFileIndexReq.builder()
+                    .file_path(filePO.getUrl()).build(), "inner"), "索引建立失败");
+            doc.setIndexStatus(DocIndexStatus.INDEXED.getValue());
+        } catch (Exception e) {
+            log.error("建立索引失败");
+            doc.setIndexStatus(DocIndexStatus.FAILED.getValue());
+        }
+        docService.getBaseMapper().updateById(doc);
     }
 
     private void translateDocName2English(Long docId) {

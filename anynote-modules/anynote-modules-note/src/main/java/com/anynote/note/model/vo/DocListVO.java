@@ -22,6 +22,8 @@ public class DocListVO {
      */
     private Long createBy;
 
+    private Integer indexStatus;
+
     private String creatorNickname;
 
     private String creatorUsername;

@@ -53,6 +53,11 @@ public class Doc extends BaseEntity {
     private Integer type;
 
     /**
+     * 索引状态 0.成功 1.索引中 2.索引失败 3.未索引
+     */
+    private Integer indexStatus;
+
+    /**
      * 数据权限 1.自己可见 2.自己和管理员可见 3.知识库中所有人可见
      */
     private Integer dataScope;
@@ -71,7 +76,7 @@ public class Doc extends BaseEntity {
 
     @Builder
     public Doc(Long id, Long fileId, String name, Long knowledgeBaseId, Integer type, Integer dataScope, String permissions, Integer deleted,
-               Long createBy, Date createTime, Long updateBy, String englishName,
+               Long createBy, Date createTime, Long updateBy, String englishName, Integer indexStatus,
                Date updateTime, String remark, Map<String, Object> params) {
         super(createBy, createTime, updateBy, updateTime, remark, params);
         this.id = id;
@@ -79,6 +84,7 @@ public class Doc extends BaseEntity {
         this.name = name;
         this.knowledgeBaseId = knowledgeBaseId;
         this.type = type;
+        this.indexStatus = indexStatus;
         this.dataScope = dataScope;
         this.permissions = permissions;
         this.deleted = deleted;
