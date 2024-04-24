@@ -273,7 +273,8 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
             ragService.query(loginUser.getSysUser().getId(), RagFileQueryReq.builder()
                             .file_hash(docVO.getHash())
                             .prompt(docRagQueryParam.getPrompt())
-                            .file_name(docVO.getEnglishDocName().replace(" ", "_"))
+                            .file_name(docVO.getEnglishDocName() != null ?
+                                    docVO.getEnglishDocName().replace(" ", "_") : "doc")
                             .author(docVO.getCreatorNickname())
                             .category("UNKNOWN")
                             .description("None")
