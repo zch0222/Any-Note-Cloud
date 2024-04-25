@@ -29,4 +29,8 @@ public class RocketMQProperties {
     private String ragTopic;
 
     private String ragGroup;
+
+    private String aiChatTopic;
+
+    private String aiChatGroup;
 }
