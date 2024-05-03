@@ -1,1 +1,2 @@
 com.anynote.note.api.factory.RemoteKnowledgeBaseFallbackFactory
+com.anynote.note.api.factory.RemoteDocFallbackFactory

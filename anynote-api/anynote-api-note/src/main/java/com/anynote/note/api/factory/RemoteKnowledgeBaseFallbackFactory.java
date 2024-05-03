@@ -4,7 +4,7 @@ import com.anynote.core.utils.ResUtil;
 import com.anynote.core.web.enums.ResCode;
 import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.core.web.model.bo.ResData;
-import com.anynote.note.api.model.RemoteKnowledgeBaseService;
+import com.anynote.note.api.RemoteKnowledgeBaseService;
 import com.anynote.note.api.model.dto.NoteKnowledgeBaseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;

@@ -5,12 +5,11 @@ import com.anynote.core.utils.StringUtils;
 import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.core.web.model.bo.ResData;
 import com.anynote.manage.service.ManageKnowledgeBaseService;
-import com.anynote.note.api.model.RemoteKnowledgeBaseService;
+import com.anynote.note.api.RemoteKnowledgeBaseService;
 import com.anynote.note.api.model.dto.NoteKnowledgeBaseDTO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
 
 /**
  * @author 称霸幼儿园

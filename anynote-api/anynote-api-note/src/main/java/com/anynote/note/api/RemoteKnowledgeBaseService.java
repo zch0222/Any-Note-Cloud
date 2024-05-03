@@ -1,4 +1,4 @@
-package com.anynote.note.api.model;
+package com.anynote.note.api;
 
 import com.anynote.core.constant.ServiceNameConstants;
 import com.anynote.core.web.model.bo.PageBean;

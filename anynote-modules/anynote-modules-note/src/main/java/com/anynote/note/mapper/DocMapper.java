@@ -3,7 +3,7 @@ package com.anynote.note.mapper;
 import com.anynote.note.api.model.po.Doc;
 import com.anynote.note.model.bo.DocQueryParam;
 import com.anynote.note.model.vo.DocListVO;
-import com.anynote.note.model.vo.DocVO;
+import com.anynote.note.api.model.vo.DocVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

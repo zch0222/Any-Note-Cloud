@@ -6,6 +6,7 @@ package com.anynote.common.rocketmq.tags;
 public enum AIChatTagsEnum {
 
     CREATE_CONVERSATION("创建对话"),
+    SAVE_MESSAGE("保存消息")
     ;
 
     private final String description;

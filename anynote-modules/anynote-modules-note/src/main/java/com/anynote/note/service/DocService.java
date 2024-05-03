@@ -7,8 +7,7 @@ import com.anynote.note.api.model.po.Doc;
 import com.anynote.note.enums.DocPermissions;
 import com.anynote.note.model.bo.*;
 import com.anynote.note.model.vo.DocListVO;
-import com.anynote.note.model.vo.DocQueryVO;
-import com.anynote.note.model.vo.DocVO;
+import com.anynote.note.api.model.vo.DocVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.io.IOException;
@@ -31,6 +30,8 @@ public interface DocService extends IService<Doc> {
     public DocPermissions getDocPermissions(Long docId);
 
     public DocVO getDocById(DocQueryParam queryParam);
+
+    public Doc selectDocById(Long id);
 
     public void queryDoc(DocRagQueryParam docRagQueryParam) throws IOException;
 

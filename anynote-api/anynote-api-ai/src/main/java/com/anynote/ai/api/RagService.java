@@ -3,11 +3,13 @@ package com.anynote.ai.api;
 import com.anynote.ai.api.exception.RagLimitException;
 import com.anynote.ai.api.model.bo.RagFileQueryReq;
 import com.anynote.ai.api.model.bo.RagFileQueryRes;
+import com.anynote.ai.api.model.po.ChatConversation;
 import com.anynote.ai.api.model.po.RagLog;
 import com.anynote.common.redis.service.ConfigService;
 import com.anynote.common.redis.service.RedisService;
 import com.anynote.common.rocketmq.callback.RocketmqSendCallbackBuilder;
 import com.anynote.common.rocketmq.properties.RocketMQProperties;
+import com.anynote.common.rocketmq.tags.AIChatTagsEnum;
 import com.anynote.common.rocketmq.tags.RagTagsEnum;
 import com.anynote.common.security.token.TokenUtil;
 import com.anynote.core.exception.BusinessException;
@@ -17,11 +19,13 @@ import com.anynote.core.utils.StringUtils;
 import com.anynote.system.api.model.bo.LoginUser;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -86,9 +90,24 @@ public class RagService {
         throw new RagLimitException();
     }
 
-    public void query(Long userId, RagFileQueryReq req, Function<RagFileQueryRes, Void> callback) {
-        this.ragLimitCheck(userId);
+    public void query(Long userId, Long docId, Long conversationId, RagFileQueryReq req, Function<RagFileQueryRes, Void> callback) {
+        Gson gson = new Gson();
         Date date = new Date();
+        if (StringUtils.isNull(conversationId)) {
+            String destination = rocketMQProperties.getAiChatTopic() + ":" + AIChatTagsEnum.CREATE_CONVERSATION.name();
+            rocketMQTemplate.send(destination, MessageBuilder.withPayload(gson.toJson(ChatConversation.builder()
+                            .docId(docId)
+                            .title(req.getPrompt().length() > 10 ? req.getPrompt().substring(0, 10) + "..." : req.getPrompt())
+                            .type(0)
+                            .permissions("70000")
+                            .deleted(0)
+                            .createBy(userId)
+                            .createTime(date)
+                            .updateBy(userId)
+                            .updateTime(date)
+                    .build())).build());
+        }
+        this.ragLimitCheck(userId);
         RagLog ragLog = RagLog.builder()
                 .fileHash(req.getFile_hash())
                 .fileName(req.getFile_name())
@@ -104,7 +123,6 @@ public class RagService {
                 .createBy(userId)
                 .build();
         String aiServerAddress = configService.getAIServerAddress();
-        Gson gson = new Gson();
         Flux<RagFileQueryRes> resFlux = webClient.post()
                 .uri(aiServerAddress + "/api/rag/query")
                 .contentType(MediaType.APPLICATION_JSON)

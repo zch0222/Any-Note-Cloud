@@ -20,12 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 客户端工具类
@@ -292,6 +290,27 @@ public class ServletUtils
         {
             return StringUtils.EMPTY;
         }
+    }
+
+    public static void setStreamResponseHeader() {
+        HttpServletResponse response = getResponse();
+        assert response != null;
+        response.setHeader("Content-Type", "text/event-stream;charset=UTF-8");
+        response.setHeader("Cache-Control", "no-cache");
+
+    }
+
+    public static void sendStreamResponse(Writer writer, String data) {
+        try {
+            writer.write(String.format("id: %s\nevent: message\ndata: %s\n\n", System.currentTimeMillis(), data));
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Writer getWriter() throws IOException {
+        return Objects.requireNonNull(getResponse()).getWriter();
     }
 
 //    /**

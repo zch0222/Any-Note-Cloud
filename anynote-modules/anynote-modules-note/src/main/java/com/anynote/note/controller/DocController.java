@@ -1,5 +1,6 @@
 package com.anynote.note.controller;
 
+import com.anynote.common.security.annotation.InnerAuth;
 import com.anynote.core.utils.ResUtil;
 import com.anynote.core.validation.annotation.Upload;
 import com.anynote.core.validation.enums.FileType;
@@ -10,13 +11,13 @@ import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.core.web.model.bo.ResData;
 import com.anynote.file.api.model.bo.HuaweiOBSTemporarySignature;
 import com.anynote.file.api.model.dto.DocUploadTempLinkDTO;
+import com.anynote.note.api.model.po.Doc;
 import com.anynote.note.model.bo.*;
 import com.anynote.note.model.dto.CompleteDocUploadDTO;
 import com.anynote.note.model.dto.DocListDTO;
 import com.anynote.note.model.dto.DocRagQueryDTO;
 import com.anynote.note.model.vo.DocListVO;
-import com.anynote.note.model.vo.DocQueryVO;
-import com.anynote.note.model.vo.DocVO;
+import com.anynote.note.api.model.vo.DocVO;
 import com.anynote.note.service.DocService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -84,12 +85,19 @@ public class DocController {
         return ResUtil.success(docService.getDocById(DocQueryParam.DocQueryParamBuilder().docId(id).build()));
     }
 
+    @InnerAuth
+    @GetMapping("inner/{id}")
+    public ResData<Doc> selectDocById(@Validated @PathVariable @NotNull(message = "文档ID不能为空") Long id) {
+        return ResUtil.success(docService.selectDocById(id));
+    }
+
     @PostMapping("{id}/query")
     public void ragQueryDoc(@Validated @PathVariable @NotNull(message = "文档ID不能为空") Long id,
                                            @RequestBody DocRagQueryDTO docRagQueryDTO) throws IOException {
         docService.queryDoc(DocRagQueryParam.DocRagQueryParamBuilder()
                 .docId(id)
                 .prompt(docRagQueryDTO.getPrompt())
+                .conversationId(docRagQueryDTO.getConversationId())
                 .build());
     }
 

@@ -26,7 +26,7 @@ public interface RemoteRagService {
     public ResData<RagFileIndexRes> indexFile(@RequestBody RagFileIndexReq ragFileIndexReq,
                                               @RequestHeader("from-source") String fromSource);
 
-    @PostMapping("/rag/query")
-    public void queryFile(@RequestBody RagFileQueryReq ragFileQueryReq);
+//    @PostMapping("/rag/query")
+//    public void queryFile(@RequestBody RagFileQueryReq ragFileQueryReq);
 
 }

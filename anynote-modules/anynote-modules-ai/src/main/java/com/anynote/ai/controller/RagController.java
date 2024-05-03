@@ -3,6 +3,8 @@ package com.anynote.ai.controller;
 import com.anynote.ai.api.model.bo.RagFileIndexReq;
 import com.anynote.ai.api.model.bo.RagFileIndexRes;
 import com.anynote.ai.api.model.bo.RagFileQueryReq;
+import com.anynote.ai.api.model.dto.DocQueryDTO;
+import com.anynote.ai.model.bo.DocRagQueryParam;
 import com.anynote.ai.service.FileRagService;
 import com.anynote.common.security.annotation.InnerAuth;
 import com.anynote.core.utils.ResUtil;
@@ -33,6 +35,15 @@ public class RagController {
     @PostMapping("query")
     public void queryFile(@Validated @RequestBody RagFileQueryReq ragFileQueryReq) throws IOException {
         fileRagService.queryFile(ragFileQueryReq);
+    }
+
+    @PostMapping("query/docs")
+    public void queryDoc(@Validated @RequestBody DocQueryDTO docQueryDTO) throws IOException {
+        fileRagService.queryDoc(DocRagQueryParam.DocRagQueryParamBuilder()
+                        .conversionId(docQueryDTO.getConversationId())
+                        .docId(docQueryDTO.getDocId())
+                        .prompt(docQueryDTO.getPrompt())
+                .build());
     }
 
 }

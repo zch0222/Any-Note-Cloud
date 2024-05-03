@@ -79,6 +79,16 @@
             <artifactId>anynote-api-ai</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.anynote</groupId>
+            <artifactId>anynote-api-note</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+        </dependency>
+
 
     </dependencies>
 

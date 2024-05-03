@@ -1,14 +1,11 @@
 package com.anynote.note.service.impl;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.nacos.shaded.com.google.gson.Gson;
 import com.anynote.ai.api.RagService;
 import com.anynote.ai.api.RemoteRagService;
 import com.anynote.ai.api.RemoteTranslateService;
 import com.anynote.ai.api.exception.RagLimitException;
 import com.anynote.ai.api.model.bo.RagFileQueryReq;
-import com.anynote.ai.api.model.bo.RagFileQueryRes;
-import com.anynote.ai.api.model.dto.TranslateTextDTO;
 import com.anynote.common.redis.service.ConfigService;
 import com.anynote.common.rocketmq.callback.RocketmqSendCallbackBuilder;
 import com.anynote.common.rocketmq.properties.RocketMQProperties;
@@ -44,7 +41,7 @@ import com.anynote.note.mapper.DocMapper;
 import com.anynote.note.model.bo.*;
 import com.anynote.note.model.vo.DocListVO;
 import com.anynote.note.model.vo.DocQueryVO;
-import com.anynote.note.model.vo.DocVO;
+import com.anynote.note.api.model.vo.DocVO;
 import com.anynote.note.service.DocService;
 import com.anynote.note.service.KnowledgeBaseService;
 import com.anynote.system.api.model.bo.LoginUser;
@@ -55,23 +52,15 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * 文档服务器 IMPL
@@ -286,7 +275,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
         }
 
         try {
-            ragService.query(loginUser.getSysUser().getId(), RagFileQueryReq.builder()
+            ragService.query(loginUser.getSysUser().getId(), docRagQueryParam.getDocId(), docRagQueryParam.getConversationId(), RagFileQueryReq.builder()
                             .file_hash(docVO.getHash())
                             .prompt(docRagQueryParam.getPrompt())
                             .file_name(docVO.getEnglishDocName() != null ?
@@ -375,6 +364,11 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
 //        } catch (InterruptedException e) {
 //            Thread.currentThread().interrupt();
 //        }
+    }
+
+    @Override
+    public Doc selectDocById(Long id) {
+        return this.baseMapper.selectById(id);
     }
 
     @RequiresDocPermissions(DocPermissions.MANAGE)

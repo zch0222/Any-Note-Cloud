@@ -31,11 +31,11 @@ public class RemoteRagFallbackFactory implements FallbackFactory<RemoteRagServic
             public ResData<RagFileIndexRes> indexFile(RagFileIndexReq ragFileIndexReq, String fromSource) {
                 throw new BusinessException("AI模块调用失败：索引建立失败");
             }
-
-            @Override
-            public void queryFile(RagFileQueryReq ragFileQueryReq) {
-                throw new BusinessException("AI模块调用失败：查询文档失败");
-            }
+//
+//            @Override
+//            public void queryFile(RagFileQueryReq ragFileQueryReq) {
+//                throw new BusinessException("AI模块调用失败：查询文档失败");
+//            }
         };
     }
 }

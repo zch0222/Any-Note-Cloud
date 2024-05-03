@@ -37,6 +37,11 @@ public class ChatConversation extends BaseEntity {
     private Long docId;
 
     /**
+     * 权限
+     */
+    private String permissions;
+
+    /**
      * 删除标记 0.正常 1.删除
      */
     @TableLogic
@@ -45,7 +50,7 @@ public class ChatConversation extends BaseEntity {
 
     @Builder
     public ChatConversation(Long id, String title, Integer type, Long docId, Integer deleted,
-                            Long createBy, Date createTime, Long updateBy, Date updateTime,
+                            Long createBy, Date createTime, Long updateBy, Date updateTime, String permissions,
                             String remark, Map<String, Object> params) {
         super(createBy, createTime, updateBy, updateTime, remark, params);
         this.id = id;
@@ -53,5 +58,6 @@ public class ChatConversation extends BaseEntity {
         this.type = type;
         this.docId = docId;
         this.deleted = deleted;
+        this.permissions = permissions;
     }
 }

@@ -15,7 +15,7 @@
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <resultMap id="DocVOResultMap" type="com.anynote.note.model.vo.DocVO">
+    <resultMap id="DocVOResultMap" type="com.anynote.note.api.model.vo.DocVO">
         <id column="id" property="id" />
         <result column="doc_name" property="docName" />
         <result column="english_doc_name" property="englishDocName" />
