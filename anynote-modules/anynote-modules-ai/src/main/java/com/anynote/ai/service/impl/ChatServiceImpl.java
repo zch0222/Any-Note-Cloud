@@ -5,6 +5,7 @@ import com.anynote.ai.api.model.po.ChatMessage;
 import com.anynote.ai.datascope.annotation.RequiresChatConversationPermissions;
 import com.anynote.ai.enums.ChatConversationPermissions;
 import com.anynote.ai.model.bo.ChatConversationQueryParam;
+import com.anynote.ai.model.bo.ChatConversationUpdateParam;
 import com.anynote.ai.model.vo.ChatConversationInfoVO;
 import com.anynote.ai.model.vo.ChatConversationVO;
 import com.anynote.ai.service.ChatConversationService;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -150,5 +152,21 @@ public class ChatServiceImpl implements ChatService {
                 .rows(chatConversationInfoVOS)
                 .total(pageInfo.getTotal())
                 .build();
+    }
+
+    @RequiresChatConversationPermissions(ChatConversationPermissions.EDIT)
+    @Override
+    public String updateChatConversation(ChatConversationUpdateParam chatConversationUpdateParam) {
+        LoginUser loginUser = tokenUtil.getLoginUser();
+        int count = chatConversationService.getBaseMapper().updateById(ChatConversation.builder()
+                        .id(chatConversationUpdateParam.getConversationId())
+                        .title(chatConversationUpdateParam.getTitle())
+                        .updateBy(loginUser.getUserId())
+                        .updateTime(new Date())
+                .build());
+        if (1 == count) {
+            return "SUCCESS";
+        }
+        throw new BusinessException("更新对话信息失败");
     }
 }

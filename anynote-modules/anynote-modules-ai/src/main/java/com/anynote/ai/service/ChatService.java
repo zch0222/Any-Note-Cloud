@@ -4,6 +4,7 @@ import com.anynote.ai.api.model.po.ChatConversation;
 import com.anynote.ai.api.model.po.ChatMessage;
 import com.anynote.ai.enums.ChatConversationPermissions;
 import com.anynote.ai.model.bo.ChatConversationQueryParam;
+import com.anynote.ai.model.bo.ChatConversationUpdateParam;
 import com.anynote.ai.model.vo.ChatConversationInfoVO;
 import com.anynote.ai.model.vo.ChatConversationVO;
 import com.anynote.core.web.model.bo.PageBean;
@@ -23,6 +24,8 @@ public interface ChatService {
     public ChatConversationPermissions getConversationPermissions(Long conversationId);
 
     public ChatConversationVO getConversationById(ChatConversationQueryParam queryParam);
+
+    public String updateChatConversation(ChatConversationUpdateParam chatConversationUpdateParam);
 
     public PageBean<ChatConversationInfoVO> getConversationList(ChatConversationQueryParam queryParam);
 

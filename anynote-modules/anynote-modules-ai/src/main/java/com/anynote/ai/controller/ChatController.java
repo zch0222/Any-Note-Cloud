@@ -2,7 +2,9 @@ package com.anynote.ai.controller;
 
 import com.anynote.ai.enums.ChatType;
 import com.anynote.ai.model.bo.ChatConversationQueryParam;
+import com.anynote.ai.model.bo.ChatConversationUpdateParam;
 import com.anynote.ai.model.dto.ChatConversationListDTO;
+import com.anynote.ai.model.dto.ChatConversationUpdateDTO;
 import com.anynote.ai.model.vo.ChatConversationInfoVO;
 import com.anynote.ai.model.vo.ChatConversationVO;
 import com.anynote.ai.service.ChatService;
@@ -10,10 +12,7 @@ import com.anynote.core.utils.ResUtil;
 import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.core.web.model.bo.ResData;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
@@ -31,6 +30,14 @@ public class ChatController {
                                                                    @PathVariable("id") Long id) {
         return ResUtil.success(chatService.getConversationById(ChatConversationQueryParam.builder()
                         .conversationId(id).build()));
+    }
+
+    @PatchMapping("conversations/{id}")
+    public ResData<String> updateChatConversation(@PathVariable("id") Long id,
+                                                  @Validated @RequestBody ChatConversationUpdateDTO chatConversationUpdateDTO) {
+        return ResUtil.success(chatService.updateChatConversation(ChatConversationUpdateParam
+                .ChatConversationUpdateParamBuilder()
+                .conversationId(id).title(chatConversationUpdateDTO.getTitle()).build()));
     }
 
     @GetMapping("conversations")
