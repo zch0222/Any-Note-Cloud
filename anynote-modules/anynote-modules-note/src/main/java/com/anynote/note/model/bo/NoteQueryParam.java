@@ -36,4 +36,9 @@ public class NoteQueryParam extends BaseEntity {
     private Integer page;
 
     private Integer pageSize;
+
+    /**
+     * 操作者id
+     */
+    private Long operatorId;
 }

@@ -20,6 +20,7 @@
         <module>anynote-gateway</module>
         <module>anynote-auth</module>
         <module>anynote-api</module>
+        <module>anynote-admin</module>
     </modules>
     <properties>
         <anynote.version>0.0.1-SNAPSHOT</anynote.version>
@@ -53,6 +54,7 @@
         <org.apache.poi.version>5.2.3</org.apache.poi.version>
         <commons.fileupload.version>1.5</commons.fileupload.version>
         <commons.codec.version>1.15</commons.codec.version>
+        <spring-boot-admin.version>2.7.15</spring-boot-admin.version>
     </properties>
     <dependencyManagement>
         <dependencies>

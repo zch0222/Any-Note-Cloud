@@ -1,15 +1,18 @@
 package com.anynote.system.api;
 
 import com.anynote.core.constant.ServiceNameConstants;
+import com.anynote.core.web.model.bo.CreateResEntity;
 import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.core.web.model.bo.ResData;
 import com.anynote.system.api.factory.RemoteUserFallbackFactory;
 import com.anynote.system.api.model.bo.KnowledgeBaseImportUser;
 import com.anynote.system.api.model.bo.LoginUser;
+import com.anynote.system.api.model.dto.CreateUserDTO;
 import com.anynote.system.api.model.dto.KnowledgeBaseUserImportDTO;
 import com.anynote.system.api.model.po.SysUser;
 import com.anynote.system.api.model.vo.KnowledgeBaseUserVO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -60,4 +63,7 @@ public interface RemoteUserService {
     public ResData<PageBean<SysUser>> getManageUserList(@RequestParam("page") Integer page,
                                                         @RequestParam("pageSize") Integer pageSize,
                                                         @RequestParam("username") String username);
+
+    @PostMapping("user")
+    public ResData<CreateResEntity> createUser(@RequestBody @Valid CreateUserDTO createUserDTO);
 }

@@ -1,5 +1,6 @@
 package com.anynote.auth.service.impl;
 
+import com.anynote.auth.model.dto.RegisterDTO;
 import com.anynote.auth.model.dto.ResetPasswordDTO;
 import com.anynote.auth.service.LoginService;
 import com.anynote.auth.service.PasswordService;
@@ -9,13 +10,18 @@ import com.anynote.core.constant.UserConstants;
 import com.anynote.core.enums.UserStatus;
 import com.anynote.core.exception.BusinessException;
 import com.anynote.core.exception.auth.LoginException;
+import com.anynote.core.utils.RemoteResDataUtil;
+import com.anynote.core.utils.ResUtil;
 import com.anynote.core.utils.StringUtils;
 import com.anynote.core.web.enums.ResCode;
+import com.anynote.core.web.model.bo.CreateResEntity;
 import com.anynote.core.web.model.bo.ResData;
 import com.anynote.system.api.RemoteUserService;
 import com.anynote.system.api.model.bo.LoginUser;
 import com.anynote.system.api.model.bo.Token;
+import com.anynote.system.api.model.dto.CreateUserDTO;
 import com.anynote.system.api.model.po.SysUser;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +32,7 @@ import org.springframework.stereotype.Service;
  * 登录服务
  * @author 称霸幼儿园
  */
+@Slf4j
 @Service
 public class LoginServiceImpl implements LoginService {
 
@@ -131,6 +138,41 @@ public class LoginServiceImpl implements LoginService {
             tokenUtil.removeTokens(loginUser.getSysUser().getUsername());
         });
         return this.login(sysUser.getUsername(), resetPasswordDTO.getNewPassword());
+    }
+
+    @Override
+    public LoginUser register(RegisterDTO registerDTO) {
+        LoginUser loginUser = null;
+        try {
+            loginUser = RemoteResDataUtil.getResData(remoteUserService.getUserInfo(registerDTO.getUsername()), "");
+        } catch (BusinessException e) {
+            log.info(e.getErrorMessage(), "注册用户名可用");
+        }
+        if (StringUtils.isNotNull(loginUser)) {
+            throw new BusinessException("注册失败，用户名已存在");
+        }
+
+        CreateResEntity createResEntity = RemoteResDataUtil.getResData(remoteUserService.createUser(CreateUserDTO.builder()
+                .username(registerDTO.getUsername())
+                .nickname(registerDTO.getNickname())
+                .password(registerDTO.getPassword())
+                .email(registerDTO.getEmail())
+                .phoneNumber("")
+                .sex(registerDTO.getSex())
+                .build()), "注册失败");
+
+        if (StringUtils.isNull(createResEntity) || StringUtils.isNull(createResEntity.getId())) {
+            throw new BusinessException("注册失败");
+        }
+        LoginUser resLoginUser = null;
+        try {
+            resLoginUser = this.login(registerDTO.getUsername(), registerDTO.getPassword());
+        } catch (BusinessException e) {
+            log.error(e.getErrorMessage());
+            throw new BusinessException("注册失败");
+        }
+
+        return resLoginUser;
     }
 
     public static void main(String[] args) {

@@ -22,4 +22,9 @@ public class ConfigService {
         return Integer.valueOf(sysConfig.getValue());
     }
 
+    public Long getHomeDocId() {
+        SysConfig sysConfig = redisService.getConfig(ConfigEnum.HOME_DOC_ID);
+        return Long.valueOf(sysConfig.getValue());
+    }
+
 }

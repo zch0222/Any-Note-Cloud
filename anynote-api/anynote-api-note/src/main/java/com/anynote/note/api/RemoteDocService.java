@@ -23,5 +23,7 @@ public interface RemoteDocService {
     @GetMapping("/docs/{id}")
     public ResData<DocVO> getDoc(@Validated @PathVariable("id") @NotNull(message = "文档ID不能为空") Long id);
 
+    @GetMapping("/docs/public/{id}")
+    public ResData<DocVO> getPublicDoc(@Validated @PathVariable("id") @NotNull(message = "文档ID不能为空") Long id);
 
 }

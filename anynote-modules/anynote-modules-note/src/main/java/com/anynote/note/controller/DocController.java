@@ -109,9 +109,19 @@ public class DocController {
     }
 
     @DeleteMapping("{id}")
-    public ResData<String> deleteDoc(@Validated @PathVariable @NotNull(message = "文档ID不能为空") Long id) {
+    public ResData<String> deleteDoc(@Validated @PathVariable("id") @NotNull(message = "文档ID不能为空") Long id) {
         DocDeleteParam docDeleteParam = new DocDeleteParam();
         docDeleteParam.setDocId(id);
         return ResUtil.success(docService.deleteDoc(docDeleteParam));
+    }
+
+    @GetMapping("home")
+    public ResData<DocVO> getHomeDoc() {
+        return ResUtil.success(docService.getHomeDoc());
+    }
+
+    @GetMapping("public/{id}")
+    public ResData<DocVO> getPublicDoc(@Validated @PathVariable @NotNull(message = "文档ID不能为空") Long id) {
+        return ResUtil.success(docService.getDocById(DocQueryParam.DocQueryParamBuilder().docId(id).build()));
     }
 }

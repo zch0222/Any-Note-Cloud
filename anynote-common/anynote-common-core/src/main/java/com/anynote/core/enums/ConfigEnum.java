@@ -30,5 +30,10 @@ public enum ConfigEnum {
     /**
      * AI 服务器地址
      */
-    AI_SERVER_ADDRESS;
+    AI_SERVER_ADDRESS,
+
+    /**
+     * 首页展示文档ID
+     */
+    HOME_DOC_ID;
 }

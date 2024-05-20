@@ -1,11 +1,13 @@
 package com.anynote.system.api.factory;
 
 import com.anynote.core.web.enums.ResCode;
+import com.anynote.core.web.model.bo.CreateResEntity;
 import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.core.web.model.bo.ResData;
 import com.anynote.system.api.RemoteUserService;
 import com.anynote.system.api.model.bo.KnowledgeBaseImportUser;
 import com.anynote.system.api.model.bo.LoginUser;
+import com.anynote.system.api.model.dto.CreateUserDTO;
 import com.anynote.system.api.model.dto.KnowledgeBaseUserImportDTO;
 import com.anynote.system.api.model.po.SysUser;
 import com.anynote.system.api.model.vo.KnowledgeBaseUserVO;
@@ -59,6 +61,11 @@ public class RemoteUserFallbackFactory implements FallbackFactory<RemoteUserServ
 
             @Override
             public ResData<PageBean<SysUser>> getManageUserList(Integer page, Integer pageSize, String username) {
+                return ResData.error(ResCode.INNER_SYSTEM_SERVICE_ERROR);
+            }
+
+            @Override
+            public ResData<CreateResEntity> createUser(CreateUserDTO createUserDTO) {
                 return ResData.error(ResCode.INNER_SYSTEM_SERVICE_ERROR);
             }
         };

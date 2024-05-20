@@ -27,6 +27,12 @@ public class RemoteDocFallbackFactory implements FallbackFactory<RemoteDocServic
             public ResData<DocVO> getDoc(Long id) {
                 throw new BusinessException("获取文档信息失败");
             }
+
+
+            @Override
+            public ResData<DocVO> getPublicDoc(Long id) {
+                throw new BusinessException("获取文档信息失败");
+            }
         };
     }
 }

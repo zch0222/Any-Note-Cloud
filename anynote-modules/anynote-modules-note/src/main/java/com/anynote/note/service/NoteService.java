@@ -4,17 +4,11 @@ import com.anynote.common.elasticsearch.model.EsNoteIndex;
 import com.anynote.common.elasticsearch.model.bo.SearchPageBean;
 import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.file.api.model.bo.HuaweiOBSTemporarySignature;
-import com.anynote.file.api.model.dto.CompleteUploadDTO;
 import com.anynote.note.api.model.po.Note;
-import com.anynote.note.api.model.po.NoteHistory;
-import com.anynote.note.datascope.annotation.RequiresKnowledgeBasePermissions;
-import com.anynote.note.datascope.annotation.RequiresNotePermissions;
-import com.anynote.note.enums.KnowledgeBasePermissions;
 import com.anynote.note.enums.NotePermissions;
 import com.anynote.note.model.bo.*;
-import com.anynote.note.model.dto.CompleteNoteImageUploadDTO;
-import com.anynote.note.model.dto.NoteCreateDTO;
 import com.anynote.note.model.dto.NoteSearchDTO;
+import com.anynote.note.model.vo.NoteListVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -23,12 +17,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface NoteService extends IService<Note> {
 
+
     /**
      * 获取最近更新的笔记
      * @param queryParam
      * @return
      */
-    public PageBean<Note> getNoteInfoList(NoteQueryParam queryParam);
+    public PageBean<NoteListVO> getNoteList(NoteQueryParam queryParam);
 
     public PageBean<Note> getNotesByKnowledgeBaseId(NoteQueryParam queryParam);
 

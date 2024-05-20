@@ -5,6 +5,7 @@ import com.anynote.note.api.model.po.Note;
 import com.anynote.note.datascope.annotation.NoteDataScopeInterceptor;
 import com.anynote.note.model.bo.NoteQueryParam;
 import com.anynote.note.model.bo.NoteUpdateParam;
+import com.anynote.note.model.vo.NoteListVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Mapper;
@@ -22,6 +23,8 @@ public interface NoteMapper extends BaseMapper<Note> {
     @DataScopeInterceptor
     @NoteDataScopeInterceptor
     public List<Note> selectNoteInfoList(NoteQueryParam queryParam);
+
+    public List<NoteListVO> selectNoteList(NoteQueryParam queryParam);
 
     /**
      * 获取note id

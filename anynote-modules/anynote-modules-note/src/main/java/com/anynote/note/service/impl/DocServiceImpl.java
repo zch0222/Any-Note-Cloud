@@ -6,6 +6,7 @@ import com.anynote.ai.api.RemoteRagService;
 import com.anynote.ai.api.RemoteTranslateService;
 import com.anynote.ai.api.exception.RagLimitException;
 import com.anynote.ai.api.model.bo.RagFileQueryReq;
+import com.anynote.common.datascope.model.bo.QueryParam;
 import com.anynote.common.redis.service.ConfigService;
 import com.anynote.common.rocketmq.callback.RocketmqSendCallbackBuilder;
 import com.anynote.common.rocketmq.properties.RocketMQProperties;
@@ -14,11 +15,9 @@ import com.anynote.common.security.token.TokenUtil;
 import com.anynote.core.constant.FileConstants;
 import com.anynote.core.constant.HuaweiOBSConstants;
 import com.anynote.core.exception.BusinessException;
+import com.anynote.core.exception.auth.TokenException;
 import com.anynote.core.exception.user.UserParamException;
-import com.anynote.core.utils.RemoteResDataUtil;
-import com.anynote.core.utils.ResUtil;
-import com.anynote.core.utils.ServletUtils;
-import com.anynote.core.utils.StringUtils;
+import com.anynote.core.utils.*;
 import com.anynote.core.web.model.bo.CreateResEntity;
 import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.core.web.model.bo.ResData;
@@ -200,10 +199,14 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
 
     @Override
     public DocPermissions getDocPermissions(Long docId) {
-        LoginUser loginUser = tokenUtil.getLoginUser();
-        if (SysUser.isAdminX(loginUser.getSysUser().getRole())) {
-            return DocPermissions.MANAGE;
+        LoginUser loginUser = null;
+        try {
+            loginUser = tokenUtil.getLoginUser();
+        } catch (TokenException e) {
+            log.error(e.getErrorMessage());
+            log.info("匿名访问文档，ID:" + docId);
         }
+
         LambdaQueryWrapper<Doc> docLambdaQueryWrapper = new LambdaQueryWrapper<>();
         docLambdaQueryWrapper
                 .eq(Doc::getId, docId)
@@ -213,6 +216,15 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
         if (StringUtils.isNull(doc)) {
             throw new UserParamException("文档不存在");
         }
+
+        if (loginUser == null) {
+            return DocPermissions.parse(Integer.parseInt(doc.getPermissions().substring(4, 5)));
+        }
+
+        if (SysUser.isAdminX(loginUser.getSysUser().getRole())) {
+            return DocPermissions.MANAGE;
+        }
+
 
         int permission = 0;
         if (loginUser.getUserId().equals(doc.getCreateBy())) {
@@ -388,5 +400,13 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
             throw new BusinessException("删除失败");
         }
         return "SUCCESS";
+    }
+
+    @Override
+    public DocVO getHomeDoc() {
+        DocQueryParam docQueryParam = DocQueryParam.DocQueryParamBuilder()
+                .docId(configService.getHomeDocId())
+                .build();
+        return SpringUtils.getAopProxy(this).getDocById(docQueryParam);
     }
 }

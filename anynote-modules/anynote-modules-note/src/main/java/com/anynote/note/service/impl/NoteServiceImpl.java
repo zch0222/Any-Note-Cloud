@@ -41,6 +41,7 @@ import com.anynote.note.mapper.NoteMapper;
 import com.anynote.note.mapper.NoteTextMapper;
 import com.anynote.note.model.bo.*;
 import com.anynote.note.model.dto.NoteSearchDTO;
+import com.anynote.note.model.vo.NoteListVO;
 import com.anynote.note.service.KnowledgeBaseService;
 import com.anynote.note.service.NoteImageService;
 import com.anynote.note.service.NoteService;
@@ -49,6 +50,7 @@ import com.anynote.system.api.model.bo.LoginUser;
 import com.anynote.system.api.model.po.SysUser;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -99,11 +101,25 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note>
 
 
     @Override
-    public PageBean<Note> getNoteInfoList(NoteQueryParam queryParam) {
+    public PageBean<NoteListVO> getNoteList(NoteQueryParam queryParam) {
 //
 //        LambdaQueryWrapper
+        LoginUser loginUser = tokenUtil.getLoginUser();
+        queryParam.setOperatorId(loginUser.getUserId());
 
-        return null;
+        PageHelper.startPage(queryParam.getPage(), queryParam.getPageSize(), "latest_operation_time DESC");
+        List<NoteListVO> noteVOList = this.baseMapper.selectNoteList(queryParam);
+        PageInfo<NoteListVO> pageInfo = new PageInfo<>(noteVOList);
+
+        for (NoteListVO noteListVO : noteVOList) {
+            noteListVO.setNotePermissions(this.getNotePermissions(noteListVO.getId()).getValue());
+        }
+        return PageBean.<NoteListVO>builder()
+                .rows(noteVOList)
+                .current(queryParam.getPage())
+                .pages(pageInfo.getPages())
+                .total(pageInfo.getTotal())
+                .build();
     }
 
     @Override

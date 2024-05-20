@@ -22,6 +22,7 @@ import com.anynote.note.model.bo.*;
 import com.anynote.note.model.dto.*;
 import com.anynote.note.model.vo.NoteHistoryListItemVO;
 import com.anynote.note.model.vo.NoteHistoryVO;
+import com.anynote.note.model.vo.NoteListVO;
 import com.anynote.note.service.NoteHistoryService;
 import com.anynote.note.service.NoteOperationLogService;
 import com.anynote.note.service.NoteService;
@@ -32,6 +33,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -46,6 +49,7 @@ public class NoteController {
     @Autowired
     private NoteService noteService;
 
+
     @Resource
     private NoteHistoryService noteHistoryService;
 
@@ -55,9 +59,21 @@ public class NoteController {
     private NoteOperationLogService noteOperationLogService;
 
     @GetMapping()
-    public ResData<PageBean<Note>> getNoteList(Integer page, Integer pageSize, Long knowledgeBaseId) {
-        return null;
+    public ResData<PageBean<NoteListVO>> getNoteList(@NotNull(message = "页码不能为空") @Min(value = 1, message = "页码错误")
+                                                   Integer page,
+                                                     @NotNull(message = "页面大小不能为空")
+                                               @Max(value = 100, message = "页面大小错误")
+                                               @Min(value = 1, message = "页面大小错误")
+                                               Integer pageSize,
+                                                     Long knowledgeBaseId) {
+
+        return ResUtil.success(noteService.getNoteList(NoteQueryParam.builder()
+                        .page(page)
+                        .pageSize(pageSize)
+                        .knowledgeBaseId(knowledgeBaseId)
+                .build()));
     }
+
 
 
     /**

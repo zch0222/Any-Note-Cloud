@@ -2,10 +2,12 @@ package com.anynote.auth.controller;
 
 import com.anynote.auth.model.dto.LoginDTO;
 import com.anynote.auth.model.dto.LoginRequestDTO;
+import com.anynote.auth.model.dto.RegisterDTO;
 import com.anynote.auth.model.dto.ResetPasswordDTO;
 import com.anynote.auth.service.LoginService;
 import com.anynote.auth.service.impl.LoginServiceImpl;
 import com.anynote.common.security.utils.SecurityUtils;
+import com.anynote.core.utils.ResUtil;
 import com.anynote.core.web.model.bo.ResData;
 import com.anynote.system.api.model.bo.LoginUser;
 import io.swagger.annotations.Api;
@@ -45,6 +47,11 @@ public class TokenController {
     @GetMapping("test")
     public ResData<String> test() {
         return ResData.success("OK");
+    }
+
+    @PostMapping("register")
+    public ResData<LoginDTO> register(@RequestBody @Valid RegisterDTO registerDTO) {
+        return ResUtil.success(new LoginDTO(loginService.register(registerDTO)));
     }
 
 //    public static void main(String[] args) {

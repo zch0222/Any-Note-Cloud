@@ -39,5 +39,7 @@ public interface DocService extends IService<Doc> {
 
     public String deleteDoc(DocDeleteParam param);
 
+    public DocVO getHomeDoc();
+
 
 }

@@ -6,6 +6,7 @@ import com.anynote.system.api.model.dto.KnowledgeBaseUserImportDTO;
 import com.anynote.system.api.model.po.SysUser;
 import com.anynote.system.api.model.vo.KnowledgeBaseUserVO;
 import com.anynote.system.api.model.bo.SysUserQueryParam;
+import com.anynote.system.api.model.dto.CreateUserDTO;
 import com.anynote.system.model.dto.ResetPasswordDTO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -61,4 +62,6 @@ public interface SysUserService extends IService<SysUser> {
     public PageBean<SysUser> getManageUserList(SysUserQueryParam queryParam);
 
     public SysUser getSysUserInfoById(Long userId);
+
+    public Long createUser(CreateUserDTO createUserDTO);
 }

@@ -7,8 +7,6 @@ import com.anynote.core.exception.BusinessException;
 import com.anynote.core.utils.StringUtils;
 import com.anynote.core.web.enums.ResCode;
 import com.anynote.core.web.model.bo.PageBean;
-import com.anynote.core.web.model.bo.ResData;
-import com.anynote.system.api.RemoteUserService;
 import com.anynote.system.api.enums.KnowledgeBaseUserImportErrorType;
 import com.anynote.system.api.model.bo.KnowledgeBaseImportUser;
 import com.anynote.system.api.model.bo.LoginUser;
@@ -18,6 +16,7 @@ import com.anynote.system.api.model.po.SysUser;
 import com.anynote.system.api.model.vo.KnowledgeBaseUserVO;
 import com.anynote.system.mapper.SysUserMapper;
 import com.anynote.system.api.model.bo.SysUserQueryParam;
+import com.anynote.system.api.model.dto.CreateUserDTO;
 import com.anynote.system.model.dto.ResetPasswordDTO;
 import com.anynote.system.service.SysOrganizationService;
 import com.anynote.system.service.SysPermissionService;
@@ -35,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -258,5 +258,31 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = sysUserList.get(0);
         sysUser.setPassword("");
         return sysUser;
+    }
+
+    @Override
+    public Long createUser(CreateUserDTO createUserDTO) {
+        Date date = new Date();
+        SysUser sysUser = new SysUser();
+        sysUser.setUsername(createUserDTO.getUsername());
+        sysUser.setNickname(createUserDTO.getNickname());
+        sysUser.setPassword(createUserDTO.getPassword());
+        sysUser.setEmail(createUserDTO.getEmail());
+        sysUser.setPhoneNumber(createUserDTO.getPhoneNumber());
+        sysUser.setSex(createUserDTO.getSex());
+        sysUser.setPassword(SecurityUtils.encryptPassword(createUserDTO.getPassword()));
+        sysUser.setStatus(0);
+        sysUser.setDeleted(0);
+        sysUser.setLoginDate(date);
+        sysUser.setCreateBy(0L);
+        sysUser.setCreateTime(date);
+        sysUser.setUpdateBy(0L);
+        sysUser.setUpdateTime(date);
+        int count = this.baseMapper.insert(sysUser);
+        if (1 != count) {
+            throw new BusinessException("创建用户失败");
+        }
+        this.associateUserRole(sysUser.getId(), 4L);
+        return sysUser.getId();
     }
 }

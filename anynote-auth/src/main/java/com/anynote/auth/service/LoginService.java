@@ -1,5 +1,6 @@
 package com.anynote.auth.service;
 
+import com.anynote.auth.model.dto.RegisterDTO;
 import com.anynote.auth.model.dto.ResetPasswordDTO;
 import com.anynote.system.api.model.bo.LoginUser;
 
@@ -18,4 +19,6 @@ public interface LoginService {
     public LoginUser login(String username, String password);
 
     public LoginUser resetPassword(ResetPasswordDTO resetPasswordDTO);
+
+    public LoginUser register(RegisterDTO registerDTO);
 }

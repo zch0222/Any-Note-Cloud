@@ -56,6 +56,23 @@
         <result property="updateTime"   column="update_time"  />
         <result property="remark"       column="remark"       />
     </resultMap>
+
+
+    <resultMap id="NoteListResult" type="com.anynote.note.model.vo.NoteListVO">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="noteTextId" column="note_text_id"/>
+        <result property="knowledgeBaseId" column="knowledge_base_id"/>
+        <result property="knowledgeBaseName" column="knowledge_base_name"/>
+        <result property="status" column="status"/>
+        <result property="dataScope" column="data_scope"/>
+        <result property="deleted" column="is_delete"/>
+        <result property="createBy"     column="create_by"    />
+        <result property="createTime"   column="create_time"  />
+        <result property="updateBy"     column="update_by"    />
+        <result property="updateTime"   column="update_time"  />
+        <result property="remark"       column="remark"       />
+    </resultMap>
     
     <resultMap id="NoteTextResult" type="com.anynote.note.api.model.po.NoteText">
         <id property="id" column="note_text_id"/>
@@ -94,6 +111,36 @@
         ${params.dataScope}
         <!-- 知识库内数据权限过滤 -->
         ${params.noteDataScope}
+    </select>
+
+    <select id="selectNoteList" resultMap="NoteListResult">
+        SELECT DISTINCT
+            MAX(n_note_operation_log.operation_time) as latest_operation_time, n_note.id, n_note.title,
+            n_note.create_time, n_note.create_by, n_note.update_by, n_note.update_time,
+            n_note.knowledge_base_id, n_note.note_text_id, n_note.status, n_note.data_scope, n_knowledge_base.name as knowledge_base_name
+        FROM
+            n_note_operation_log
+        LEFT JOIN
+            n_note ON n_note.id = n_note_operation_log.note_id
+        LEFT JOIN
+            n_knowledge_base ON n_note.knowledge_base_id = n_knowledge_base.id
+        WHERE
+            n_note_operation_log.is_delete = 0
+          AND
+            n_note.is_delete = 0
+          <if test="operatorId != null">
+              AND n_note_operation_log.operator_id = #{operatorId}
+          </if>
+        <if test="status != null">
+            AND n_note.status = #{status}
+        </if>
+        <if test="knowledgeBaseId != null">
+            AND n_note.knowledge_base_id = #{knowledgeBaseId}
+        </if>
+        GROUP BY
+            n_note.id, n_note.title, n_note.create_time, n_note.create_by,
+            n_note.update_by, n_note.update_time, n_note.knowledge_base_id, n_note.note_text_id, n_note.status,
+            n_note.data_scope, n_knowledge_base.name;
     </select>
 
     <select id="selectNoteById" resultMap="NoteResult">

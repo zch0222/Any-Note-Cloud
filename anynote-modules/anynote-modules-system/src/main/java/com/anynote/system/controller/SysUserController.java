@@ -4,6 +4,7 @@ import com.anynote.common.datascope.annotation.RolePermissions;
 import com.anynote.common.security.annotation.InnerAuth;
 import com.anynote.core.enums.Role;
 import com.anynote.core.utils.ResUtil;
+import com.anynote.core.web.model.bo.CreateResEntity;
 import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.core.web.model.bo.ResData;
 import com.anynote.system.api.model.bo.LoginUser;
@@ -11,6 +12,7 @@ import com.anynote.system.api.model.dto.KnowledgeBaseUserImportDTO;
 import com.anynote.system.api.model.po.SysUser;
 import com.anynote.system.api.model.vo.KnowledgeBaseUserVO;
 import com.anynote.system.api.model.bo.SysUserQueryParam;
+import com.anynote.system.api.model.dto.CreateUserDTO;
 import com.anynote.system.model.dto.ResetPasswordDTO;
 import com.anynote.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,6 +119,14 @@ public class SysUserController {
     @GetMapping("/pubInfo/{username}")
     public ResData<SysUser> getPublicUserInfo(@NotNull(message = "用户名不能为空") @PathVariable("username") String username) {
         return ResUtil.success(sysUserService.getPublicUserInfoByUsername(username));
+    }
+
+    @InnerAuth
+    @PostMapping("")
+    public ResData<CreateResEntity> createUser(@RequestBody @Valid CreateUserDTO createUserDTO) {
+        return ResUtil.success(CreateResEntity.builder()
+                        .id(sysUserService.createUser(createUserDTO))
+                .build());
     }
 
 
