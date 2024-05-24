@@ -35,5 +35,16 @@ public enum ConfigEnum {
     /**
      * 首页展示文档ID
      */
-    HOME_DOC_ID;
+    HOME_DOC_ID,
+
+    /**
+     * 内容合规接口类型
+     */
+    GREEN_TYPE,
+
+    /**
+     * 阿里云内容合规配置
+     */
+    ALI_GREEN_CONFIG
+    ;
 }

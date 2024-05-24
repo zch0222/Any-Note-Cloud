@@ -55,6 +55,8 @@
         <commons.fileupload.version>1.5</commons.fileupload.version>
         <commons.codec.version>1.15</commons.codec.version>
         <spring-boot-admin.version>2.7.15</spring-boot-admin.version>
+        <alibabacloud-green20220302.version>2.0.7</alibabacloud-green20220302.version>
+        <com.aliyun.green20220302.version>2.2.5</com.aliyun.green20220302.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -65,6 +67,19 @@
 <!--                <artifactId>rocketmq-client</artifactId>-->
 <!--                <version>${rocketmq.client.version}</version>-->
 <!--            </dependency>-->
+
+
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>green20220302</artifactId>
+                <version>2.2.5</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>alibabacloud-green20220302</artifactId>
+                <version>${alibabacloud-green20220302.version}</version>
+            </dependency>
 
 
             <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->

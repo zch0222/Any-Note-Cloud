@@ -299,7 +299,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc>
                     value -> {
                         String resJson = null;
                         if (value.getStatus().equals("failed")) {
-                            value.setMessage("生成失败，请重试");
+                            value.setResult("生成失败，请重试");
                             resJson = gson.toJson(ResUtil.error(DocQueryVO.builder()
                                     .status(value.getStatus())
                                     .message(value.getResult())

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RagFileQueryRes {
 
-    private String message;
+//    private String message;
 
     private String id;
 

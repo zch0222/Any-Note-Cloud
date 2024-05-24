@@ -8,15 +8,20 @@ import com.anynote.ai.api.model.bo.RagFileQueryReq;
 import com.anynote.ai.api.model.bo.RagFileQueryRes;
 import com.anynote.ai.api.model.po.ChatConversation;
 import com.anynote.ai.api.model.po.ChatMessage;
+import com.anynote.ai.api.model.po.RagGreenLog;
 import com.anynote.ai.api.model.po.RagLog;
 import com.anynote.ai.datascope.annotation.RequiresChatConversationPermissions;
 import com.anynote.ai.enums.ChatConversationPermissions;
 import com.anynote.ai.enums.ChatRole;
 import com.anynote.ai.enums.ChatType;
+import com.anynote.ai.enums.GreenLabel;
+import com.anynote.ai.factory.GreenPluginFactory;
 import com.anynote.ai.model.bo.DocRagQueryParam;
+import com.anynote.ai.model.bo.GreenRes;
 import com.anynote.ai.model.vo.DocQueryVO;
 import com.anynote.ai.service.ChatService;
 import com.anynote.ai.service.FileRagService;
+import com.anynote.ai.service.RagGreenLogService;
 import com.anynote.common.redis.service.ConfigService;
 import com.anynote.common.rocketmq.callback.RocketmqSendCallbackBuilder;
 import com.anynote.common.rocketmq.properties.RocketMQProperties;
@@ -24,12 +29,15 @@ import com.anynote.common.rocketmq.tags.RagTagsEnum;
 import com.anynote.common.security.token.TokenUtil;
 import com.anynote.core.exception.BusinessException;
 import com.anynote.core.utils.*;
+import com.anynote.core.web.enums.ResCode;
 import com.anynote.core.web.model.bo.ResData;
 import com.anynote.note.api.RemoteDocService;
 import com.anynote.note.api.model.vo.DocVO;
 import com.anynote.system.api.model.bo.LoginUser;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
@@ -91,7 +99,15 @@ public class FileRagServiceImpl implements FileRagService {
     @Resource
     private RocketMQProperties rocketMQProperties;
 
+    @Resource
+    private GreenPluginFactory greenPluginFactory;
+
+    @Resource
+    private RagGreenLogService ragGreenLogService;
+
     private final String CONTENT_TYPE = "text/plain;charset=UTF-8";
+
+    final private String GREEN_MESSAGE = "对不起，暂时无法回答您的问题";
 
     @Override
     public RagFileIndexRes indexFile(RagFileIndexReq ragFileIndexReq) {
@@ -300,7 +316,7 @@ public class FileRagServiceImpl implements FileRagService {
                 value -> {
                     String resJson = null;
                     if (value.getStatus().equals("failed")) {
-                        value.setMessage("生成失败，请重试");
+//                        value.setMessage("生成失败，请重试");
                         resJson = gson.toJson(ResUtil.error(DocQueryVO.builder()
                                 .status(value.getStatus())
                                 .message(value.getResult())
@@ -464,6 +480,76 @@ public class FileRagServiceImpl implements FileRagService {
                     .conversationId(conversationId).build()));
         }
 
+        try {
+            GreenRes greenRes = greenPluginFactory.greenPlugin()
+                    .llmQueryModeration(docRagQueryParam.getPrompt());
+            List<GreenRes.Result> errorResultList = new ArrayList<>();
+            for (GreenRes.Result result : greenRes.getResults()) {
+                if (!GreenLabel.NON_LABEL.equals(result.getGreenLabel())) {
+                    errorResultList.add(result);
+                }
+            }
+            if (!errorResultList.isEmpty()) {
+                Date finishDate = new Date();
+                ChatMessage resMessage = ChatMessage.builder()
+                        .conversationId(askMessage.getConversationId())
+                        .orderIndex(askMessage.getOrderIndex() + 1)
+                        .content(GREEN_MESSAGE)
+                        .role(ChatRole.BOT.getValue())
+                        .type(ChatType.DOC_RAG.getValue())
+                        .docId(docVO.getId())
+                        .deleted(0)
+                        .createBy(loginUser.getUserId())
+                        .createTime(finishDate)
+                        .updateBy(loginUser.getUserId())
+                        .updateTime(finishDate)
+                        .build();
+                chatService.insertChatMessage(resMessage);
+                this.saveRagGreenLog(errorResultList, conversationId, askMessage.getId(), greenRes.getContent(),
+                        loginUser.getUserId(), 0);
+                ragLog.setResult(2);
+                ragLog.setMessage("对不起，暂时无法回答该问题");
+                ragLog.setEndTime(finishDate);
+                String destination = rocketMQProperties.getRagTopic() + ":" + RagTagsEnum.SAVE_RAG_LOG.name();
+                rocketMQTemplate.asyncSend(destination, gson.toJson(ragLog),
+                        RocketmqSendCallbackBuilder.commonCallback());
+                return Flux.just(ResUtil.error(DocQueryVO.builder()
+                        .status("failed")
+                        .message("对不起，暂时无法回答该问题")
+                        .conversationId(conversationId).build()));
+            }
+        } catch (Exception e) {
+            log.error("内容安全接口异常", e);
+            Date finishDate = new Date();
+            ragLog.setResult(1);
+            ragLog.setMessage("发生异常请稍后再试");
+            ragLog.setEndTime(finishDate);
+            String destination = rocketMQProperties.getRagTopic() + ":" + RagTagsEnum.SAVE_RAG_LOG.name();
+            rocketMQTemplate.asyncSend(destination, gson.toJson(ragLog),
+                    RocketmqSendCallbackBuilder.commonCallback());
+
+            ChatMessage resMessage = ChatMessage.builder()
+                    .conversationId(askMessage.getConversationId())
+                    .orderIndex(askMessage.getOrderIndex() + 1)
+                    .content("发生异常请稍后再试")
+                    .role(ChatRole.BOT.getValue())
+                    .type(ChatType.DOC_RAG.getValue())
+                    .docId(docVO.getId())
+                    .deleted(0)
+                    .createBy(loginUser.getUserId())
+                    .createTime(finishDate)
+                    .updateBy(loginUser.getUserId())
+                    .updateTime(finishDate)
+                    .build();
+            chatService.insertChatMessage(resMessage);
+
+            return Flux.just(ResUtil.error(DocQueryVO.builder()
+                    .status("failed")
+                    .message("发生异常请稍后再试")
+                    .conversationId(conversationId).build()));
+        }
+
+
         // 构建请求
         RagFileQueryReq req = RagFileQueryReq.builder()
                 .file_hash(docVO.getHash())
@@ -480,6 +566,7 @@ public class FileRagServiceImpl implements FileRagService {
 
 
         RagFileQueryRes[] ragFileQueryRes = {null};
+        GreenRes[] greenRes = {null};
         String aiServerAddress = configService.getAIServerAddress();
         Long finalConversationId = conversationId;
         return webClient.post()
@@ -493,7 +580,7 @@ public class FileRagServiceImpl implements FileRagService {
                     ragFileQueryRes[0] = value;
                     log.info(gson.toJson(value));
                     if (value.getStatus().equals("failed")) {
-                        value.setMessage("生成失败，请重试");
+                        value.setResult("生成失败，请重试");
                         return ResUtil.error(DocQueryVO.builder()
                                 .status(value.getStatus())
                                 .message(value.getResult())
@@ -501,9 +588,23 @@ public class FileRagServiceImpl implements FileRagService {
                                 .build());
                     }
                     else {
+                        if (!value.getResult().isEmpty()) {
+                            try {
+                                greenRes[0] = greenPluginFactory.greenPlugin()
+                                        .llmResponseModeration(value.getResult());
+                                for (GreenRes.Result result : greenRes[0].getResults()) {
+                                    if (!GreenLabel.NON_LABEL.equals(result.getGreenLabel())) {
+                                        ragFileQueryRes[0].setResult(GREEN_MESSAGE);
+                                        ragFileQueryRes[0].setStatus("failed");
+                                    }
+                                }
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                         return ResUtil.success(DocQueryVO.builder()
-                                .status(value.getStatus())
-                                .message(value.getResult())
+                                .status(ragFileQueryRes[0].getStatus())
+                                .message(ragFileQueryRes[0].getResult())
                                 .conversationId(finalConversationId)
                                 .build());
                     }
@@ -524,6 +625,8 @@ public class FileRagServiceImpl implements FileRagService {
                             .updateTime(finishDate)
                             .build();
                     chatService.insertChatMessage(resMessage);
+                    this.saveRagGreenLog(greenRes[0].getResults(), finalConversationId, resMessage.getId(),
+                            greenRes[0].getContent(), loginUser.getUserId(), 1);
                     if (ragFileQueryRes[0].getStatus().equals("finished")) {
                         ragLog.setResult(0);
                     }
@@ -538,7 +641,7 @@ public class FileRagServiceImpl implements FileRagService {
                     rocketMQTemplate.asyncSend(destination, gson.toJson(ragLog),
                             RocketmqSendCallbackBuilder.commonCallback());
                 }).doOnError(e -> {
-                    log.error(e.getMessage());
+                    log.error("llm生成错误", e);
                 }).onErrorReturn(ResUtil.error(DocQueryVO.builder()
                         .status("failed")
                         .message("出现异常请稍后重试")
@@ -547,7 +650,7 @@ public class FileRagServiceImpl implements FileRagService {
     }
 
     private Flux<ResData<DocQueryVO>> query(RagFileQueryReq req, Function<RagFileQueryRes, ResData<DocQueryVO>> map,
-                                            Consumer<SignalType> doFinally, ResData<DocQueryVO> onErrorReturn) {
+                                            Consumer<SignalType> doFinally, Consumer<? super Throwable> doOnError, ResData<DocQueryVO> onErrorReturn) {
         Gson gson = new Gson();
         String aiServerAddress = configService.getAIServerAddress();
         return webClient.post()
@@ -558,10 +661,27 @@ public class FileRagServiceImpl implements FileRagService {
                 .bodyToFlux(RagFileQueryRes.class)
                 .map(map)
                 .doFinally(doFinally)
-                .doOnError(e -> {
-                    log.error(e.getMessage());
-                })
+                .doOnError(doOnError)
                 .onErrorReturn(onErrorReturn);
+    }
+
+    private void saveRagGreenLog(List<GreenRes.Result> resultList,
+                                 Long conversationId, Long messageId, String content, Long userId, Integer type) {
+
+        for (GreenRes.Result result : resultList) {
+            if (!GreenLabel.NON_LABEL.equals(result.getGreenLabel())) {
+                ragGreenLogService.getBaseMapper().insert(RagGreenLog.builder()
+                        .conversationId(conversationId)
+                        .messageId(messageId)
+                        .type(type)
+                        .content(content)
+                        .riskWord(result.getRiskWord())
+                        .label(result.getGreenLabel().getLabel())
+                        .chineseMeaning(result.getGreenLabel().getChineseMeaning())
+                        .userId(userId)
+                        .build());
+            }
+        }
     }
 
 
@@ -589,6 +709,46 @@ public class FileRagServiceImpl implements FileRagService {
                 .createBy(0L)
                 .build();
 
+        try {
+            GreenRes greenRes = greenPluginFactory.greenPlugin()
+                    .llmQueryModeration(docRagQueryParam.getPrompt());
+            List<GreenRes.Result> errorResultList = new ArrayList<>();
+            for (GreenRes.Result result : greenRes.getResults()) {
+                if (!GreenLabel.NON_LABEL.equals(result.getGreenLabel())) {
+                    errorResultList.add(result);
+                }
+            }
+            if (!errorResultList.isEmpty()) {
+                Date finishDate = new Date();
+                this.saveRagGreenLog(errorResultList, null, null, greenRes.getContent(),
+                        0L, 0);
+                ragLog.setResult(1);
+                ragLog.setMessage("对不起，暂时无法回答该问题");
+                ragLog.setEndTime(finishDate);
+                String destination = rocketMQProperties.getRagTopic() + ":" + RagTagsEnum.SAVE_RAG_LOG.name();
+                rocketMQTemplate.asyncSend(destination, gson.toJson(ragLog),
+                        RocketmqSendCallbackBuilder.commonCallback());
+                return Flux.just(ResUtil.error(DocQueryVO.builder()
+                        .status("failed")
+                        .message("对不起，暂时无法回答该问题")
+                        .conversationId(null).build()));
+            }
+        } catch (Exception e) {
+            log.error("内容安全接口异常", e);
+            Date finishDate = new Date();
+            ragLog.setResult(1);
+            ragLog.setMessage("发生异常请稍后再试");
+            ragLog.setEndTime(finishDate);
+            String destination = rocketMQProperties.getRagTopic() + ":" + RagTagsEnum.SAVE_RAG_LOG.name();
+            rocketMQTemplate.asyncSend(destination, gson.toJson(ragLog),
+                    RocketmqSendCallbackBuilder.commonCallback());
+
+            return Flux.just(ResUtil.error(DocQueryVO.builder()
+                    .status("failed")
+                    .message("发生异常请稍后再试")
+                    .conversationId(null).build()));
+        }
+
         // 构建请求
         RagFileQueryReq req = RagFileQueryReq.builder()
                 .file_hash(docVO.getHash())
@@ -600,12 +760,13 @@ public class FileRagServiceImpl implements FileRagService {
                 .build();
 
         RagFileQueryRes[] ragFileQueryRes = {null};
+        GreenRes[] greenRes = {null};
 
         return this.query(req, value -> {
             ragFileQueryRes[0] = value;
             log.info(gson.toJson(value));
             if (value.getStatus().equals("failed")) {
-                value.setMessage("生成失败，请重试");
+                value.setResult("生成失败，请重试");
                 return ResUtil.error(DocQueryVO.builder()
                         .status(value.getStatus())
                         .message(value.getResult())
@@ -613,9 +774,23 @@ public class FileRagServiceImpl implements FileRagService {
                         .build());
             }
             else {
+                if (!value.getResult().isEmpty()) {
+                    try {
+                        greenRes[0] = greenPluginFactory.greenPlugin()
+                                .llmResponseModeration(value.getResult());
+                        for (GreenRes.Result result : greenRes[0].getResults()) {
+                            if (!GreenLabel.NON_LABEL.equals(result.getGreenLabel())) {
+                                ragFileQueryRes[0].setResult(GREEN_MESSAGE);
+                                ragFileQueryRes[0].setStatus("failed");
+                            }
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
                 return ResUtil.success(DocQueryVO.builder()
-                        .status(value.getStatus())
-                        .message(value.getResult())
+                        .status(ragFileQueryRes[0].getStatus())
+                        .message(ragFileQueryRes[0].getResult())
                         .conversationId(null)
                         .build());
             }
@@ -628,11 +803,17 @@ public class FileRagServiceImpl implements FileRagService {
                 ragLog.setResult(1);
             }
             log.info(gson.toJson(ragLog));
+
+            this.saveRagGreenLog(greenRes[0].getResults(), null, null, greenRes[0].getContent(),
+                    0L, 1);
+
             ragLog.setMessage(StringUtils.isNotNull(ragFileQueryRes[0]) ? ragFileQueryRes[0].getResult() : "出现异常请稍后重试");
             ragLog.setEndTime(finishDate);
             String destination = rocketMQProperties.getRagTopic() + ":" + RagTagsEnum.SAVE_RAG_LOG.name();
             rocketMQTemplate.asyncSend(destination, gson.toJson(ragLog),
                     RocketmqSendCallbackBuilder.commonCallback());
+        }, (e) -> {
+            log.error("llm生成消息异常-free", e);
         }, ResUtil.error(DocQueryVO.builder()
                 .status("failed")
                 .message("出现异常请稍后重试")

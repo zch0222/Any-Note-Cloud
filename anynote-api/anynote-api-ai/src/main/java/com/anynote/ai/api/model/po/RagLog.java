@@ -67,7 +67,7 @@ public class RagLog extends BaseEntity {
     private Date endTime;
 
     /**
-     * 查询的结果（0代表成功，1代表失败）。
+     * 查询的结果（0代表成功，1代表失败 2代表不当内容）。
      */
     private Integer result;
 
