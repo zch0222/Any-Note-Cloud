@@ -1,4 +1,4 @@
-package com.anynote.ai.model.bo;
+package com.anynote.ai.api.model.bo;
 
 import lombok.*;
 

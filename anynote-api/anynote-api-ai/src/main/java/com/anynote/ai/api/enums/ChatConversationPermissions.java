@@ -1,4 +1,4 @@
-package com.anynote.ai.enums;
+package com.anynote.ai.api.enums;
 
 import com.anynote.core.exception.BusinessException;
 

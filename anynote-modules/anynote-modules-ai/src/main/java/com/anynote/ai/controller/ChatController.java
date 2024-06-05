@@ -1,13 +1,17 @@
 package com.anynote.ai.controller;
 
+import com.anynote.ai.api.enums.ChatConversationPermissions;
+import com.anynote.ai.api.model.dto.ConversationCreateDTO;
 import com.anynote.ai.enums.ChatType;
-import com.anynote.ai.model.bo.ChatConversationQueryParam;
+import com.anynote.ai.api.model.bo.ChatConversationQueryParam;
+import com.anynote.ai.model.bo.ChatConversationCreateParam;
 import com.anynote.ai.model.bo.ChatConversationUpdateParam;
 import com.anynote.ai.model.dto.ChatConversationListDTO;
 import com.anynote.ai.model.dto.ChatConversationUpdateDTO;
 import com.anynote.ai.model.vo.ChatConversationInfoVO;
 import com.anynote.ai.model.vo.ChatConversationVO;
 import com.anynote.ai.service.ChatService;
+import com.anynote.common.security.annotation.InnerAuth;
 import com.anynote.core.utils.ResUtil;
 import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.core.web.model.bo.ResData;
@@ -31,6 +35,26 @@ public class ChatController {
         return ResUtil.success(chatService.getConversationById(ChatConversationQueryParam.builder()
                         .conversationId(id).build()));
     }
+
+    @InnerAuth
+    @PostMapping("conversations")
+    public ResData<Long> createConversation(@Validated @RequestBody ConversationCreateDTO conversationCreateDTO) {
+        int[] test = {1};
+        int length = test.length;
+        test[1] = 7;
+        return ResUtil.success(chatService.createConversation(ChatConversationCreateParam
+                .ChatConversationCreateParamBuilder()
+                .title(conversationCreateDTO.getTitle())
+                .type(conversationCreateDTO.getType())
+                .docId(conversationCreateDTO.getDocId()).build()));
+    }
+
+    @InnerAuth
+    @GetMapping("conversations/{id}/permissions")
+    public ResData<ChatConversationPermissions> getChatConversationPermissions(@PathVariable("id") Long id) {
+        return ResUtil.success(chatService.getConversationPermissions(id));
+    }
+
 
     @PatchMapping("conversations/{id}")
     public ResData<String> updateChatConversation(@PathVariable("id") Long id,

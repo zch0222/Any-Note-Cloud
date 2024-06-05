@@ -1,4 +1,4 @@
-package com.anynote.ai.model.bo;
+package com.anynote.ai.api.model.bo;
 
 
 import lombok.AllArgsConstructor;
@@ -21,5 +21,7 @@ public class ChatConversationQueryParam {
     private Integer pageSize;
 
     private Integer type;
+
+    private String accessToken;
 
 }

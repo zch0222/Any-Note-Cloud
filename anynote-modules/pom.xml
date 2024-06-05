@@ -16,6 +16,8 @@
         <module>anynote-modules-file</module>
         <module>anynote-modules-manage</module>
         <module>anynote-modules-ai</module>
+        <module>anynote-modules-ai-nio</module>
+        <module>anynote-modules-external-api</module>
     </modules>
     <build>
         <finalName>anynote-modules</finalName>

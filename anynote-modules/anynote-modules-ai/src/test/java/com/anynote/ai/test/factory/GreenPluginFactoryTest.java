@@ -24,5 +24,19 @@ public class GreenPluginFactoryTest {
     void testLlmQueryModeration() throws Exception {
         greenPluginFactory.greenPlugin().llmQueryModeration("操你妈");
     }
+    @Test
+    void test() {
+        int[] nums = {1,1,1,2,2,3};
+        int count = nums.length;
+        for (int i = 0; i < count-1; ++i) {
+            while (nums[i] == nums[i+1]) {
+                count--;
+                for (int j = i+1; j < count-1; ++j) {
+                    nums[j] = nums[j+1];
+                }
+            }
+        }
+        System.out.println(count);
+    }
 
 }

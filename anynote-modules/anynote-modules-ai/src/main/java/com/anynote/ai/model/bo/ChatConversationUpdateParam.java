@@ -1,12 +1,13 @@
 package com.anynote.ai.model.bo;
 
+import com.anynote.ai.api.model.bo.ChatConversationQueryParam;
 import lombok.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatConversationUpdateParam extends ChatConversationQueryParam{
+public class ChatConversationUpdateParam extends ChatConversationQueryParam {
 
     private String title;
 

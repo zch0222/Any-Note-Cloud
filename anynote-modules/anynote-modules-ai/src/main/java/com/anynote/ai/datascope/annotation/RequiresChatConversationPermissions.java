@@ -1,6 +1,6 @@
 package com.anynote.ai.datascope.annotation;
 
-import com.anynote.ai.enums.ChatConversationPermissions;
+import com.anynote.ai.api.enums.ChatConversationPermissions;
 
 import java.lang.annotation.*;
 

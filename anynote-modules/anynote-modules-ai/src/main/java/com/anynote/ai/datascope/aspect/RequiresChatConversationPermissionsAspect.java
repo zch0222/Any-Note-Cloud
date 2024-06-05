@@ -1,8 +1,8 @@
 package com.anynote.ai.datascope.aspect;
 
 import com.anynote.ai.datascope.annotation.RequiresChatConversationPermissions;
-import com.anynote.ai.enums.ChatConversationPermissions;
-import com.anynote.ai.model.bo.ChatConversationQueryParam;
+import com.anynote.ai.api.enums.ChatConversationPermissions;
+import com.anynote.ai.api.model.bo.ChatConversationQueryParam;
 import com.anynote.ai.service.ChatService;
 import com.anynote.common.security.token.TokenUtil;
 import com.anynote.core.exception.BusinessException;

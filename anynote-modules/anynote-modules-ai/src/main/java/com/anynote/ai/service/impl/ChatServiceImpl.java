@@ -3,8 +3,10 @@ package com.anynote.ai.service.impl;
 import com.anynote.ai.api.model.po.ChatConversation;
 import com.anynote.ai.api.model.po.ChatMessage;
 import com.anynote.ai.datascope.annotation.RequiresChatConversationPermissions;
-import com.anynote.ai.enums.ChatConversationPermissions;
-import com.anynote.ai.model.bo.ChatConversationQueryParam;
+import com.anynote.ai.api.enums.ChatConversationPermissions;
+import com.anynote.ai.api.model.bo.ChatConversationQueryParam;
+import com.anynote.ai.enums.ChatType;
+import com.anynote.ai.model.bo.ChatConversationCreateParam;
 import com.anynote.ai.model.bo.ChatConversationUpdateParam;
 import com.anynote.ai.model.vo.ChatConversationInfoVO;
 import com.anynote.ai.model.vo.ChatConversationVO;
@@ -15,6 +17,7 @@ import com.anynote.common.security.token.TokenUtil;
 import com.anynote.core.exception.BusinessException;
 import com.anynote.core.utils.StringUtils;
 import com.anynote.core.web.model.bo.PageBean;
+import com.anynote.note.api.RemoteDocService;
 import com.anynote.system.api.model.bo.LoginUser;
 import com.anynote.system.api.model.po.SysUser;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -36,6 +39,9 @@ public class ChatServiceImpl implements ChatService {
 
     @Resource
     private ChatMessageService chatMessageService;
+
+    @Resource
+    private RemoteDocService remoteDocService;
 
     @Resource
     private TokenUtil tokenUtil;
@@ -168,5 +174,30 @@ public class ChatServiceImpl implements ChatService {
             return "SUCCESS";
         }
         throw new BusinessException("更新对话信息失败");
+    }
+
+    @Override
+    public Long createConversation(ChatConversationCreateParam createParam) {
+
+//        if (ChatType.DOC_RAG.getValue() == createParam.getType()) {
+//            remoteDocService.getDoc(createParam.getDocId());
+//        }
+        LoginUser loginUser = tokenUtil.getLoginUser();
+        Date date = new Date();
+        ChatConversation conversation = ChatConversation.builder()
+                .title(createParam.getTitle())
+                .type(createParam.getType())
+                .docId(createParam.getDocId())
+                .permissions("70000")
+                .createBy(loginUser.getUserId())
+                .updateBy(loginUser.getUserId())
+                .updateTime(date)
+                .createTime(date)
+                .build();
+        int count = chatConversationService.getBaseMapper().insert(conversation);
+        if (1 != count) {
+            throw new BusinessException("创建对话失败");
+        }
+        return conversation.getId();
     }
 }

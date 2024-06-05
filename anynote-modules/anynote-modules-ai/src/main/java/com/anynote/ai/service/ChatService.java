@@ -1,9 +1,11 @@
 package com.anynote.ai.service;
 
+import com.anynote.ai.api.model.dto.ConversationCreateDTO;
 import com.anynote.ai.api.model.po.ChatConversation;
 import com.anynote.ai.api.model.po.ChatMessage;
-import com.anynote.ai.enums.ChatConversationPermissions;
-import com.anynote.ai.model.bo.ChatConversationQueryParam;
+import com.anynote.ai.api.enums.ChatConversationPermissions;
+import com.anynote.ai.api.model.bo.ChatConversationQueryParam;
+import com.anynote.ai.model.bo.ChatConversationCreateParam;
 import com.anynote.ai.model.bo.ChatConversationUpdateParam;
 import com.anynote.ai.model.vo.ChatConversationInfoVO;
 import com.anynote.ai.model.vo.ChatConversationVO;
@@ -24,6 +26,8 @@ public interface ChatService {
     public ChatConversationPermissions getConversationPermissions(Long conversationId);
 
     public ChatConversationVO getConversationById(ChatConversationQueryParam queryParam);
+
+    public Long createConversation(ChatConversationCreateParam createParam);
 
     public String updateChatConversation(ChatConversationUpdateParam chatConversationUpdateParam);
 

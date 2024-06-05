@@ -17,6 +17,7 @@
         <module>anynote-common-datascope</module>
         <module>anynote-common-elasticsearch</module>
         <module>anynote-common-rocketmq</module>
+        <module>anynote-common-green</module>
     </modules>
 
 
