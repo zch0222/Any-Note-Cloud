@@ -33,4 +33,8 @@ public class RocketMQProperties {
     private String aiChatTopic;
 
     private String aiChatGroup;
+
+    private String notifyTopic;
+
+    private String notifyGroup;
 }

@@ -1,0 +1,34 @@
+server:
+  port: 9066
+
+
+spring:
+  application:
+    name: anynote-notify
+  profiles:
+    # 环境配置
+    active: dev
+  cloud:
+    #    gateway:
+    #      routes:
+    #        # 系统模块
+    #        - id: anynote-system
+    #          uri: http://localhost:9201/
+    #          predicates:
+    #            - Path=/system/**
+    #          filters:
+    #            - StripPrefix=1
+    nacos:
+      discovery:
+        # 服务注册地址
+        server-addr: localhost:8848
+        namespace: 0587fa28-1301-43db-a7a1-599c00fc3f70
+      config:
+        # 配置中心地址
+        server-addr: localhost:8848
+        # 配置文件格式
+        file-extension: yml
+        namespace: 0587fa28-1301-43db-a7a1-599c00fc3f70
+        # 共享配置
+        shared-configs:
+          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}

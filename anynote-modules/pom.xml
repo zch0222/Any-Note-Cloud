@@ -18,6 +18,7 @@
         <module>anynote-modules-ai</module>
         <module>anynote-modules-ai-nio</module>
         <module>anynote-modules-external-api</module>
+        <module>anynote-modules-notify</module>
     </modules>
     <build>
         <finalName>anynote-modules</finalName>
