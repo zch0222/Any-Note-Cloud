@@ -193,6 +193,12 @@
 
             <dependency>
                 <groupId>com.anynote</groupId>
+                <artifactId>anynote-api-notify</artifactId>
+                <version>${anynote.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.anynote</groupId>
                 <artifactId>anynote-common-green</artifactId>
                 <version>${anynote.version}</version>
             </dependency>

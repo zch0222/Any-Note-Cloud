@@ -550,4 +550,14 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseMapper, N
                 .completeHuaweiOBSUpload(completeKnowledgeBaseUploadDTO), "上传异常，请联系管理员");
         return Constants.SUCCESS_RES;
     }
+
+    @Override
+    public List<Long> getKnowledgeBaseUserIds(Long knowledgeBaseId) {
+        LambdaQueryWrapper<UserKnowledgeBase> queryWrapper = new LambdaQueryWrapper<>();
+
+        queryWrapper
+                .eq(UserKnowledgeBase::getKnowledgeBaseId, knowledgeBaseId);
+        List<UserKnowledgeBase> userKnowledgeBaseList = userKnowledgeBaseMapper.selectList(queryWrapper);
+        return userKnowledgeBaseList.stream().map(UserKnowledgeBase::getUserId).collect(Collectors.toList());
+    }
 }

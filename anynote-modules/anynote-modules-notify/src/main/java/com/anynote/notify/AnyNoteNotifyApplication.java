@@ -4,6 +4,7 @@ package com.anynote.notify;
 import com.anynote.common.security.handler.GlobalExceptionHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.FilterType;
                 GlobalExceptionHandler.class
         })
 })
+@EnableFeignClients(basePackages = {"com.anynote"})
 public class AnyNoteNotifyApplication {
 
 

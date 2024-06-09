@@ -3,6 +3,7 @@ package com.anynote.note.service.impl;
 import com.alibaba.fastjson2.JSON;
 import com.anynote.common.rocketmq.callback.RocketmqSendCallbackBuilder;
 import com.anynote.common.rocketmq.properties.RocketMQProperties;
+import com.anynote.common.rocketmq.tags.NoteTagsEnum;
 import com.anynote.common.rocketmq.tags.NoteTaskTagsEnum;
 import com.anynote.common.security.token.TokenUtil;
 import com.anynote.core.constant.Constants;
@@ -13,6 +14,7 @@ import com.anynote.core.utils.StringUtils;
 import com.anynote.core.web.enums.ResCode;
 import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.note.api.model.bo.NoteOperationCount;
+import com.anynote.note.api.model.bo.NoteTaskCreatedMessageBody;
 import com.anynote.note.api.model.po.*;
 import com.anynote.note.datascope.annotation.RequiresKnowledgeBasePermissions;
 import com.anynote.note.datascope.annotation.RequiresNotePermissions;
@@ -37,6 +39,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -271,6 +274,20 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
                 noteTaskOperationHistoryService.asyncSaveNoteTaskOperationHistory(addUserNoteTaskOperationHistory);
             }
         });
+
+        rocketMQTemplate.asyncSend(rocketMQProperties.getNoteTopic() + ":" + NoteTagsEnum.NOTE_TASK_CREATED.name(),
+                new Gson().toJson(NoteTaskCreatedMessageBody.builder()
+                        .noteTaskId(noteTask.getId())
+                        .taskDescribe(noteTask.getTaskName())
+                        .startTime(noteTask.getStartTime())
+                        .endTime(noteTask.getEndTime())
+                        .knowledgeBaseId(noteTask.getKnowledgeBaseId())
+                        .status(noteTask.getStatus())
+                        .taskDescribe(noteTask.getTaskDescribe())
+                        .createBy(noteTask.getCreateBy())
+                        .createTime(noteTask.getCreateTime())
+                        .updateBy(noteTask.getUpdateBy())
+                        .updateTime(noteTask.getUpdateTime()).build()), RocketmqSendCallbackBuilder.commonCallback());
         return noteTask.getId();
     }
 

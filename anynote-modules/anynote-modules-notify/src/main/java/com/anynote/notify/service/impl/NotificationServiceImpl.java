@@ -1,21 +1,17 @@
 package com.anynote.notify.service.impl;
 
+import com.anynote.common.redis.constant.RedisChannel;
 import com.anynote.common.rocketmq.properties.RocketMQProperties;
-import com.anynote.common.rocketmq.tags.NotifyTagsEnum;
 import com.anynote.common.security.token.TokenUtil;
-import com.anynote.core.utils.ResUtil;
-import com.anynote.core.web.model.bo.ResData;
 import com.anynote.notify.model.dto.NoticeDTO;
 import com.anynote.notify.service.NotificationService;
 import com.anynote.system.api.model.bo.LoginUser;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
 
 
 import javax.annotation.Resource;
@@ -34,19 +30,35 @@ public class NotificationServiceImpl implements NotificationService {
     @Resource
     private Gson gson;
 
-//    @Resource(name = "rocketMQClientConfiguration")
-//    private ClientConfiguration clientConfiguration;
-//
-//    @Resource(name = "rocketMQClientServiceProvider")
-//    private ClientServiceProvider clientServiceProvider;
-
     @Resource
-    private RocketMQProperties rocketMQProperties;
+    private ReactiveRedisTemplate<String, String> reactiveRedisTemplate;
 
 
 
     @Override
-    public Flux<ServerSentEvent<String>> notice(NoticeDTO noticeDTO, String accessToken){
+    public Flux<ServerSentEvent<String>> notice(NoticeDTO noticeDTO, String accessToken) {
+        LoginUser loginUser = tokenUtil.getLoginUser(accessToken);
+        String chanel = RedisChannel.NOTIFY_CHANNEL_USER + loginUser.getUserId();
+        log.info(chanel);
+        Flux<ServerSentEvent<String>> subFlux = reactiveRedisTemplate.listenToChannel(chanel)
+                .map(value -> {
+                    log.info(value.toString());
+                    return ServerSentEvent.<String>builder()
+                            .id(new Date().toString())
+                            .data(value.toString())
+                            .event("message")
+                            .build();
+                });
+        Flux<ServerSentEvent<String>> heartbeatFlux = Flux.interval(Duration.ofSeconds(10))
+                .map(tick -> {
+                    log.info("heartbeat");
+                    return ServerSentEvent.<String>builder()
+                            .id(new Date().toString())
+                            .data("heartbeat")
+                            .event("message")
+                            .build();
+                });
+        return Flux.merge(subFlux, heartbeatFlux);
 //        try {
 //            LoginUser loginUser = tokenUtil.getLoginUser(accessToken);
 //            Duration awaitDuration = Duration.ofSeconds(30);
@@ -78,7 +90,7 @@ public class NotificationServiceImpl implements NotificationService {
 //                        .data(res.get())
 //                        .event("message")
 //                        .build();
-//            }).publishOn(Schedulers.boundedElastic()).repeat().doFinally(signal -> {
+//            }).publishOn(Schedulers.boundedElastic()).repeat(3).doFinally(signal -> {
 //                log.info("FINALLY");
 //            });
 //        } catch (Exception e) {
@@ -91,6 +103,5 @@ public class NotificationServiceImpl implements NotificationService {
 //                        .data(gson.toJson(ResUtil.success(loginUser.getRole())))
 //                        .event("message")
 //                        .build());
-        return null;
     }
 }

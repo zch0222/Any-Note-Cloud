@@ -16,6 +16,7 @@
         <module>anynote-api-note</module>
         <module>anynote-api-file</module>
         <module>anynote-api-ai</module>
+        <module>anynote-api-notify</module>
     </modules>
 
     <properties>

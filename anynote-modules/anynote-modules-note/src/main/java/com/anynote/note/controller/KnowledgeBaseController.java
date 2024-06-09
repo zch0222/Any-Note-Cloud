@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author 称霸幼儿园
@@ -114,6 +115,17 @@ public class KnowledgeBaseController {
         queryParam.setPageSize(pageSize);
         queryParam.setUsername(username);
         return ResUtil.success(knowledgeBaseService.getKnowledgeBaseUsers(queryParam));
+    }
+
+    /**
+     * 获取知识库用户id列表
+     * @param knowledgeBaseId
+     * @return
+     */
+    @InnerAuth
+    @GetMapping("users/ids/{knowledgeBaseId}")
+    public ResData<List<Long>> getKnowledgeBaseUserIds(@NotNull(message = "知识库id不能为空") @PathVariable("knowledgeBaseId") Long knowledgeBaseId) {
+        return ResUtil.success(knowledgeBaseService.getKnowledgeBaseUserIds(knowledgeBaseId));
     }
 
     @DeleteMapping("users")

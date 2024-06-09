@@ -7,7 +7,11 @@ import com.anynote.note.api.model.dto.NoteKnowledgeBaseDTO;
 import com.anynote.note.api.factory.RemoteKnowledgeBaseFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * @author 称霸幼儿园
@@ -23,4 +27,8 @@ public interface RemoteKnowledgeBaseService {
                                                                             @RequestParam("type") Integer type,
                                                                             @RequestParam("status") Integer status,
                                                                             @RequestParam("organizationId") Long organizationId);
+
+    @GetMapping("bases/users/ids/{knowledgeBaseId}")
+    public ResData<List<Long>> getKnowledgeBaseUserIds(@PathVariable("knowledgeBaseId") Long knowledgeBaseId,
+                                                       @RequestHeader("from-source") String fromSource);
 }

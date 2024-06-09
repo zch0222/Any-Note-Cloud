@@ -8,6 +8,8 @@ public enum NoteTaskTagsEnum {
     SUBMIT("提交任务"),
 
     INSERT_HISTORY("插入操作历史"),
+
+
     ;
 
     private final String description;

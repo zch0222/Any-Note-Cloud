@@ -37,4 +37,6 @@ public class RocketMQProperties {
     private String notifyTopic;
 
     private String notifyGroup;
+
+    private String notifyNoteGroup;
 }

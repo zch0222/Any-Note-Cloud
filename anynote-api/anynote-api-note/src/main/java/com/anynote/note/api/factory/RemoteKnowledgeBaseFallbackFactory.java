@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * @author 称霸幼儿园
  */
@@ -25,6 +27,11 @@ public class RemoteKnowledgeBaseFallbackFactory implements FallbackFactory<Remot
 
             @Override
             public ResData<PageBean<NoteKnowledgeBaseDTO>> getManagerKnowledgeBases(Integer page, Integer pageSize, Integer type, Integer status, Long organizationId) {
+                return ResUtil.error(ResCode.INNER_NOTE_SERVICE_ERROR);
+            }
+
+            @Override
+            public ResData<List<Long>> getKnowledgeBaseUserIds(Long knowledgeBaseId, String fromSource) {
                 return ResUtil.error(ResCode.INNER_NOTE_SERVICE_ERROR);
             }
         };
