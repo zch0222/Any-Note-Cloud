@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @author 称霸幼儿园
  */
@@ -14,6 +16,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NoticeVO {
 
-    private String type;
+    private Long id;
 
+    private String title;
+
+    private String content;
+
+    private Integer type;
+
+    private Integer status;
+
+    private Integer level;
+
+    private Date createTime;
+
+    private Date updateTime;
+
+    private String knowledgeName;
+
+    private Long knowledgeBaseId;
 }

@@ -31,4 +31,8 @@ public interface RemoteKnowledgeBaseService {
     @GetMapping("bases/users/ids/{knowledgeBaseId}")
     public ResData<List<Long>> getKnowledgeBaseUserIds(@PathVariable("knowledgeBaseId") Long knowledgeBaseId,
                                                        @RequestHeader("from-source") String fromSource);
+
+    @GetMapping("/bases/inner/{id}")
+    public ResData<NoteKnowledgeBaseDTO> innerGetKnowledgeBaseById(@PathVariable("id") Long id,
+                                                                   @RequestHeader("from-source") String fromSource);
 }

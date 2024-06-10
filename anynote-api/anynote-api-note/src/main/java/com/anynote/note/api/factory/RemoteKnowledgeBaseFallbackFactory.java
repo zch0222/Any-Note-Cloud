@@ -34,6 +34,11 @@ public class RemoteKnowledgeBaseFallbackFactory implements FallbackFactory<Remot
             public ResData<List<Long>> getKnowledgeBaseUserIds(Long knowledgeBaseId, String fromSource) {
                 return ResUtil.error(ResCode.INNER_NOTE_SERVICE_ERROR);
             }
+
+            @Override
+            public ResData<NoteKnowledgeBaseDTO> innerGetKnowledgeBaseById(Long id, String fromSource) {
+                return ResUtil.error(ResCode.INNER_NOTE_SERVICE_ERROR);
+            }
         };
     }
 }

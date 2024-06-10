@@ -106,4 +106,6 @@ public interface KnowledgeBaseService extends IService<NoteKnowledgeBase> {
     public PageBean<NoteKnowledgeBaseDTO> getManagerKnowledgeBaseList(KnowledgeBaseQueryParam queryParam);
 
     public List<Long> getKnowledgeBaseUserIds(Long knowledgeBaseId);
+
+    public NoteKnowledgeBaseDTO getKnowledgeBaseById(Long id);
 }

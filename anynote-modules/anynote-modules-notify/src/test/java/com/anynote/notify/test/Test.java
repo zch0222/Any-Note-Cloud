@@ -1,5 +1,6 @@
 package com.anynote.notify.test;
 
+import com.anynote.common.redis.constant.RedisChannel;
 import com.anynote.common.rocketmq.callback.RocketmqSendCallbackBuilder;
 import com.anynote.common.rocketmq.properties.RocketMQProperties;
 import com.anynote.common.rocketmq.tags.NotifyTagsEnum;
@@ -73,7 +74,7 @@ public class Test {
 //        reactiveRedisTemplate.convertAndSend("NOTIFY:2", "Hello World!");
         Map<String, String> map = new HashMap<>();
         map.put("TEST", "Hello World!");
-        stringRedisTemplate.convertAndSend("NOTIFY:2", new Gson().toJson(map));
+        stringRedisTemplate.convertAndSend(RedisChannel.NOTIFY_CHANNEL_USER + 2L, new Gson().toJson(map));
     }
 
 

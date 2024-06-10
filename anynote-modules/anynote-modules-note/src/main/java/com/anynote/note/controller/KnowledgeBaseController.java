@@ -128,6 +128,18 @@ public class KnowledgeBaseController {
         return ResUtil.success(knowledgeBaseService.getKnowledgeBaseUserIds(knowledgeBaseId));
     }
 
+    /**
+     * 根据知识库id获取知识库信息
+     * @param id
+     * @return
+     */
+    @InnerAuth
+    @GetMapping("inner/{id}")
+    public ResData<NoteKnowledgeBaseDTO> innerGetKnowledgeBaseById(@PathVariable("id") Long id) {
+        return ResUtil.success(knowledgeBaseService.getKnowledgeBaseById(id));
+    }
+
+
     @DeleteMapping("users")
     public ResData<String> removeKnowledgeBaseUser(@NotNull(message = "用户ID不能为空") Long userId,
                                                    @NotNull(message = "知识库ID不能为空") Long knowledgeBaseId) {

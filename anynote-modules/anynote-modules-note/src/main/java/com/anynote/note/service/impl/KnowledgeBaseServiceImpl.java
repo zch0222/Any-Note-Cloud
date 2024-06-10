@@ -560,4 +560,9 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseMapper, N
         List<UserKnowledgeBase> userKnowledgeBaseList = userKnowledgeBaseMapper.selectList(queryWrapper);
         return userKnowledgeBaseList.stream().map(UserKnowledgeBase::getUserId).collect(Collectors.toList());
     }
+
+    @Override
+    public NoteKnowledgeBaseDTO getKnowledgeBaseById(Long id) {
+        return this.baseMapper.selectKnowledgeBaseById(KnowledgeBaseQueryParam.builder().id(id).build());
+    }
 }

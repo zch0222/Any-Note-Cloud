@@ -13,6 +13,7 @@ import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.annotation.SelectorType;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -31,7 +32,7 @@ public class NotifyNoteMessageListener implements RocketMQListener<MessageExt> {
     private RemoteKnowledgeBaseService remoteKnowledgeBaseService;
 
     @Resource
-    private ReactiveRedisTemplate<String, String> reactiveRedisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public void onMessage(MessageExt messageExt) {
@@ -52,7 +53,7 @@ public class NotifyNoteMessageListener implements RocketMQListener<MessageExt> {
         for (Long userId : userIds) {
             String chanel = RedisChannel.NOTIFY_CHANNEL_USER + userId;
             log.info(chanel);
-            reactiveRedisTemplate.convertAndSend(chanel, gson.toJson(body));
+            stringRedisTemplate.convertAndSend(chanel, gson.toJson(body));
         }
     }
 }

@@ -3,7 +3,11 @@ package com.anynote.notify.service.impl;
 import com.anynote.common.redis.constant.RedisChannel;
 import com.anynote.common.rocketmq.properties.RocketMQProperties;
 import com.anynote.common.security.token.TokenUtil;
+import com.anynote.note.api.RemoteKnowledgeBaseService;
+import com.anynote.notify.api.enmus.NoticeType;
+import com.anynote.notify.api.model.po.Notice;
 import com.anynote.notify.model.dto.NoticeDTO;
+import com.anynote.notify.service.NoticeService;
 import com.anynote.notify.service.NotificationService;
 import com.anynote.system.api.model.bo.LoginUser;
 import com.google.gson.Gson;
@@ -32,6 +36,12 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Resource
     private ReactiveRedisTemplate<String, String> reactiveRedisTemplate;
+
+    @Resource
+    private NoticeService noticeService;
+
+    @Resource
+    private RemoteKnowledgeBaseService remoteKnowledgeBaseService;
 
 
 
@@ -103,5 +113,13 @@ public class NotificationServiceImpl implements NotificationService {
 //                        .data(gson.toJson(ResUtil.success(loginUser.getRole())))
 //                        .event("message")
 //                        .build());
+    }
+
+    @Override
+    public void publishNotice(Notice notice) {
+        noticeService.getBaseMapper().insert(notice);
+        if (NoticeType.KNOWLEDGE_BASE.getType() == notice.getType()) {
+            
+        }
     }
 }
