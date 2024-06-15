@@ -55,7 +55,7 @@ public class NotificationServiceImpl implements NotificationService {
                     log.info(value.toString());
                     return ServerSentEvent.<String>builder()
                             .id(new Date().toString())
-                            .data(value.toString())
+                            .data(gson.toJson(value.getMessage()))
                             .event("message")
                             .build();
                 });

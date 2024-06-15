@@ -278,7 +278,7 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
         rocketMQTemplate.asyncSend(rocketMQProperties.getNoteTopic() + ":" + NoteTagsEnum.NOTE_TASK_CREATED.name(),
                 new Gson().toJson(NoteTaskCreatedMessageBody.builder()
                         .noteTaskId(noteTask.getId())
-                        .taskDescribe(noteTask.getTaskName())
+                        .taskName(noteTask.getTaskName())
                         .startTime(noteTask.getStartTime())
                         .endTime(noteTask.getEndTime())
                         .knowledgeBaseId(noteTask.getKnowledgeBaseId())

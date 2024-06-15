@@ -55,7 +55,7 @@ public class NotifyNoteMessageListener implements RocketMQListener<MessageExt> {
         log.info(tag.toString());
         log.info(gson.toJson(messageExt));
         if (NoteTagsEnum.NOTE_TASK_CREATED.equals(tag)) {
-            log.info(new String(messageExt.getBody()));
+            log.info("NOTE_TASK_CREATED:{}", new String(messageExt.getBody()));
             NoteTaskCreatedMessageBody body = gson.fromJson(new String(messageExt.getBody()),
                     NoteTaskCreatedMessageBody.class);
             publishNoteTaskCreateNotice(body);
