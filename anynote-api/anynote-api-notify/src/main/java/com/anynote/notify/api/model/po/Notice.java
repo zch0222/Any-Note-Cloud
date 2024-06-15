@@ -36,14 +36,15 @@ public class Notice extends BaseEntity {
     private Integer deleted;
 
     @Builder
-    public Notice(Long id, String title, String content, Integer type, Integer status, Integer deleted, Long createBy,
-                  Date createTime, Long updateBy, Date updateTime, String remark, Map<String, Object> params) {
+    public Notice(Long id, String title, String content, Integer type, Integer status, Integer deleted, Integer level,
+                  Long createBy, Date createTime, Long updateBy, Date updateTime, String remark, Map<String, Object> params) {
         super(createBy, createTime, updateBy, updateTime, remark, params);
         this.id = id;
         this.title = title;
         this.content = content;
         this.type = type;
         this.status = status;
+        this.level = level;
         this.deleted = deleted;
     }
 

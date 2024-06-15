@@ -60,10 +60,7 @@ import javax.annotation.Resource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -563,6 +560,8 @@ public class KnowledgeBaseServiceImpl extends ServiceImpl<KnowledgeBaseMapper, N
 
     @Override
     public NoteKnowledgeBaseDTO getKnowledgeBaseById(Long id) {
-        return this.baseMapper.selectKnowledgeBaseById(KnowledgeBaseQueryParam.builder().id(id).build());
+        KnowledgeBaseQueryParam queryParam = KnowledgeBaseQueryParam.builder().id(id).build();
+        queryParam.setParams(new HashMap<>(0));
+        return this.baseMapper.selectKnowledgeBaseById(queryParam);
     }
 }

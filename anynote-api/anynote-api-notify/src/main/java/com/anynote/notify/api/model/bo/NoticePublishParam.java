@@ -1,4 +1,4 @@
-package com.anynote.notify.model.vo;
+package com.anynote.notify.api.model.bo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,17 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
-/**
- * @author 称霸幼儿园
- */
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class NoticeVO {
-
-    private Long id;
+@NoArgsConstructor
+public class NoticePublishParam {
 
     private String title;
 
@@ -36,7 +32,8 @@ public class NoticeVO {
 
     private Long updateBy;
 
-    private String knowledgeName;
-
     private Long knowledgeBaseId;
+
+    private List<Long> userIdList;
+
 }

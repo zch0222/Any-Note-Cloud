@@ -11,13 +11,13 @@ public enum NoticeLevel {
 
     HIGH(2);
 
-    private final int type;
+    private final int level;
 
-    NoticeLevel(int type) {
-        this.type = type;
+    NoticeLevel(int level) {
+        this.level = level;
     }
 
-    public int getType() {
-        return this.type;
+    public int getLevel() {
+        return this.level;
     }
 }

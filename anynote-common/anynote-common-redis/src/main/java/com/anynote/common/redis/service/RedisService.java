@@ -1,5 +1,6 @@
 package com.anynote.common.redis.service;
 
+import com.anynote.common.redis.model.bo.RedisMessage;
 import com.anynote.core.enums.ConfigEnum;
 import com.anynote.system.api.model.po.SysConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.data.redis.core.*;
 import org.springframework.data.util.CloseableIterator;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +22,9 @@ public class RedisService {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      *
@@ -305,5 +310,16 @@ public class RedisService {
     public Collection<String> keys(final String pattern)
     {
         return redisTemplate.keys(pattern);
+    }
+
+    public void batchPublish(List<RedisMessage> messages) {
+        stringRedisTemplate.executePipelined((RedisCallback<?>) (connection) -> {
+            for (RedisMessage message : messages) {
+                byte[] rawChannel = stringRedisTemplate.getStringSerializer().serialize(message.getChannel());
+                byte[] rawMessage = stringRedisTemplate.getStringSerializer().serialize(message.getMessage());
+                connection.publish(rawChannel, rawMessage);
+            }
+            return null;
+        });
     }
 }

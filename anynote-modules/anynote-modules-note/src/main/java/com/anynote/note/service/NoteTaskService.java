@@ -78,4 +78,6 @@ public interface NoteTaskService extends IService<NoteTask> {
 
     public List<NoteTaskChartsVO> getNoteTaskChartsData(NoteTaskChartsQueryParam queryParam);
 
+
+    public List<UserNoteTask> getTaskUsers(Long taskId);
 }

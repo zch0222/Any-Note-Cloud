@@ -1,10 +1,12 @@
 package com.anynote.note.controller;
 
+import com.anynote.common.security.annotation.InnerAuth;
 import com.anynote.core.constant.ErrorMessageConstants;
 import com.anynote.core.utils.ResUtil;
 import com.anynote.core.web.model.bo.CreateResEntity;
 import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.core.web.model.bo.ResData;
+import com.anynote.note.api.model.po.UserNoteTask;
 import com.anynote.note.model.bo.NoteTaskChartsQueryParam;
 import com.anynote.note.model.bo.NoteTaskCreateParam;
 import com.anynote.note.model.bo.NoteTaskQueryParam;
@@ -73,6 +75,12 @@ public class NoteTaskController {
     @GetMapping("{id}/history")
     public ResData<List<NoteTaskHistoryVO>> getNoteTaskHistories(@NotNull(message = "任务id不能为空") @PathVariable("id") Long id) {
         return ResUtil.success(noteTaskService.getNoteTaskHistoryList(id));
+    }
+
+    @InnerAuth
+    @GetMapping("/inner/taskUsers/{taskId}")
+    public ResData<List<UserNoteTask>> getTaskUsers(@PathVariable("taskId") Long taskId) {
+        return ResUtil.success(noteTaskService.getTaskUsers(taskId));
     }
 
 

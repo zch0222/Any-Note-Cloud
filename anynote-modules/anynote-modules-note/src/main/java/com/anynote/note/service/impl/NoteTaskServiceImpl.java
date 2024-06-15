@@ -722,4 +722,13 @@ public class NoteTaskServiceImpl extends ServiceImpl<NoteTaskMapper, NoteTask>
         }
         return noteTaskChartsVOList;
     }
+
+
+    @Override
+    public List<UserNoteTask> getTaskUsers(Long taskId) {
+        LambdaQueryWrapper<UserNoteTask> userNoteTaskLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        userNoteTaskLambdaQueryWrapper
+                .eq(UserNoteTask::getNoteTaskId, taskId);
+        return userNoteTaskMapper.selectList(userNoteTaskLambdaQueryWrapper);
+    }
 }
