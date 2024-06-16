@@ -65,7 +65,7 @@ public class NotificationServiceImpl implements NotificationService {
                     return ServerSentEvent.<String>builder()
                             .id(new Date().toString())
                             .data("heartbeat")
-                            .event("message")
+                            .event("heartbeat")
                             .build();
                 });
         return Flux.merge(subFlux, heartbeatFlux);
