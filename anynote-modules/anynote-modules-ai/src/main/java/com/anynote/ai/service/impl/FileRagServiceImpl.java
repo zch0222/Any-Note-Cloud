@@ -568,7 +568,7 @@ public class FileRagServiceImpl implements FileRagService {
         String aiServerAddress = configService.getAIServerAddress();
         Long finalConversationId = conversationId;
         return webClient.post()
-                .uri(aiServerAddress + "/api/rag/query")
+                .uri(aiServerAddress + "/api/rag/query/v2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(gson.toJson(req)))
                 .retrieve()
