@@ -51,7 +51,7 @@ public class WhisperServiceImpl implements WhisperService {
 
         String aiServiceAddress = configService.getAIServerAddress();
         return webClient.post()
-                .uri(aiServiceAddress)
+                .uri(aiServiceAddress + "/api/whisper/submit")
                 .body(Mono.just(whisperDTO), WhisperDTO.class)
                 .retrieve()
                 .bodyToMono(WhisperSubmitVO.class)

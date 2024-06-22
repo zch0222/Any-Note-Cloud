@@ -4,10 +4,7 @@ import com.anynote.ai.nio.model.dto.WhisperDTO;
 import com.anynote.ai.nio.service.WhisperService;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import javax.annotation.Resource;
@@ -20,7 +17,7 @@ public class WhisperController {
     private WhisperService whisperService;
 
 
-    @GetMapping("")
+    @PostMapping("")
     public Flux<ServerSentEvent<String>> whisper(@Validated @RequestBody WhisperDTO whisperDTO) {
         return whisperService.whisper(whisperDTO);
     }
