@@ -10,6 +10,12 @@ public enum WhisperTagsEnum {
      */
     WHISPER_TASK_FINISHED,
 
+
+    /**
+     * whisper 任务提交
+     */
+    WHISPER_TASK_SUBMITTED,
+
     /**
      * whisper 任务状态更新
      */

@@ -34,7 +34,16 @@
             <version>${druid.version}</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>com.anynote</groupId>
+            <artifactId>anynote-common-security</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-security</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <dependency>
             <groupId>com.mysql</groupId>

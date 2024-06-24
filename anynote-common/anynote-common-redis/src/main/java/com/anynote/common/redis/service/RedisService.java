@@ -38,6 +38,10 @@ public class RedisService {
         redisTemplate.opsForValue().set(key, value);
     }
 
+    public <T> boolean setNX(final String key, final T value) {
+        return redisTemplate.opsForValue().setIfAbsent(key, value);
+    }
+
     /**
      * 缓存基本的对象，Integer、String、实体类等
      *

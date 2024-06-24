@@ -1,4 +1,4 @@
-package com.anynote.ai.nio.model.vo;
+package com.anynote.ai.api.model.vo;
 
 import lombok.Data;
 
@@ -22,6 +22,32 @@ public class WhisperTaskStatusVO {
          */
         private String txt;
     }
+
+    public static enum Status {
+        STARTING(0),
+        LOADING_MODEL(1),
+        DOWNLOADING(2),
+        RUNNING(3),
+        FINISHED(4),
+        ;
+
+        private final int value;
+
+        Status(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
+    public static enum Type {
+        STATUS_UPDATE,
+        HEARTBEAT;
+    }
+
+    private String type;
 
     /**
      * 状态
