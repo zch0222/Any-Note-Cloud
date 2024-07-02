@@ -1,0 +1,277 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 536870912 bytes for G1 virtual space
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Zero Based Compressed Oops mode in which the Java heap is
+#     placed in the first 32GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 32GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (os_windows.cpp:3825), pid=26464, tid=40380
+#
+# JRE version:  (17.0.9+8) (build )
+# Java VM: OpenJDK 64-Bit Server VM (17.0.9+8-b1166.2, mixed mode, emulated-client, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, windows-amd64)
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -XX:TieredStopAtLevel=1 -Dspring.output.ansi.enabled=always -Dcom.sun.management.jmxremote -Dspring.jmx.enabled=true -Dspring.liveBeansView.mbeanDomain -Dspring.application.admin.enabled=true -Dmanagement.endpoints.jmx.exposure.include=* -javaagent:C:\Users\YXLMz\AppData\Local\Programs\IntelliJ IDEA Ultimate\lib\idea_rt.jar=62394:C:\Users\YXLMz\AppData\Local\Programs\IntelliJ IDEA Ultimate\bin -Dfile.encoding=UTF-8 com.anynote.ai.nio.AnyNoteAINioApplication
+
+Host: AMD Ryzen 7 5800H with Radeon Graphics         , 16 cores, 31G,  Windows 11 , 64 bit Build 22621 (10.0.22621.3672)
+Time: Wed Jun 26 23:53:55 2024  Windows 11 , 64 bit Build 22621 (10.0.22621.3672) elapsed time: 0.020592 seconds (0d 0h 0m 0s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000001b9344acf40):  JavaThread "Unknown thread" [_thread_in_vm, id=40380, stack(0x0000004372800000,0x0000004372900000)]
+
+Stack: [0x0000004372800000,0x0000004372900000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x688349]  os::platform_print_native_stack+0xd9  (os_windows_x86.cpp:235)
+V  [jvm.dll+0x841bfa]  VMError::report+0xc6a  (vmError.cpp:855)
+V  [jvm.dll+0x84383e]  VMError::report_and_die+0x78e  (vmError.cpp:1749)
+V  [jvm.dll+0x843ea3]  VMError::report_and_die+0x43  (vmError.cpp:1535)
+V  [jvm.dll+0x24bdef]  report_vm_out_of_memory+0x8f  (debug.cpp:321)
+V  [jvm.dll+0x6850f9]  os::pd_commit_memory_or_exit+0xc9  (os_windows.cpp:3833)
+V  [jvm.dll+0x67988a]  os::commit_memory_or_exit+0x2a  (os.cpp:1739)
+V  [jvm.dll+0x30cbfb]  G1PageBasedVirtualSpace::commit+0x19b  (g1PageBasedVirtualSpace.cpp:204)
+V  [jvm.dll+0x3140a6]  G1RegionsLargerThanCommitSizeMapper::commit_regions+0x96  (g1RegionToSpaceMapper.cpp:100)
+V  [jvm.dll+0x363ede]  HeapRegionManager::expand_any+0xee  (heapRegionManager.cpp:363)
+V  [jvm.dll+0x36410f]  HeapRegionManager::expand_by+0x7f  (heapRegionManager.cpp:380)
+V  [jvm.dll+0x2e29c8]  G1CollectedHeap::expand+0xb8  (g1CollectedHeap.cpp:1298)
+V  [jvm.dll+0x2e3934]  G1CollectedHeap::initialize+0x664  (g1CollectedHeap.cpp:1719)
+V  [jvm.dll+0x812771]  universe_init+0xb1  (universe.cpp:736)
+V  [jvm.dll+0x371d41]  init_globals+0x31  (init.cpp:124)
+V  [jvm.dll+0x7f12bc]  Threads::create_vm+0x60c  (thread.cpp:2909)
+V  [jvm.dll+0x3f59cf]  JNI_CreateJavaVM_inner+0x8f  (jni.cpp:3635)
+V  [jvm.dll+0x3f7601]  JNI_CreateJavaVM+0x11  (jni.cpp:3727)
+C  [jli.dll+0x528f]  JavaMain+0x113  (java.c:413)
+C  [ucrtbase.dll+0x29333]
+C  [KERNEL32.DLL+0x1257d]
+C  [ntdll.dll+0x5af28]
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x00007ff88e7adf18, length=0, elements={
+}
+
+Java Threads: ( => current thread )
+
+Other Threads:
+  0x000001b94e270c90 GCTaskThread "GC Thread#0" [stack: 0x0000004372900000,0x0000004372a00000] [id=50660]
+  0x000001b93452be00 ConcurrentGCThread "G1 Main Marker" [stack: 0x0000004372a00000,0x0000004372b00000] [id=18392]
+  0x000001b93452cfc0 ConcurrentGCThread "G1 Conc#0" [stack: 0x0000004372b00000,0x0000004372c00000] [id=34188]
+
+[error occurred during error reporting (printing all threads), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ff88df63597]
+
+VM state: not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x000001b9344a9de0] Heap_lock - owner thread: 0x000001b9344acf40
+
+Heap address: 0x0000000602400000, size: 8156 MB, Compressed Oops mode: Zero based, Oop shift amount: 3
+
+CDS archive(s) mapped at: [0x0000000000000000-0x0000000000000000-0x0000000000000000), size 0, SharedBaseAddress: 0x0000000800000000, ArchiveRelocationMode: 1.
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 0, Narrow klass range: 0x0
+
+GC Precious Log:
+<Empty>
+
+Heap:
+ garbage-first heap   total 0K, used 0K [0x0000000602400000, 0x0000000800000000)
+  region size 4096K, 0 young (0K), 0 survivors (0K)
+ Metaspace       used 0K, committed 0K, reserved 0K
+  class space    used 0K, committed 0K, reserved 0K
+
+Heap Regions: E=young(eden), S=young(survivor), O=old, HS=humongous(starts), HC=humongous(continues), CS=collection set, F=free, OA=open archive, CA=closed archive, TAMS=top-at-mark-start (previous, next)
+
+Card table byte_map: [0x000001b93c2a0000,0x000001b93d290000] _byte_map_base: 0x000001b93928e000
+
+Marking Bits (Prev, Next): (CMBitMap*) 0x000001b93451a5f0, (CMBitMap*) 0x000001b93451a630
+ Prev Bits: [0x000001b93e280000, 0x000001b9461f0000)
+ Next Bits: [0x000001b9461f0000, 0x000001b94e160000)
+
+GC Heap History (0 events):
+No events
+
+Dll operation events (1 events):
+Event: 0.014 Loaded shared library C:\Users\YXLMz\.jdks\jbr-17.0.9\bin\java.dll
+
+Deoptimization events (0 events):
+No events
+
+Classes unloaded (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+VM Operations (0 events):
+No events
+
+Events (0 events):
+No events
+
+
+Dynamic libraries:
+0x00007ff785800000 - 0x00007ff78580a000 	C:\Users\YXLMz\.jdks\jbr-17.0.9\bin\java.exe
+0x00007ff948bd0000 - 0x00007ff948de7000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ff947dd0000 - 0x00007ff947e94000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ff946350000 - 0x00007ff9466fc000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ff9467f0000 - 0x00007ff946901000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ff93e910000 - 0x00007ff93e927000 	C:\Users\YXLMz\.jdks\jbr-17.0.9\bin\jli.dll
+0x00007ff93e930000 - 0x00007ff93e94b000 	C:\Users\YXLMz\.jdks\jbr-17.0.9\bin\VCRUNTIME140.dll
+0x00007ff948720000 - 0x00007ff9488ce000 	C:\WINDOWS\System32\USER32.dll
+0x00007ff946320000 - 0x00007ff946346000 	C:\WINDOWS\System32\win32u.dll
+0x00007ff9488d0000 - 0x00007ff9488f9000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ff946180000 - 0x00007ff946299000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ff946070000 - 0x00007ff94610a000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ff937120000 - 0x00007ff9373b3000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.22621.3672_none_2713b9d173822955\COMCTL32.dll
+0x00007ff9469c0000 - 0x00007ff946a67000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ff946e10000 - 0x00007ff946e41000 	C:\WINDOWS\System32\IMM32.DLL
+0x00007ff93e900000 - 0x00007ff93e90c000 	C:\Users\YXLMz\.jdks\jbr-17.0.9\bin\vcruntime140_1.dll
+0x00007ff93e870000 - 0x00007ff93e8fd000 	C:\Users\YXLMz\.jdks\jbr-17.0.9\bin\msvcp140.dll
+0x00007ff88dc70000 - 0x00007ff88e8f2000 	C:\Users\YXLMz\.jdks\jbr-17.0.9\bin\server\jvm.dll
+0x00007ff946f60000 - 0x00007ff947012000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ff947d20000 - 0x00007ff947dca000 	C:\WINDOWS\System32\sechost.dll
+0x00007ff9467c0000 - 0x00007ff9467e8000 	C:\WINDOWS\System32\bcrypt.dll
+0x00007ff947630000 - 0x00007ff947745000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ff944d50000 - 0x00007ff944d9d000 	C:\WINDOWS\SYSTEM32\POWRPROF.dll
+0x00007ff936cf0000 - 0x00007ff936d24000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ff93bdf0000 - 0x00007ff93bdfa000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ff896960000 - 0x00007ff896969000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ff947030000 - 0x00007ff9470a1000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ff944d30000 - 0x00007ff944d43000 	C:\WINDOWS\SYSTEM32\UMPDC.dll
+0x00007ff944fe0000 - 0x00007ff944ff8000 	C:\WINDOWS\SYSTEM32\kernel.appcore.dll
+0x00007ff93e860000 - 0x00007ff93e86a000 	C:\Users\YXLMz\.jdks\jbr-17.0.9\bin\jimage.dll
+0x00007ff943170000 - 0x00007ff9433a2000 	C:\WINDOWS\SYSTEM32\DBGHELP.DLL
+0x00007ff946a70000 - 0x00007ff946df8000 	C:\WINDOWS\System32\combase.dll
+0x00007ff948900000 - 0x00007ff9489d7000 	C:\WINDOWS\System32\OLEAUT32.dll
+0x00007ff93a8d0000 - 0x00007ff93a902000 	C:\WINDOWS\SYSTEM32\dbgcore.DLL
+0x00007ff9462a0000 - 0x00007ff94631b000 	C:\WINDOWS\System32\bcryptPrimitives.dll
+0x00007ff934010000 - 0x00007ff93401e000 	C:\Users\YXLMz\.jdks\jbr-17.0.9\bin\instrument.dll
+0x00007ff913a10000 - 0x00007ff913a35000 	C:\Users\YXLMz\.jdks\jbr-17.0.9\bin\java.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Users\YXLMz\.jdks\jbr-17.0.9\bin;C:\WINDOWS\SYSTEM32;C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.22621.3672_none_2713b9d173822955;C:\Users\YXLMz\.jdks\jbr-17.0.9\bin\server
+
+VM Arguments:
+jvm_args: -XX:TieredStopAtLevel=1 -Dspring.output.ansi.enabled=always -Dcom.sun.management.jmxremote -Dspring.jmx.enabled=true -Dspring.liveBeansView.mbeanDomain -Dspring.application.admin.enabled=true -Dmanagement.endpoints.jmx.exposure.include=* -javaagent:C:\Users\YXLMz\AppData\Local\Programs\IntelliJ IDEA Ultimate\lib\idea_rt.jar=62394:C:\Users\YXLMz\AppData\Local\Programs\IntelliJ IDEA Ultimate\bin -Dfile.encoding=UTF-8 
+java_command: com.anynote.ai.nio.AnyNoteAINioApplication
+java_class_path (initial): D:\code\anynote\nio\Anynote-Cloud\anynote-modules\anynote-modules-ai-nio\target\classes;C:\Users\YXLMz\.m2\repository\com\alibaba\cloud\spring-cloud-starter-alibaba-nacos-discovery\2021.0.4.0\spring-cloud-starter-alibaba-nacos-discovery-2021.0.4.0.jar;C:\Users\YXLMz\.m2\repository\com\alibaba\cloud\spring-cloud-alibaba-commons\2021.0.4.0\spring-cloud-alibaba-commons-2021.0.4.0.jar;C:\Users\YXLMz\.m2\repository\com\alibaba\nacos\nacos-client\2.0.4\nacos-client-2.0.4.jar;C:\Users\YXLMz\.m2\repository\commons-codec\commons-codec\1.15\commons-codec-1.15.jar;C:\Users\YXLMz\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.13.4\jackson-core-2.13.4.jar;C:\Users\YXLMz\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.13.4.2\jackson-databind-2.13.4.2.jar;C:\Users\YXLMz\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.13.4\jackson-annotations-2.13.4.jar;C:\Users\YXLMz\.m2\repository\org\apache\httpcomponents\httpasyncclient\4.1.5\httpasyncclient-4.1.5.jar;C:\Users\YXLMz\.m2\repository\org\apache\httpcomponents\httpcore\4.4.16\httpcore-4.4.16.jar;C:\Users\YXLMz\.m2\repository\org\apache\httpcomponents\httpcore-nio\4.4.16\httpcore-nio-4.4.16.jar;C:\Users\YXLMz\.m2\repository\org\apache\httpcomponents\httpclient\4.5.14\httpclient-4.5.14.jar;C:\Users\YXLMz\.m2\repository\org\reflections\reflections\0.9.11\reflections-0.9.11.jar;C:\Users\YXLMz\.m2\repository\com\google\guava\guava\20.0\guava-20.0.jar;C:\Users\YXLMz\.m2\repository\org\javassist\javassist\3.21.0-GA\javassist-3.21.0-GA.jar;C:\Users\YXLMz\.m2\repository\io\prometheus\simpleclient\0.15.0\simpleclient-0.15.0.jar;C:\Users\YXLMz\.m2\repository\io\prometheus\simpleclient_tracer_otel\0.15.0\simpleclient_tracer_otel-0.15.0.jar;C:\Users\YXLMz\.m2\repository\io\prometheus\simpleclient_tracer_common\0.15.0\simpleclient_tracer_common-0.15.0.jar;C:\Users\YXLMz\.m2\repository\io\prometheus\simpleclient_tracer_otel_agent\0.15.0\simpleclient_tracer_otel_agent-0.15.0.jar;C
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 12                                        {product} {ergonomic}
+     uint ConcGCThreads                            = 3                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 13                                        {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 4194304                                   {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 536870912                                 {product} {ergonomic}
+     bool ManagementServer                         = true                                      {product} {command line}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 8552185856                                {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 4194304                                   {product} {ergonomic}
+   size_t MinHeapSize                              = 8388608                                   {product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 0                                      {pd product} {ergonomic}
+     bool ProfileInterpreter                       = false                                  {pd product} {command line}
+    uintx ProfiledCodeHeapSize                     = 0                                      {pd product} {ergonomic}
+   size_t SoftMaxHeapSize                          = 8552185856                             {manageable} {ergonomic}
+     intx TieredStopAtLevel                        = 1                                         {product} {command line}
+     bool UseCompressedClassPointers               = true                           {product lp64_product} {ergonomic}
+     bool UseCompressedOops                        = true                           {product lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags
+ #1: stderr all=off uptime,level,tags
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\Amazon Corretto\jdk1.8.0_412
+PATH=C:\Program Files\NVIDIA\CUDNN\v9.1\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4\libnvvp;C:\Program Files\Amazon Corretto\jdk1.8.0_412\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\YXLMz\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\Git\cmd;C:\Program Files\NVIDIA Corporation\Nsight Compute 2024.1.1\;C:\Program Files\dotnet\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\;C:\Program Files\Microsoft SQL Server\140\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\DTS\Binn\;C:\Program Files\Microsoft SQL Server\140\DTS\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Users\YXLMz\miniconda3;C:\Users\YXLMz\miniconda3\Library\mingw-w64\bin;C:\Users\YXLMz\miniconda3\Library\usr\bin;C:\Users\YXLMz\miniconda3\Library\bin;C:\Users\YXLMz\miniconda3\Scripts;C:\Users\YXLMz\AppData\Local\Microsoft\WindowsApps;C:\Users\YXLMz\AppData\Local\JetBrains\Toolbox\scripts;D:\software\mpv-lazy;D:\software\ffmpeg-master-latest-win64-gpl\bin;C:\Program Files\CMake\bin;C:\Program Files\JetBrains\CLion 2024.1.1\bin;D:\software\w64devkit\bin;C:\Users\YXLMz\AppData\Local\Programs\Ollama;C:\Program Files\qemu;C:\Users\YXLMz\AppData\Local\Programs\Microsoft VS Code\bin
+USERNAME=YXLMz
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+TMP=C:\Users\YXLMz\AppData\Local\Temp
+TEMP=C:\Users\YXLMz\AppData\Local\Temp
+
+
+
+Periodic native trim disabled
+
+JNI global refs:
+JNI global refs: 0, weak refs: 0
+
+JNI global refs memory usage: 0, weak refs: 0
+
+OOME stack traces (most recent first):
+Classloader memory used:
+
+
+---------------  S Y S T E M  ---------------
+
+OS:
+ Windows 11 , 64 bit Build 22621 (10.0.22621.3672)
+OS uptime: 3 days 1:45 hours
+Hyper-V role detected
+
+CPU: total 16 (initial active 16) (16 cores per cpu, 2 threads per core) family 25 model 80 stepping 0 microcode 0x0, cx8, cmov, fxsr, ht, mmx, 3dnowpref, sse, sse2, sse3, ssse3, sse4a, sse4.1, sse4.2, popcnt, lzcnt, tsc, tscinvbit, avx, avx2, aes, erms, clmul, bmi1, bmi2, adx, sha, fma, vzeroupper, clflush, clflushopt, hv
+Processor Information for processor 0
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 1
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 2
+  Max Mhz: 3201, Current Mhz: 2555, Mhz Limit: 3201
+Processor Information for processor 3
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 4
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 5
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 6
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 7
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 8
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 9
+  Max Mhz: 3201, Current Mhz: 2555, Mhz Limit: 3201
+Processor Information for processor 10
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 11
+  Max Mhz: 3201, Current Mhz: 2555, Mhz Limit: 3201
+Processor Information for processor 12
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 13
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 14
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+Processor Information for processor 15
+  Max Mhz: 3201, Current Mhz: 3201, Mhz Limit: 3201
+
+Memory: 4k page, system-wide physical 32620M (2973M free)
+TotalPageFile size 93508M (AvailPageFile size 442M)
+current process WorkingSet (physical memory assigned to process): 45M, peak: 45M
+current process commit charge ("private bytes"): 99M, peak: 578M
+
+vm_info: OpenJDK 64-Bit Server VM (17.0.9+8-b1166.2) for windows-amd64 JRE (17.0.9+8-b1166.2), built on 2024-01-13 by "builduser" with MS VC++ 16.10 / 16.11 (VS2019)
+
+END.

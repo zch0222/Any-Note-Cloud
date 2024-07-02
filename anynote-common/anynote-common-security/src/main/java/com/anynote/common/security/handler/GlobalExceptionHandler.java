@@ -3,6 +3,7 @@ package com.anynote.common.security.handler;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
+import com.anynote.common.security.condition.SpringMvcCondition;
 import com.anynote.core.context.HttpContextHolder;
 import com.anynote.core.exception.BusinessException;
 import com.anynote.core.exception.auth.LoginException;
@@ -12,6 +13,7 @@ import com.anynote.core.web.enums.HttpStatusEnum;
 import com.anynote.core.web.enums.ResCode;
 import com.anynote.core.web.model.bo.ResData;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +24,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @author 称霸幼儿园
  */
 @Slf4j
-//@RestControllerAdvice
+@RestControllerAdvice
+@Conditional(SpringMvcCondition.class)
 public class GlobalExceptionHandler {
 
 

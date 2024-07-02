@@ -20,7 +20,6 @@ import com.anynote.common.rocketmq.properties.RocketMQProperties;
 import com.anynote.common.rocketmq.tags.WhisperTagsEnum;
 import com.anynote.core.constant.RedisConstants;
 import com.google.gson.Gson;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.spring.annotation.MessageModel;
@@ -33,8 +32,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.scheduler.Schedulers;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -132,6 +132,12 @@ public class WhisperListener implements RocketMQListener<MessageExt> {
                         .txtUrl(isFinished ? whisperTaskStatusVO.getResult().getTxt() : "")
                 .updateTime(whisperTaskStatusUpdatedMQParam.getUpdateTime())
                 .build());
+        List<RedisMessage> messageList = new ArrayList<>(1);
+        messageList.add(RedisMessage.builder()
+                .channel(RedisChannel.WHISPER_TASK_STATUS_CHANNEL + whisperTaskStatusUpdatedMQParam.getWhisperTaskId())
+                        .message(gson.toJson(whisperTaskStatusVO))
+                .build());
+        redisService.batchPublish(messageList);
     }
 
     private void onWhisperTaskSubmitted(WhisperTaskCreatedMQParam whisperTaskCreatedMQParam) {
