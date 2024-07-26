@@ -17,7 +17,7 @@ public class DocListDTO {
     private Integer page;
 
     @NotNull(message = "页面大小错误")
-    @Min(value = 1, message = "页面大学错误")
+    @Min(value = 1, message = "页面大小错误")
     @Max(value = 50, message = "页面大小错误")
     private Integer pageSize;
 }
