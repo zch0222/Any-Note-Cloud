@@ -3,3 +3,5 @@ com.anynote.core.config.FileConfig
 com.anynote.core.validation.aspect.UploadAspect
 com.anynote.core.validation.aspect.UrlAspect
 com.anynote.core.properties.ExternalResourcesProperties
+com.anynote.core.filter.webflux.ContextWebFilter
+com.anynote.core.handler.webflux.SpringWebfluxGlobalExceptionHandler

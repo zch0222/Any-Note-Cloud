@@ -1,7 +1,7 @@
 package com.anynote.note.datascope.annotation;
 
 import com.anynote.common.datascope.enums.Logical;
-import com.anynote.note.enums.KnowledgeBasePermissions;
+import com.anynote.note.api.enums.KnowledgeBasePermissions;
 
 import java.lang.annotation.*;
 

@@ -1,3 +1,5 @@
 com.anynote.common.datascope.aspect.DataScopeAspect
 com.anynote.common.datascope.aspect.DataScopeInterceptorAspect
 com.anynote.common.datascope.aspect.RolePermissionsAspect
+com.anynote.common.datascope.aspect.webflux.RequiresPermissionsAspect
+com.anynote.common.datascope.service.impl.PermissionServiceImpl

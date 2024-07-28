@@ -6,7 +6,7 @@ import com.anynote.core.utils.StringUtils;
 import com.anynote.core.web.enums.ResCode;
 import com.anynote.core.web.model.bo.BaseEntity;
 import com.anynote.note.datascope.annotation.RequiresKnowledgeBasePermissions;
-import com.anynote.note.enums.KnowledgeBasePermissions;
+import com.anynote.note.api.enums.KnowledgeBasePermissions;
 import com.anynote.note.model.bo.KnowledgeBaseQueryParam;
 import com.anynote.note.model.bo.NoteQueryParam;
 import com.anynote.note.service.KnowledgeBaseService;

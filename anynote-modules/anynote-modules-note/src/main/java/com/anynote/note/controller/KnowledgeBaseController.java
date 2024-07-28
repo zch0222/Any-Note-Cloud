@@ -11,6 +11,8 @@ import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.core.web.model.bo.ResData;
 import com.anynote.file.api.model.bo.FileDTO;
 import com.anynote.file.api.model.bo.HuaweiOBSTemporarySignature;
+import com.anynote.note.api.model.dto.GetUserKnowledgeBaseListDTO;
+import com.anynote.note.api.model.po.UserKnowledgeBase;
 import com.anynote.note.model.bo.KnowledgeBaseQueryParam;
 import com.anynote.note.model.bo.KnowledgeBaseUpdateParam;
 import com.anynote.note.model.bo.KnowledgeBaseUsersDeleteParam;
@@ -22,13 +24,15 @@ import com.anynote.note.model.dto.KnowledgeBaseUpdateDTO;
 import com.anynote.note.api.model.dto.NoteKnowledgeBaseDTO;
 import com.anynote.note.model.vo.CreateKnowledgeBaseVO;
 import com.anynote.note.service.KnowledgeBaseService;
+import com.anynote.note.service.UserKnowledgeBaseService;
 import com.anynote.system.api.model.vo.KnowledgeBaseUserVO;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -42,6 +46,9 @@ public class KnowledgeBaseController {
 
     @Autowired
     private KnowledgeBaseService knowledgeBaseService;
+
+    @Resource
+    private UserKnowledgeBaseService userKnowledgeBaseService;
 
     @DataScope
     @GetMapping("organizations")
@@ -115,6 +122,12 @@ public class KnowledgeBaseController {
         queryParam.setPageSize(pageSize);
         queryParam.setUsername(username);
         return ResUtil.success(knowledgeBaseService.getKnowledgeBaseUsers(queryParam));
+    }
+
+    @InnerAuth
+    @PostMapping("/inner/getUserKnowledgeBaseList")
+    public ResData<List<UserKnowledgeBase>> getUserKnowledgeBaseList(@RequestBody @Valid GetUserKnowledgeBaseListDTO getUserKnowledgeBaseListDTO) {
+        return ResData.success(userKnowledgeBaseService.getUserKnowledgeBaseList(getUserKnowledgeBaseListDTO));
     }
 
     /**

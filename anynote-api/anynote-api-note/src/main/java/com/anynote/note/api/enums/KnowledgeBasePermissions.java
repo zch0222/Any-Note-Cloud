@@ -1,4 +1,4 @@
-package com.anynote.note.enums;
+package com.anynote.note.api.enums;
 
 /**
  * 知识库数据权限类型

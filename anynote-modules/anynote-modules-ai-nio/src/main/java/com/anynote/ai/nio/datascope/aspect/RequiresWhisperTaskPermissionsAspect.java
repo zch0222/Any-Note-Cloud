@@ -40,7 +40,7 @@ public class RequiresWhisperTaskPermissionsAspect {
     private Gson gson;
 
     @Around("@annotation(requiresWhisperTaskPermissions)")
-    public Flux<Object> doBefore(ProceedingJoinPoint joinPoint, RequiresWhisperTaskPermissions requiresWhisperTaskPermissions) {
+    public Flux<Object> doAround(ProceedingJoinPoint joinPoint, RequiresWhisperTaskPermissions requiresWhisperTaskPermissions) {
         WhisperTaskQueryParam whisperTaskQueryParam = this.getParam(joinPoint);
         LoginUser loginUser = tokenUtil.getLoginUser(whisperTaskQueryParam.getAccessToken());
         log.info(gson.toJson(whisperTaskQueryParam));

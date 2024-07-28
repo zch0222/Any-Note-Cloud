@@ -34,7 +34,7 @@ import com.anynote.note.api.model.po.*;
 import com.anynote.note.datascope.annotation.RequiresKnowledgeBasePermissions;
 import com.anynote.note.datascope.annotation.RequiresNotePermissions;
 import com.anynote.note.datascope.aspect.RequiresNotePermissionsAspect;
-import com.anynote.note.enums.KnowledgeBasePermissions;
+import com.anynote.note.api.enums.KnowledgeBasePermissions;
 import com.anynote.note.enums.NoteFileType;
 import com.anynote.note.enums.NotePermissions;
 import com.anynote.note.mapper.NoteMapper;

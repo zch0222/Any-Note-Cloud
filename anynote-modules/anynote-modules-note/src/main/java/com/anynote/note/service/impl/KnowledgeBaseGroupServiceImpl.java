@@ -4,7 +4,7 @@ import com.anynote.common.security.token.TokenUtil;
 import com.anynote.core.utils.StringUtils;
 import com.anynote.note.api.model.po.KnowledgeBaseGroup;
 import com.anynote.note.datascope.annotation.RequiresKnowledgeBasePermissions;
-import com.anynote.note.enums.KnowledgeBasePermissions;
+import com.anynote.note.api.enums.KnowledgeBasePermissions;
 import com.anynote.note.mapper.KnowledgeBaseGroupMapper;
 import com.anynote.note.model.bo.KnowledgeBaseGroupCreateParam;
 import com.anynote.note.model.bo.KnowledgeBaseGroupQueryParam;

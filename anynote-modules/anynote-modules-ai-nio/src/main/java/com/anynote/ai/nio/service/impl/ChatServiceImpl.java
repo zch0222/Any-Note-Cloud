@@ -2,16 +2,27 @@ package com.anynote.ai.nio.service.impl;
 
 import com.anynote.ai.api.RemoteChatConversationService;
 import com.anynote.ai.api.enums.ChatConversationPermissions;
+import com.anynote.ai.api.model.bo.ChatConversationQueryParam;
+import com.anynote.ai.api.model.po.ChatConversation;
+import com.anynote.ai.api.model.po.ChatMessage;
+import com.anynote.ai.nio.model.vo.ChatConversationInfoVO;
+import com.anynote.ai.nio.model.vo.ChatConversationVO;
+import com.anynote.ai.nio.service.ChatConversationService;
+import com.anynote.ai.nio.service.ChatMessageService;
 import com.anynote.ai.nio.service.ChatService;
+import com.anynote.common.datascope.annotation.RequiresPermissions;
+import com.anynote.common.datascope.constants.PermissionConstants;
 import com.anynote.core.exception.auth.AuthException;
 import com.anynote.core.utils.RemoteResDataUtil;
 import com.anynote.core.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -19,6 +30,12 @@ public class ChatServiceImpl implements ChatService {
 
 //    @Resource
 //    private TokenUtil tokenUtil;
+
+    @Resource
+    private ChatConversationService chatConversationService;
+
+    @Resource
+    private ChatMessageService chatMessageService;
 
     @Resource
     private RemoteChatConversationService remoteChatConversationService;
@@ -43,6 +60,32 @@ public class ChatServiceImpl implements ChatService {
                 });
     }
 
+    @RequiresPermissions(value = "a:chatConversation:read", paramIdName = "conversationId")
+    @Override
+    public Mono<ChatConversationVO> getChatConversationById(ChatConversationQueryParam queryParam) {
+        return Mono
+                .deferContextual(ctx -> {
+                    log.info(StringUtils.format("conversation id = {}", queryParam.getConversationId()));
+                    ChatConversation conversation = chatConversationService.getById(queryParam.getConversationId());
+                    List<ChatMessage> chatMessageList = chatMessageService.list(new LambdaQueryWrapper<ChatMessage>()
+                            .eq(ChatMessage::getConversationId, queryParam.getConversationId()));
+                    Integer permission = ctx.get(PermissionConstants.PERMISSION_CONTEXT_KEY);
+                    return Mono.just(ChatConversationVO.builder()
+                            .conversation(ChatConversationInfoVO.builder()
+                                    .id(conversation.getId())
+                                    .title(conversation.getTitle())
+                                    .type(conversation.getType())
+                                    .docId(conversation.getDocId())
+                                    .permission(permission)
+                                    .createBy(conversation.getCreateBy())
+                                    .createTime(conversation.getCreateTime())
+                                    .updateBy(conversation.getUpdateBy())
+                                    .updateTime(conversation.getUpdateTime())
+                                    .build())
+                            .messages(chatMessageList)
+                            .build());
+                });
+    }
 
     //    @Override
 //    public List<ChatMessage> selectChatMessageList(Long conversationId) {

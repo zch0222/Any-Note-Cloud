@@ -35,7 +35,7 @@ import com.anynote.system.api.model.bo.KnowledgeBaseImportUser;
 import com.anynote.note.api.model.po.NoteKnowledgeBase;
 import com.anynote.note.datascope.annotation.RequiresKnowledgeBasePermissions;
 import com.anynote.note.datascope.aspect.KnowledgeBasePermissionsAspect;
-import com.anynote.note.enums.KnowledgeBasePermissions;
+import com.anynote.note.api.enums.KnowledgeBasePermissions;
 import com.anynote.note.mapper.KnowledgeBaseMapper;
 import com.anynote.note.model.dto.KnowledgeBaseImportUserVO;
 import com.anynote.note.api.model.dto.NoteKnowledgeBaseDTO;

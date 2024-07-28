@@ -4,7 +4,7 @@ import com.anynote.common.security.token.TokenUtil;
 import com.anynote.core.utils.StringUtils;
 import com.anynote.core.web.model.bo.BaseEntity;
 import com.anynote.note.datascope.annotation.NoteDataScopeInterceptor;
-import com.anynote.note.enums.KnowledgeBasePermissions;
+import com.anynote.note.api.enums.KnowledgeBasePermissions;
 import com.anynote.note.model.bo.NoteQueryParam;
 import com.anynote.note.service.KnowledgeBaseService;
 import com.anynote.system.api.model.bo.LoginUser;

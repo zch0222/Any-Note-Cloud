@@ -1,12 +1,8 @@
 package com.anynote.note.service.impl;
 
-import com.alibaba.nacos.shaded.org.checkerframework.checker.units.qual.A;
 import com.anynote.core.web.model.bo.PageBean;
-import com.anynote.note.api.model.po.NoteTask;
 import com.anynote.note.api.model.po.NoteTaskSubmissionRecord;
-import com.anynote.note.datascope.annotation.RequiresKnowledgeBasePermissions;
 import com.anynote.note.datascope.annotation.RequiresNoteTaskPermissions;
-import com.anynote.note.enums.KnowledgeBasePermissions;
 import com.anynote.note.enums.NoteTaskPermissions;
 import com.anynote.note.mapper.NoteTaskMapper;
 import com.anynote.note.mapper.NoteTaskSubmissionRecordMapper;
@@ -14,7 +10,6 @@ import com.anynote.note.model.bo.NoteTaskSubmissionRecordQueryParam;
 import com.anynote.note.model.dto.NoteTaskSubmissionRecordDTO;
 import com.anynote.note.service.NoteTaskSubmissionRecordService;
 import com.anynote.note.validate.annotation.PageValid;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

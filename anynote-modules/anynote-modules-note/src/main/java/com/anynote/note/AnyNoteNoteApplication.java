@@ -3,6 +3,8 @@ package com.anynote.note;
 import com.anynote.common.security.annotation.EnableAnyNoteFeignClients;
 import com.anynote.common.security.annotation.EnableCustomConfig;
 import com.anynote.common.swagger.annotation.EnableCustomSwagger2;
+import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.annotation.MapperScans;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -14,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableAnyNoteFeignClients
 @EnableCustomConfig
 @SpringBootApplication
+@MapperScan({"com.anynote.note.mapper", "com.anynote.common.datascope.mapper"})
 public class AnyNoteNoteApplication {
 
     public static void main(String[] args) {

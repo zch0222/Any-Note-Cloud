@@ -5,10 +5,13 @@ import com.anynote.core.web.enums.ResCode;
 import com.anynote.core.web.model.bo.PageBean;
 import com.anynote.core.web.model.bo.ResData;
 import com.anynote.note.api.RemoteKnowledgeBaseService;
+import com.anynote.note.api.model.dto.GetUserKnowledgeBaseListDTO;
 import com.anynote.note.api.model.dto.NoteKnowledgeBaseDTO;
+import com.anynote.note.api.model.po.UserKnowledgeBase;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
@@ -38,6 +41,12 @@ public class RemoteKnowledgeBaseFallbackFactory implements FallbackFactory<Remot
             @Override
             public ResData<NoteKnowledgeBaseDTO> innerGetKnowledgeBaseById(Long id, String fromSource) {
                 return ResUtil.error(ResCode.INNER_NOTE_SERVICE_ERROR);
+            }
+
+            @Override
+            public ResData<List<UserKnowledgeBase>> getUserKnowledgeBaseList(GetUserKnowledgeBaseListDTO getUserKnowledgeBaseListDTO,
+                                                                             String fromSource) {
+                return ResData.error(ResCode.INNER_NOTE_SERVICE_ERROR);
             }
         };
     }
