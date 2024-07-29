@@ -18,6 +18,7 @@
         <module>anynote-common-elasticsearch</module>
         <module>anynote-common-rocketmq</module>
         <module>anynote-common-green</module>
+        <module>anynote-common-ai-fastapi</module>
     </modules>
 
 

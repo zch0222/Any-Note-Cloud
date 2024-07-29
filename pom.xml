@@ -205,6 +205,12 @@
 
             <dependency>
                 <groupId>com.anynote</groupId>
+                <artifactId>anynote-common-ai-fastapi</artifactId>
+                <version>${anynote.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.anynote</groupId>
                 <artifactId>anynote-common-core</artifactId>
                 <version>${anynote.version}</version>
             </dependency>

@@ -6,7 +6,7 @@ import com.anynote.core.web.enums.ResCode;
  * 业务异常
  * @author 称霸幼儿园
  */
-public class BusinessException extends RuntimeException{
+public class BusinessException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     /**

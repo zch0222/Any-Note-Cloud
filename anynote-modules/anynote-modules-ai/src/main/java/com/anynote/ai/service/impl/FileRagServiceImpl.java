@@ -12,7 +12,7 @@ import com.anynote.ai.api.model.po.RagGreenLog;
 import com.anynote.ai.api.model.po.RagLog;
 import com.anynote.ai.datascope.annotation.RequiresChatConversationPermissions;
 import com.anynote.ai.api.enums.ChatConversationPermissions;
-import com.anynote.ai.enums.ChatRole;
+import com.anynote.ai.api.enums.ChatRole;
 import com.anynote.ai.enums.ChatType;
 import com.anynote.ai.enums.GreenLabel;
 import com.anynote.ai.factory.GreenPluginFactory;
@@ -340,7 +340,7 @@ public class FileRagServiceImpl implements FileRagService {
                             .conversationId(askMessage.getConversationId())
                             .orderIndex(askMessage.getOrderIndex() + 1)
                             .content(ragFileQueryRes[0].getResult())
-                            .role(ChatRole.BOT.getValue())
+                            .role(ChatRole.ASSISTANT.getValue())
                             .type(ChatType.DOC_RAG.getValue())
                             .docId(docVO.getId())
                             .deleted(0)
@@ -461,7 +461,7 @@ public class FileRagServiceImpl implements FileRagService {
                     .conversationId(askMessage.getConversationId())
                     .orderIndex(askMessage.getOrderIndex() + 1)
                     .content("您今天的RAG使用次数已用完")
-                    .role(ChatRole.BOT.getValue())
+                    .role(ChatRole.ASSISTANT.getValue())
                     .type(ChatType.DOC_RAG.getValue())
                     .docId(docVO.getId())
                     .deleted(0)
@@ -493,7 +493,7 @@ public class FileRagServiceImpl implements FileRagService {
                         .conversationId(askMessage.getConversationId())
                         .orderIndex(askMessage.getOrderIndex() + 1)
                         .content(GREEN_MESSAGE)
-                        .role(ChatRole.BOT.getValue())
+                        .role(ChatRole.ASSISTANT.getValue())
                         .type(ChatType.DOC_RAG.getValue())
                         .docId(docVO.getId())
                         .deleted(0)
@@ -530,7 +530,7 @@ public class FileRagServiceImpl implements FileRagService {
                     .conversationId(askMessage.getConversationId())
                     .orderIndex(askMessage.getOrderIndex() + 1)
                     .content("发生异常请稍后再试")
-                    .role(ChatRole.BOT.getValue())
+                    .role(ChatRole.ASSISTANT.getValue())
                     .type(ChatType.DOC_RAG.getValue())
                     .docId(docVO.getId())
                     .deleted(0)
@@ -613,7 +613,7 @@ public class FileRagServiceImpl implements FileRagService {
                             .conversationId(askMessage.getConversationId())
                             .orderIndex(askMessage.getOrderIndex() + 1)
                             .content(ragFileQueryRes[0] != null ? ragFileQueryRes[0].getResult() : "出现异常请稍后重试")
-                            .role(ChatRole.BOT.getValue())
+                            .role(ChatRole.ASSISTANT.getValue())
                             .type(ChatType.DOC_RAG.getValue())
                             .docId(docVO.getId())
                             .deleted(0)

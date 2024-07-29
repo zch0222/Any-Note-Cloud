@@ -7,7 +7,7 @@ import com.anynote.ai.api.model.bo.ChatConversationQueryParam;
 import com.anynote.ai.model.bo.ChatConversationCreateParam;
 import com.anynote.ai.model.bo.ChatConversationUpdateParam;
 import com.anynote.ai.model.dto.ChatConversationListDTO;
-import com.anynote.ai.model.dto.ChatConversationUpdateDTO;
+import com.anynote.ai.api.model.dto.ChatConversationUpdateDTO;
 import com.anynote.ai.model.vo.ChatConversationInfoVO;
 import com.anynote.ai.model.vo.ChatConversationVO;
 import com.anynote.ai.service.ChatService;

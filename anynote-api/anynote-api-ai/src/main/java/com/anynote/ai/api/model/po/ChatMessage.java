@@ -43,7 +43,7 @@ public class ChatMessage extends BaseEntity {
     private int role;
 
     /**
-     * Type: 0 for document rag.
+     * Type: 0 for document rag. 1. Chat
      */
     private int type;
 

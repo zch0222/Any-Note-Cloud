@@ -2,11 +2,9 @@ package com.anynote.ai.api.model.bo;
 
 
 import com.anynote.core.web.model.bo.QueryParam;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

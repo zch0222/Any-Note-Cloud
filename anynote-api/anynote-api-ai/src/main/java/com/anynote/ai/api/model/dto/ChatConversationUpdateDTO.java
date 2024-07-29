@@ -1,4 +1,4 @@
-package com.anynote.ai.model.dto;
+package com.anynote.ai.api.model.dto;
 
 import lombok.Data;
 

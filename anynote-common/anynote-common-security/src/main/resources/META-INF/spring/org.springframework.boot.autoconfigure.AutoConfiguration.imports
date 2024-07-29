@@ -4,3 +4,4 @@ com.anynote.common.security.token.TokenUtil
 com.anynote.common.security.properties.JWTTokenProperties
 com.anynote.common.security.aspect.InnerAuthAspect
 com.anynote.common.security.feign.FeignAutoConfiguration
+com.anynote.common.security.filter.webflux.ContextWebFilter

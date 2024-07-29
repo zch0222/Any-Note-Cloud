@@ -37,6 +37,11 @@ public class ChatConversation extends BaseEntity {
     private Long docId;
 
     /**
+     * 知识库id
+     */
+    private Long knowledgeBaseId;
+
+    /**
      * 权限
      */
     private String permissions;
@@ -49,7 +54,7 @@ public class ChatConversation extends BaseEntity {
     private Integer deleted;
 
     @Builder
-    public ChatConversation(Long id, String title, Integer type, Long docId, Integer deleted,
+    public ChatConversation(Long id, String title, Integer type, Long docId, Long knowledgeBaseId, Integer deleted,
                             Long createBy, Date createTime, Long updateBy, Date updateTime, String permissions,
                             String remark, Map<String, Object> params) {
         super(createBy, createTime, updateBy, updateTime, remark, params);
@@ -57,6 +62,7 @@ public class ChatConversation extends BaseEntity {
         this.title = title;
         this.type = type;
         this.docId = docId;
+        this.knowledgeBaseId = knowledgeBaseId;
         this.deleted = deleted;
         this.permissions = permissions;
     }

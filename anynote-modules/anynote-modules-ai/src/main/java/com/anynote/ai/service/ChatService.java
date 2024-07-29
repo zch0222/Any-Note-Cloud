@@ -1,6 +1,5 @@
 package com.anynote.ai.service;
 
-import com.anynote.ai.api.model.dto.ConversationCreateDTO;
 import com.anynote.ai.api.model.po.ChatConversation;
 import com.anynote.ai.api.model.po.ChatMessage;
 import com.anynote.ai.api.enums.ChatConversationPermissions;

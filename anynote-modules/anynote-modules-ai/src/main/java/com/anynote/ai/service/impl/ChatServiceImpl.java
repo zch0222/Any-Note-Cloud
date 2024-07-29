@@ -5,7 +5,6 @@ import com.anynote.ai.api.model.po.ChatMessage;
 import com.anynote.ai.datascope.annotation.RequiresChatConversationPermissions;
 import com.anynote.ai.api.enums.ChatConversationPermissions;
 import com.anynote.ai.api.model.bo.ChatConversationQueryParam;
-import com.anynote.ai.enums.ChatType;
 import com.anynote.ai.model.bo.ChatConversationCreateParam;
 import com.anynote.ai.model.bo.ChatConversationUpdateParam;
 import com.anynote.ai.model.vo.ChatConversationInfoVO;
