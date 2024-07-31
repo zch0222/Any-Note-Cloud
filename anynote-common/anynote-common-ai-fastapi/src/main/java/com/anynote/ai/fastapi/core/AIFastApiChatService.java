@@ -5,6 +5,7 @@ import com.anynote.ai.fastapi.model.vo.FastApiChatCompletionsVO;
 import com.anynote.ai.fastapi.properties.AIFastApiProperties;
 import com.anynote.common.redis.service.ConfigService;
 import com.anynote.core.utils.StringUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,7 @@ public class AIFastApiChatService {
     public Flux<FastApiChatCompletionsVO> chatCompletions(FastApiChatCompletionsDTO chatCompletionsDTO) {
         return webClient.post()
                 .uri(StringUtils.format("{}/v1/chat/completions", configService.getAIServerAddress()))
+                .header(HttpHeaders.AUTHORIZATION, configService.getAIServerAPIKey())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(chatCompletionsDTO))
                 .retrieve()
