@@ -45,6 +45,11 @@ public enum ConfigEnum {
     /**
      * 阿里云内容合规配置
      */
-    ALI_GREEN_CONFIG
+    ALI_GREEN_CONFIG,
+
+    /**
+     * AI服务器OPEN API KEY
+     */
+    AI_SERVER_API_KEY
     ;
 }

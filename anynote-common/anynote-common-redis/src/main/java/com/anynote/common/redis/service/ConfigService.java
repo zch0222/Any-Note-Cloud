@@ -27,4 +27,9 @@ public class ConfigService {
         return Long.valueOf(sysConfig.getValue());
     }
 
+    public String getAIServerAPIKey() {
+        SysConfig sysConfig = redisService.getConfig(ConfigEnum.AI_SERVER_API_KEY);
+        return sysConfig.getValue();
+    }
+
 }
