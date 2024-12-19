@@ -2,6 +2,7 @@ package com.anynote.ai.nio.controller;
 
 import com.anynote.ai.api.model.bo.DocRagQueryParam;
 import com.anynote.ai.api.model.dto.DocQueryDTO;
+import com.anynote.ai.api.model.vo.DocQueryVO;
 import com.anynote.ai.nio.model.vo.AIChatVO;
 import com.anynote.ai.nio.service.RagService;
 import com.anynote.core.utils.ResUtil;
@@ -25,7 +26,6 @@ public class RagController {
 
     @Resource
     private RagService ragService;
-
 
 
     private String test1() throws InterruptedException {
@@ -54,6 +54,11 @@ public class RagController {
                 .prompt(docQueryDTO.getPrompt())
                 .build(), accessToken)
                 .flatMap(value -> Flux.just(ResUtil.success(value)));
+    }
+
+    @PostMapping("query/docs/v1")
+    public Flux<ResData<DocQueryVO>> queryDocV1(@Validated @RequestBody DocQueryDTO docQueryDTO) {
+        return null;
     }
 
 }

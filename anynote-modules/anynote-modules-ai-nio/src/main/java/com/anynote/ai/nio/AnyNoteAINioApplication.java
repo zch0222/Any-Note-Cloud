@@ -3,6 +3,7 @@ package com.anynote.ai.nio;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -11,6 +12,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableFeignClients(basePackages = {"com.anynote"})
 @MapperScan({"com.anynote.common.datascope.mapper", "com.anynote.ai.nio.mapper"})
+@EnableDiscoveryClient
+
 //@EnableScheduling
 public class AnyNoteAINioApplication {
 

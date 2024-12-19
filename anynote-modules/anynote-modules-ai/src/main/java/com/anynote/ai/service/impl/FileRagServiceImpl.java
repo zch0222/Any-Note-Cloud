@@ -40,6 +40,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -69,6 +70,9 @@ public class FileRagServiceImpl implements FileRagService {
 
 //    @Resource
 //    private RedisService redisService;
+
+    @Autowired
+    private WebClient.Builder webClientBuilder;
 
     @Resource
     private ConfigService configService;
@@ -110,7 +114,9 @@ public class FileRagServiceImpl implements FileRagService {
     @Override
     public RagFileIndexRes indexFile(RagFileIndexReq ragFileIndexReq) {
         String aiServerAddress = configService.getAIServerAddress();
-        HttpEntity<RagFileIndexReq> httpEntity = new HttpEntity<>(ragFileIndexReq);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", configService.getAIServerAPIKey());
+        HttpEntity<RagFileIndexReq> httpEntity = new HttpEntity<>(ragFileIndexReq, headers);
         ParameterizedTypeReference<ResData<RagFileIndexRes>> responseType =
                 new ParameterizedTypeReference<ResData<RagFileIndexRes>>() {};
         ResponseEntity<ResData<RagFileIndexRes>> response = restTemplate.exchange(aiServerAddress + "/api/rag/index",
@@ -550,6 +556,7 @@ public class FileRagServiceImpl implements FileRagService {
 
         // 构建请求
         RagFileQueryReq req = RagFileQueryReq.builder()
+                .doc_url(docVO.getUrl())
                 .file_hash(docVO.getHash())
                 .prompt(docRagQueryParam.getPrompt())
                 .file_name(docVO.getDocName())
@@ -570,6 +577,7 @@ public class FileRagServiceImpl implements FileRagService {
         return webClient.post()
                 .uri(aiServerAddress + "/api/rag/query/v2")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", configService.getAIServerAPIKey())
                 .body(BodyInserters.fromValue(gson.toJson(req)))
                 .retrieve()
                 .bodyToFlux(RagFileQueryRes.class)

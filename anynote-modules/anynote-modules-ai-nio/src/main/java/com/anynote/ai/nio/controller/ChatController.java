@@ -69,8 +69,17 @@ public class ChatController {
     }
 
 
-
-    @ApiOperation("Chat")
+    /**
+     * AI助手问答接口
+     * <p>
+     *     该接口用于与AI助手进行交互，用户可以提交问题，AI助手根据问题返回相应的回答。
+     *     根据请求中的会话ID（conversationId），可以选择继续之前的对话，或启动一个新的对话。
+     * </p>
+     *
+     * @param chatCompletionsDTO 请求体，包含了用户提交的问题和其他参数
+     * @return 表示响应数据流。每个数据项为一个ServerSentEvent对象，包含AI助手回答和一些问题元数据
+     */
+    @ApiOperation("AI助手问答")
     @PostMapping("completions")
     public Flux<ServerSentEvent<ResData<ChatCompletionsVO>>> chatCompletions(@Valid @RequestBody ChatCompletionsDTO chatCompletionsDTO) {
         if (StringUtils.isNotNull(chatCompletionsDTO.getConversationId())) {

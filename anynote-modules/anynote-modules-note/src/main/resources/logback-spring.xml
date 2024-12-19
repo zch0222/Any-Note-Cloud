@@ -10,6 +10,16 @@
         </encoder>
     </appender>
 
+    <appender name="Logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>localhost:5044</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+<!--        <encoder>-->
+<!--            &lt;!&ndash;<pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>&ndash;&gt;-->
+<!--            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>-->
+<!--            &lt;!&ndash;            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} -%5p ${PID:-} [%15.15t] %-30.30C{1.} : %m%n</pattern>&ndash;&gt;-->
+<!--        </encoder>-->
+    </appender>
+
     <!--按天生成日志-->
     <appender name="logFile"  class="ch.qos.logback.core.rolling.RollingFileAppender">
         <Prudent>true</Prudent>
@@ -29,6 +39,7 @@
     <root level="INFO">
         <appender-ref ref="console" />
         <appender-ref ref="logFile" />
+        <appender-ref ref="Logstash"/>
     </root>
 
 </configuration>

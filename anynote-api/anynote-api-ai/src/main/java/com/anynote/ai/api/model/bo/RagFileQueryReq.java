@@ -16,6 +16,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class RagFileQueryReq {
 
+    private String doc_url;
+
     @NotNull(message = "文件哈希不能为空")
     private String file_hash;
 
