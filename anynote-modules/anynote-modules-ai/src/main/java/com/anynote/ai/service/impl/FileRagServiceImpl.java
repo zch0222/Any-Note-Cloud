@@ -574,7 +574,7 @@ public class FileRagServiceImpl implements FileRagService {
         GreenRes[] greenRes = {null};
         String aiServerAddress = configService.getAIServerAddress();
         Long finalConversationId = conversationId;
-        return webClient.post()
+        return webClientBuilder.build().post()
                 .uri(aiServerAddress + "/api/rag/query/v2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", configService.getAIServerAPIKey())
